@@ -3,8 +3,9 @@ import * as THREE from 'three'
 export default class OrbitingGeometry {
   static sceneName = 'Orbiting Geometry'
 
-  constructor(renderer) {
+  constructor(renderer, theme = 'dark') {
     this.renderer = renderer
+    this.theme = theme
     this.scene = new THREE.Scene()
     this.camera = null
     this._mesh = null
@@ -19,15 +20,13 @@ export default class OrbitingGeometry {
     this.camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100)
     this.camera.position.z = 5
 
-    this.scene.background = new THREE.Color(0x000000)
-
-    const icoGeo = new THREE.IcosahedronGeometry(1.8, 1)
+    const icoGeo = new THREE.IcosahedronGeometry(1.7, 2)
     const edgesGeo = new THREE.EdgesGeometry(icoGeo)
     icoGeo.dispose()
 
     const material = new THREE.LineBasicMaterial({
-      color: 0xffffff,
-      opacity: 0.85,
+      color: this.theme === 'light' ? 0x087a4a : 0x9bf8c7,
+      opacity: this.theme === 'light' ? 0.35 : 0.28,
       transparent: true,
     })
 
@@ -40,14 +39,14 @@ export default class OrbitingGeometry {
   _onMouseMove(e) {
     this._mouse.x = (e.clientX / window.innerWidth) * 2 - 1
     this._mouse.y = -(e.clientY / window.innerHeight) * 2 + 1
-    this._targetRotation.set(this._mouse.y * 0.4, this._mouse.x * 0.4)
+    this._targetRotation.set(this._mouse.y * 0.22, this._mouse.x * 0.22)
   }
 
   update(delta, elapsed) {
     if (!this._mesh) return
 
-    this._baseRotation.y += delta * 0.3
-    this._baseRotation.x += delta * 0.1
+    this._baseRotation.y += delta * 0.12
+    this._baseRotation.x += delta * 0.035
 
     this._currentLean.lerp(this._targetRotation, delta * 2)
 

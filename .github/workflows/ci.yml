@@ -1,0 +1,43 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: awba
+      - uses: actions/checkout@v4
+        with:
+          repository: gokulraviteja/awba-backend
+          path: awba-backend
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            awba/package-lock.json
+            awba/apps/mcp/package-lock.json
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: awba-backend/go.mod
+          cache: true
+      - run: npm ci
+        working-directory: awba
+      - run: npm ci
+        working-directory: awba/apps/mcp
+      - run: npx playwright install --with-deps chromium
+        working-directory: awba
+      - name: Prepare deterministic catalog fixture
+        run: |
+          mkdir -p awba-backend/data/runtime
+          cp awba/public/catalog.sample.json awba-backend/data/runtime/catalog.json
+      - run: npm run check
+        working-directory: awba

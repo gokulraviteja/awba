@@ -1,0 +1,4160 @@
+{
+  "schemaVersion": "poc-v1",
+  "retrievedAt": "2026-10-01T10:26:17.375699Z",
+  "source": {
+    "name": "OpenRouter",
+    "url": "https://openrouter.ai/api/v1/models"
+  },
+  "models": [
+    {
+      "id": "mdl_4d81a342a357a83153d1",
+      "sourceId": "openai/gpt-6.1-sol-pro",
+      "canonicalSlug": "openai/gpt-6.1-sol-pro-20260929",
+      "name": "GPT-6.1 Sol Pro",
+      "description": "GPT-6.1 Sol Pro is the same underlying model as [GPT-6.1 Sol](https://openrouter.ai/openai/gpt-6.1-sol), served with `reasoning.mode` set to `pro` for higher-quality responses on complex tasks. **Cost note:** pro mode spends far more...",
+      "publisher": {
+        "id": "openai",
+        "name": "OpenAI"
+      },
+      "family": null,
+      "releasedAt": "2026-09-29T17:28:06Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1050000,
+      "maxOutputTokens": 128000,
+      "architecture": {
+        "modality": "text+image+file-\u003etext",
+        "inputModalities": [
+          "file",
+          "image",
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "GPT"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 2,
+            "outputPerMillion": 10,
+            "cacheReadPerMillion": 0.09999999999999999,
+            "cacheWritePerMillion": 2.5,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "openai/gpt-6.1-sol-pro",
+            "url": "https://openrouter.ai/openai/gpt-6.1-sol-pro",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "openai/gpt-6.1-sol-pro",
+        "url": "https://openrouter.ai/openai/gpt-6.1-sol-pro",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_aedcfe41ddd3587aa6e0",
+      "sourceId": "openai/gpt-6.1-sol",
+      "canonicalSlug": "openai/gpt-6.1-sol-20260929",
+      "name": "GPT-6.1 Sol",
+      "description": "GPT-6.1 Sol is an upgrade to GPT-6 Sol from OpenAI, positioned below the flagship GPT-6 Astra in the GPT-6 series. It is suited for agentic coding, computer use, document-heavy professional...",
+      "publisher": {
+        "id": "openai",
+        "name": "OpenAI"
+      },
+      "family": null,
+      "releasedAt": "2026-09-29T17:28:02Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1050000,
+      "maxOutputTokens": 128000,
+      "architecture": {
+        "modality": "text+image+file-\u003etext",
+        "inputModalities": [
+          "file",
+          "image",
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "GPT"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 2,
+            "outputPerMillion": 10,
+            "cacheReadPerMillion": 0.09999999999999999,
+            "cacheWritePerMillion": 2.5,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "openai/gpt-6.1-sol",
+            "url": "https://openrouter.ai/openai/gpt-6.1-sol",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [
+        {
+          "key": "intelligence",
+          "name": "Intelligence Index",
+          "category": "general",
+          "score": 51.8,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "openai/gpt-6.1-sol",
+            "url": "https://openrouter.ai/openai/gpt-6.1-sol",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        }
+      ],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "openai/gpt-6.1-sol",
+        "url": "https://openrouter.ai/openai/gpt-6.1-sol",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_3657f02d8735931523f0",
+      "sourceId": "anthropic/claude-sonnet-5.5",
+      "canonicalSlug": "anthropic/claude-sonnet-5.5-20260928",
+      "name": "Claude Sonnet 5.5",
+      "description": "Claude Sonnet 5.5 is Anthropic's Sonnet-class model for well-scoped everyday work, succeeding Claude Sonnet 5 as a direct upgrade. It is especially strong at building features, fixing bugs, and producing...",
+      "publisher": {
+        "id": "anthropic",
+        "name": "Anthropic"
+      },
+      "family": null,
+      "releasedAt": "2026-09-28T18:04:46Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1000000,
+      "maxOutputTokens": 128000,
+      "architecture": {
+        "modality": "text+image+file-\u003etext",
+        "inputModalities": [
+          "text",
+          "image",
+          "file"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Claude"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 2,
+            "outputPerMillion": 10,
+            "cacheReadPerMillion": 0.19999999999999998,
+            "cacheWritePerMillion": 2.5,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "anthropic/claude-sonnet-5.5",
+            "url": "https://openrouter.ai/anthropic/claude-sonnet-5.5",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [
+        {
+          "key": "intelligence",
+          "name": "Intelligence Index",
+          "category": "general",
+          "score": 56,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "anthropic/claude-sonnet-5.5",
+            "url": "https://openrouter.ai/anthropic/claude-sonnet-5.5",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        }
+      ],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "anthropic/claude-sonnet-5.5",
+        "url": "https://openrouter.ai/anthropic/claude-sonnet-5.5",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_f09d9d5d9fc4c5d0b1b6",
+      "sourceId": "anthropic/claude-sonnet-5.5:batch",
+      "canonicalSlug": "anthropic/claude-sonnet-5.5-20260928",
+      "name": "Claude Sonnet 5.5 (batch)",
+      "description": "Claude Sonnet 5.5 is Anthropic's Sonnet-class model for well-scoped everyday work, succeeding Claude Sonnet 5 as a direct upgrade. It is especially strong at building features, fixing bugs, and producing...",
+      "publisher": {
+        "id": "anthropic",
+        "name": "Anthropic"
+      },
+      "family": null,
+      "releasedAt": "2026-09-28T18:04:46Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1000000,
+      "maxOutputTokens": 128000,
+      "architecture": {
+        "modality": "text+image+file-\u003etext",
+        "inputModalities": [
+          "text",
+          "image",
+          "file"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Claude"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 1,
+            "outputPerMillion": 5,
+            "cacheReadPerMillion": 0.09999999999999999,
+            "cacheWritePerMillion": 1.25,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "anthropic/claude-sonnet-5.5:batch",
+            "url": "https://openrouter.ai/anthropic/claude-sonnet-5.5:batch",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [
+        {
+          "key": "intelligence",
+          "name": "Intelligence Index",
+          "category": "general",
+          "score": 56,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "anthropic/claude-sonnet-5.5:batch",
+            "url": "https://openrouter.ai/anthropic/claude-sonnet-5.5:batch",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        }
+      ],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "anthropic/claude-sonnet-5.5:batch",
+        "url": "https://openrouter.ai/anthropic/claude-sonnet-5.5:batch",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_06731531c7eb2052ba38",
+      "sourceId": "typesafe/jev-router",
+      "canonicalSlug": "typesafe/jev-router",
+      "name": "Jev Router",
+      "description": "Jev Router picks the best model and reasoning effort for each request, balancing quality, speed, and cost. It runs on [Jev](https://openrouter.ai/~typesafe/jev-latest), TypeSafe's first System One model, and adapts as your...",
+      "publisher": {
+        "id": "typesafe",
+        "name": "Typesafe"
+      },
+      "family": null,
+      "releasedAt": "2026-09-25T19:12:40Z",
+      "status": "available",
+      "isAlias": false,
+      "contextWindowTokens": 1000000,
+      "architecture": {
+        "modality": "text+image+file+audio+video-\u003etext",
+        "inputModalities": [
+          "audio",
+          "file",
+          "image",
+          "text",
+          "video"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Router"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_completion_tokens",
+        "max_tokens",
+        "min_p",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_a",
+        "top_k",
+        "top_logprobs",
+        "top_p",
+        "verbosity"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": null,
+            "outputPerMillion": null,
+            "cacheReadPerMillion": null,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "typesafe/jev-router",
+            "url": "https://openrouter.ai/typesafe/jev-router",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "typesafe/jev-router",
+        "url": "https://openrouter.ai/typesafe/jev-router",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_14cddc8aada9ec1d3e5f",
+      "sourceId": "perceptron/perceptron-mk1.5",
+      "canonicalSlug": "perceptron/perceptron-mk1.5-20260925",
+      "name": "Perceptron Mk1.5",
+      "description": "Perceptron Mk1.5 is Perceptron's embodied reasoning model for physical agents. It accepts text, image, video, and audio input, and answers with text plus optional structured annotations: points, boxes, polygons, tracks,...",
+      "publisher": {
+        "id": "perceptron",
+        "name": "Perceptron"
+      },
+      "family": null,
+      "releasedAt": "2026-09-25T16:11:01Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 36864,
+      "maxOutputTokens": 8192,
+      "architecture": {
+        "modality": "text+image+audio+video-\u003etext",
+        "inputModalities": [
+          "text",
+          "image",
+          "video",
+          "audio"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.15,
+            "outputPerMillion": 1.5,
+            "cacheReadPerMillion": null,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "perceptron/perceptron-mk1.5",
+            "url": "https://openrouter.ai/perceptron/perceptron-mk1.5",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "perceptron/perceptron-mk1.5",
+        "url": "https://openrouter.ai/perceptron/perceptron-mk1.5",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_951e683a34300dfb7e09",
+      "sourceId": "fireworks/ember-1",
+      "canonicalSlug": "fireworks/ember-1-20260923",
+      "name": "Ember-1",
+      "description": "Ember-1 is a specialized reasoning model from Fireworks Research, built on [Kimi K3](https://openrouter.ai/moonshotai/kimi-k3). It is designed to make every token go further: it produces shorter reasoning traces, using roughly 40%...",
+      "publisher": {
+        "id": "fireworks",
+        "name": "Fireworks"
+      },
+      "family": null,
+      "releasedAt": "2026-09-24T00:07:41Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1048576,
+      "maxOutputTokens": 943718,
+      "architecture": {
+        "modality": "text+image-\u003etext",
+        "inputModalities": [
+          "text",
+          "image"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 3,
+            "outputPerMillion": 15,
+            "cacheReadPerMillion": 0.3,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "fireworks/ember-1",
+            "url": "https://openrouter.ai/fireworks/ember-1",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "fireworks/ember-1",
+        "url": "https://openrouter.ai/fireworks/ember-1",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_4e27aaffa13133a0a0c3",
+      "sourceId": "z-ai/glm-5.3-prime",
+      "canonicalSlug": "z-ai/glm-5.3-prime-20260921",
+      "name": "GLM 5.3 Prime",
+      "description": "GLM-5.3-Prime is the high-speed variant of Z.ai's GLM-5.3, inheriting its full capabilities while delivering 1.5–2× the output throughput through inference acceleration. It supports text input and output with a 1M-token...",
+      "publisher": {
+        "id": "z-ai",
+        "name": "Z.ai"
+      },
+      "family": null,
+      "releasedAt": "2026-09-23T21:40:51Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1000000,
+      "maxOutputTokens": 131072,
+      "architecture": {
+        "modality": "text-\u003etext",
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 2.8,
+            "outputPerMillion": 8.8,
+            "cacheReadPerMillion": 0.56,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "z-ai/glm-5.3-prime",
+            "url": "https://openrouter.ai/z-ai/glm-5.3-prime",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "z-ai/glm-5.3-prime",
+        "url": "https://openrouter.ai/z-ai/glm-5.3-prime",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_32fc860c47fb55d5d593",
+      "sourceId": "qwen/qwen3.8-max-prime",
+      "canonicalSlug": "qwen/qwen3.8-max-prime-20260923",
+      "name": "Qwen3.8 Max Prime",
+      "description": "Qwen3.8 Max Prime is a higher-throughput variant of Qwen3.8 Max from Alibaba's Qwen team, served as a separate SKU at a higher price point. It accepts text, image, and video...",
+      "publisher": {
+        "id": "qwen",
+        "name": "Qwen"
+      },
+      "family": null,
+      "releasedAt": "2026-09-23T19:20:28Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1000000,
+      "maxOutputTokens": 131072,
+      "architecture": {
+        "modality": "text+image+video-\u003etext",
+        "inputModalities": [
+          "text",
+          "image",
+          "video"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Qwen"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 4,
+            "outputPerMillion": 12,
+            "cacheReadPerMillion": 0.5,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "qwen/qwen3.8-max-prime",
+            "url": "https://openrouter.ai/qwen/qwen3.8-max-prime",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "qwen/qwen3.8-max-prime",
+        "url": "https://openrouter.ai/qwen/qwen3.8-max-prime",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_91c64627c9231eec8592",
+      "sourceId": "stealth/space-bunny-alpha",
+      "canonicalSlug": "stealth/space-bunny-alpha",
+      "name": "Space Bunny Alpha",
+      "description": "Space Bunny Alpha is an anonymous large model with blazing-fast inference, strong coding capabilities and native multimodal input support. It delivers adjustable reasoning effort, and a 1M-token context window. Space...",
+      "publisher": {
+        "id": "stealth",
+        "name": "Stealth"
+      },
+      "family": null,
+      "releasedAt": "2026-09-23T14:48:04Z",
+      "status": "available",
+      "isAlias": false,
+      "contextWindowTokens": 1000000,
+      "maxOutputTokens": 524288,
+      "architecture": {
+        "modality": "text+image+video-\u003etext",
+        "inputModalities": [
+          "text",
+          "image",
+          "video"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0,
+            "outputPerMillion": 0,
+            "cacheReadPerMillion": null,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "stealth/space-bunny-alpha",
+            "url": "https://openrouter.ai/stealth/space-bunny-alpha",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "stealth/space-bunny-alpha",
+        "url": "https://openrouter.ai/stealth/space-bunny-alpha",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_ee75a69f4226d20a6e6a",
+      "sourceId": "aion-labs/aion-3.5-mini",
+      "canonicalSlug": "aion-labs/aion-3.5-mini-20260923",
+      "name": "Aion 3.5 Mini",
+      "description": "Aion 3.5 Mini is a multi-model roleplaying and storytelling system from AionLabs, built on the GLM family of models. It is the smaller, lower-cost sibling of Aion 3.5 and uses...",
+      "publisher": {
+        "id": "aion-labs",
+        "name": "Aion Labs"
+      },
+      "family": null,
+      "releasedAt": "2026-09-23T13:42:42Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 262144,
+      "maxOutputTokens": 32768,
+      "architecture": {
+        "modality": "text-\u003etext",
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.7,
+            "outputPerMillion": 1.4,
+            "cacheReadPerMillion": 0.18,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "aion-labs/aion-3.5-mini",
+            "url": "https://openrouter.ai/aion-labs/aion-3.5-mini",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "aion-labs/aion-3.5-mini",
+        "url": "https://openrouter.ai/aion-labs/aion-3.5-mini",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_103de88c3d9799cbbab9",
+      "sourceId": "aion-labs/aion-3.5",
+      "canonicalSlug": "aion-labs/aion-3.5-20260923",
+      "name": "Aion 3.5",
+      "description": "Aion 3.5 is a multi-model roleplaying and storytelling system from AionLabs, built on the GLM family of models. It uses a collaborative generation process in which multiple specialized models each...",
+      "publisher": {
+        "id": "aion-labs",
+        "name": "Aion Labs"
+      },
+      "family": null,
+      "releasedAt": "2026-09-23T13:42:41Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 262144,
+      "maxOutputTokens": 32768,
+      "architecture": {
+        "modality": "text-\u003etext",
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 3,
+            "outputPerMillion": 6,
+            "cacheReadPerMillion": 0.75,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "aion-labs/aion-3.5",
+            "url": "https://openrouter.ai/aion-labs/aion-3.5",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "aion-labs/aion-3.5",
+        "url": "https://openrouter.ai/aion-labs/aion-3.5",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_4330d1011ab4621ab642",
+      "sourceId": "upstage/solar-mini4",
+      "canonicalSlug": "upstage/solar-mini4-20260922",
+      "name": "Solar Mini 4",
+      "description": "Solar Mini 4 is Upstage's compact, cost-efficient language model, a 35B-parameter mixture-of-experts with 3B active parameters and a 524K context window. It is built for agentic use cases where response...",
+      "publisher": {
+        "id": "upstage",
+        "name": "Upstage"
+      },
+      "family": null,
+      "releasedAt": "2026-09-23T10:45:58Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 524288,
+      "maxOutputTokens": 131072,
+      "architecture": {
+        "modality": "text-\u003etext",
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "max_tokens",
+        "parallel_tool_calls",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.049999999999999996,
+            "outputPerMillion": 0.19999999999999998,
+            "cacheReadPerMillion": 0.005,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "upstage/solar-mini4",
+            "url": "https://openrouter.ai/upstage/solar-mini4",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [
+        {
+          "key": "intelligence",
+          "name": "Intelligence Index",
+          "category": "general",
+          "score": 24.1,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "upstage/solar-mini4",
+            "url": "https://openrouter.ai/upstage/solar-mini4",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        }
+      ],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "upstage/solar-mini4",
+        "url": "https://openrouter.ai/upstage/solar-mini4",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_6bb5f03d56f661b4bfdb",
+      "sourceId": "cohere/command-a-plus",
+      "canonicalSlug": "cohere/command-a-plus-05-2026",
+      "name": "Command A+",
+      "description": "Command A+ is Cohere's flagship model for enterprise agentic workflows. It accepts text and image inputs with a 192K context window, supports native tool calling with strict tool schemas, structured...",
+      "publisher": {
+        "id": "cohere",
+        "name": "Cohere"
+      },
+      "family": null,
+      "releasedAt": "2026-09-22T18:48:16Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 192000,
+      "maxOutputTokens": 64000,
+      "architecture": {
+        "modality": "text+image-\u003etext",
+        "inputModalities": [
+          "text",
+          "image"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Cohere"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.3,
+            "outputPerMillion": 1.5,
+            "cacheReadPerMillion": 0.15,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "cohere/command-a-plus",
+            "url": "https://openrouter.ai/cohere/command-a-plus",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "cohere/command-a-plus",
+        "url": "https://openrouter.ai/cohere/command-a-plus",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_edfe28359dc0420205dc",
+      "sourceId": "openai/gpt-6-luna-pro",
+      "canonicalSlug": "openai/gpt-6-luna-pro-20260922",
+      "name": "GPT-6 Luna Pro",
+      "description": "GPT-6 Luna Pro is the same underlying model as [GPT-6 Luna](https://openrouter.ai/openai/gpt-6-luna), served with `reasoning.mode` set to `pro` for higher-quality responses on complex tasks. **Cost note:** pro mode spends far more...",
+      "publisher": {
+        "id": "openai",
+        "name": "OpenAI"
+      },
+      "family": null,
+      "releasedAt": "2026-09-22T18:13:11Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1050000,
+      "maxOutputTokens": 128000,
+      "architecture": {
+        "modality": "text+image+file-\u003etext",
+        "inputModalities": [
+          "file",
+          "image",
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "GPT"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.09999999999999999,
+            "outputPerMillion": 0.5,
+            "cacheReadPerMillion": 0.01,
+            "cacheWritePerMillion": 0.125,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "openai/gpt-6-luna-pro",
+            "url": "https://openrouter.ai/openai/gpt-6-luna-pro",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "openai/gpt-6-luna-pro",
+        "url": "https://openrouter.ai/openai/gpt-6-luna-pro",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_7a95350be36f3d4bc7f3",
+      "sourceId": "anthropic/claude-opus-5.5",
+      "canonicalSlug": "anthropic/claude-opus-5.5-20260921",
+      "name": "Claude Opus 5.5",
+      "description": "Claude Opus 5.5 is Anthropic's flagship model for demanding reasoning, coding, and long-horizon agentic work, succeeding Claude Opus 5. It is particularly strong at multi-step changes in large codebases, code...",
+      "publisher": {
+        "id": "anthropic",
+        "name": "Anthropic"
+      },
+      "family": null,
+      "releasedAt": "2026-09-22T16:32:12Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1000000,
+      "maxOutputTokens": 128000,
+      "architecture": {
+        "modality": "text+image+file-\u003etext",
+        "inputModalities": [
+          "text",
+          "image",
+          "file"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Claude"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "verbosity"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 4,
+            "outputPerMillion": 20,
+            "cacheReadPerMillion": 0.19999999999999998,
+            "cacheWritePerMillion": 5,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "anthropic/claude-opus-5.5",
+            "url": "https://openrouter.ai/anthropic/claude-opus-5.5",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [
+        {
+          "key": "intelligence",
+          "name": "Intelligence Index",
+          "category": "general",
+          "score": 57.6,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "anthropic/claude-opus-5.5",
+            "url": "https://openrouter.ai/anthropic/claude-opus-5.5",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        }
+      ],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "anthropic/claude-opus-5.5",
+        "url": "https://openrouter.ai/anthropic/claude-opus-5.5",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_24d49a354822451d368a",
+      "sourceId": "xiaomi/mimo-v2.6-pro-ultraspeed",
+      "canonicalSlug": "xiaomi/mimo-v2.6-pro-ultraspeed-20260921",
+      "name": "MiMo-V2.6-Pro-UltraSpeed",
+      "description": "MiMo-V2.6-Pro-UltraSpeed is the fast speed edition of Xiaomi's flagship foundation model, MiMo-V2.6-Pro. Built from the same 1T MiMo-V2.6-Pro checkpoint, it matches the original model in quality while delivering roughly 10x...",
+      "publisher": {
+        "id": "xiaomi",
+        "name": "Xiaomi"
+      },
+      "family": null,
+      "releasedAt": "2026-09-21T20:07:47Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1048576,
+      "maxOutputTokens": 131072,
+      "architecture": {
+        "modality": "text+image+audio+video-\u003etext",
+        "inputModalities": [
+          "text",
+          "image",
+          "video",
+          "audio"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 4.35,
+            "outputPerMillion": 8.7,
+            "cacheReadPerMillion": 0.036,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "xiaomi/mimo-v2.6-pro-ultraspeed",
+            "url": "https://openrouter.ai/xiaomi/mimo-v2.6-pro-ultraspeed",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "xiaomi/mimo-v2.6-pro-ultraspeed",
+        "url": "https://openrouter.ai/xiaomi/mimo-v2.6-pro-ultraspeed",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_c5aace94b47701914edc",
+      "sourceId": "xiaomi/mimo-v2.6-flash",
+      "canonicalSlug": "xiaomi/mimo-v2.6-flash-20260921",
+      "name": "MiMo-V2.6-Flash",
+      "description": "MiMo-V2.6-Flash is an open-source foundation model developed by Xiaomi. Built on a Mixture-of-Experts architecture with 309B total parameters and 15B activated per token, it employs a hybrid attention mechanism for...",
+      "publisher": {
+        "id": "xiaomi",
+        "name": "Xiaomi"
+      },
+      "family": null,
+      "releasedAt": "2026-09-21T20:07:44Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1050000,
+      "maxOutputTokens": 131072,
+      "architecture": {
+        "modality": "text+image+audio+video-\u003etext",
+        "inputModalities": [
+          "text",
+          "image",
+          "video",
+          "audio"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.14,
+            "outputPerMillion": 0.28,
+            "cacheReadPerMillion": 0.0028,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "xiaomi/mimo-v2.6-flash",
+            "url": "https://openrouter.ai/xiaomi/mimo-v2.6-flash",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [
+        {
+          "key": "intelligence",
+          "name": "Intelligence Index",
+          "category": "general",
+          "score": 37.9,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "xiaomi/mimo-v2.6-flash",
+            "url": "https://openrouter.ai/xiaomi/mimo-v2.6-flash",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        }
+      ],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "xiaomi/mimo-v2.6-flash",
+        "url": "https://openrouter.ai/xiaomi/mimo-v2.6-flash",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_6e1bbde46b1d99dc69ca",
+      "sourceId": "xiaomi/mimo-v2.6-pro",
+      "canonicalSlug": "xiaomi/mimo-v2.6-pro-20260921",
+      "name": "MiMo-V2.6-Pro",
+      "description": "MiMo-V2.6-Pro is the flagship foundation model developed by Xiaomi. Built at a scale of over 1T parameters, it is designed to push the ceiling of capability for the most demanding...",
+      "publisher": {
+        "id": "xiaomi",
+        "name": "Xiaomi"
+      },
+      "family": null,
+      "releasedAt": "2026-09-21T20:07:39Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1050000,
+      "maxOutputTokens": 131072,
+      "architecture": {
+        "modality": "text+image+audio+video-\u003etext",
+        "inputModalities": [
+          "text",
+          "image",
+          "video",
+          "audio"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.435,
+            "outputPerMillion": 0.87,
+            "cacheReadPerMillion": 0.0036,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "xiaomi/mimo-v2.6-pro",
+            "url": "https://openrouter.ai/xiaomi/mimo-v2.6-pro",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [
+        {
+          "key": "intelligence",
+          "name": "Intelligence Index",
+          "category": "general",
+          "score": 46.3,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "xiaomi/mimo-v2.6-pro",
+            "url": "https://openrouter.ai/xiaomi/mimo-v2.6-pro",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        }
+      ],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "xiaomi/mimo-v2.6-pro",
+        "url": "https://openrouter.ai/xiaomi/mimo-v2.6-pro",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_0363d8865dd8cd7ac469",
+      "sourceId": "x-ai/grok-4.7",
+      "canonicalSlug": "x-ai/grok-4.7-20260916",
+      "name": "Grok 4.7",
+      "description": "Grok 4.7 is SpaceXAI's flagship model for coding, agentic tasks, and knowledge work, succeeding Grok 4.6. It is particularly strong at long-running software engineering tasks, verifying its own work, and...",
+      "publisher": {
+        "id": "x-ai",
+        "name": "xAI"
+      },
+      "family": null,
+      "releasedAt": "2026-09-21T16:19:01Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 500000,
+      "maxOutputTokens": 450000,
+      "architecture": {
+        "modality": "text+image+file-\u003etext",
+        "inputModalities": [
+          "text",
+          "image",
+          "file"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Grok"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_logprobs",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 2,
+            "outputPerMillion": 6,
+            "cacheReadPerMillion": 0.5,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "x-ai/grok-4.7",
+            "url": "https://openrouter.ai/x-ai/grok-4.7",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [
+        {
+          "key": "intelligence",
+          "name": "Intelligence Index",
+          "category": "general",
+          "score": 46.4,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "x-ai/grok-4.7",
+            "url": "https://openrouter.ai/x-ai/grok-4.7",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        }
+      ],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "x-ai/grok-4.7",
+        "url": "https://openrouter.ai/x-ai/grok-4.7",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_faf05c406a12b5f8ea10",
+      "sourceId": "qwen/qwen3.8-omni-flash",
+      "canonicalSlug": "qwen/qwen3.8-omni-flash-20260918",
+      "name": "Qwen3.8 Omni Flash",
+      "description": "Qwen3.8 Omni Flash is an omni-modal reasoning model from Alibaba, the first Qwen model built around agentic capabilities with native audio-video understanding. It is suited for audio-video analysis and summarization,...",
+      "publisher": {
+        "id": "qwen",
+        "name": "Qwen"
+      },
+      "family": null,
+      "releasedAt": "2026-09-21T03:05:54Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1000000,
+      "maxOutputTokens": 131072,
+      "architecture": {
+        "modality": "text+image+audio+video-\u003etext",
+        "inputModalities": [
+          "text",
+          "image",
+          "audio",
+          "video"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Qwen"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.15,
+            "outputPerMillion": 0.47,
+            "cacheReadPerMillion": 0.016,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "qwen/qwen3.8-omni-flash",
+            "url": "https://openrouter.ai/qwen/qwen3.8-omni-flash",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "qwen/qwen3.8-omni-flash",
+        "url": "https://openrouter.ai/qwen/qwen3.8-omni-flash",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_68508c0a29c79ce22f3f",
+      "sourceId": "prism-ml/ternary-bonsai-2-27b",
+      "canonicalSlug": "prism-ml/ternary-bonsai-2-27b-20260918",
+      "name": "Ternary Bonsai 2 27B",
+      "description": "Bonsai 2 27B is a 27B-parameter reasoning model from PrismML derived from Qwen3.8-27B. It supports coding, mathematics, tool calling, and image understanding with a 262K-token context window. Ternary compression shrinks...",
+      "publisher": {
+        "id": "prism-ml",
+        "name": "Prism Ml"
+      },
+      "family": null,
+      "releasedAt": "2026-09-18T17:54:06Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 262144,
+      "maxOutputTokens": 32768,
+      "architecture": {
+        "modality": "text+image-\u003etext",
+        "inputModalities": [
+          "text",
+          "image"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Qwen"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.075,
+            "outputPerMillion": 0.5,
+            "cacheReadPerMillion": 0.0375,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "prism-ml/ternary-bonsai-2-27b",
+            "url": "https://openrouter.ai/prism-ml/ternary-bonsai-2-27b",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "prism-ml/ternary-bonsai-2-27b",
+        "url": "https://openrouter.ai/prism-ml/ternary-bonsai-2-27b",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_5f9b366e2476d8a09678",
+      "sourceId": "z-ai/glm-5.3-flashx",
+      "canonicalSlug": "z-ai/glm-5.3-flashx-20260918",
+      "name": "GLM 5.3 FlashX",
+      "description": "GLM-5.3-FlashX is the high-speed variant of Z.ai's GLM-5.3-Flash, a native multimodal model delivering inference speeds of up to 200 tokens/s. Built on the same hybrid sparse and linear attention architecture...",
+      "publisher": {
+        "id": "z-ai",
+        "name": "Z.ai"
+      },
+      "family": null,
+      "releasedAt": "2026-09-18T15:07:00Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1048576,
+      "maxOutputTokens": 131072,
+      "architecture": {
+        "modality": "text+image+video-\u003etext",
+        "inputModalities": [
+          "text",
+          "image",
+          "video"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.37,
+            "outputPerMillion": 1.25,
+            "cacheReadPerMillion": 0.09,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "z-ai/glm-5.3-flashx",
+            "url": "https://openrouter.ai/z-ai/glm-5.3-flashx",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "z-ai/glm-5.3-flashx",
+        "url": "https://openrouter.ai/z-ai/glm-5.3-flashx",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_6a113eef118d93d9f855",
+      "sourceId": "unbiased/pareto",
+      "canonicalSlug": "unbiased/pareto-20260917",
+      "name": "Pareto",
+      "description": "Pareto is a multimodal composite model built for research, coding, and agentic workflows, while delivering frontier-level performance across a broad range of general-purpose tasks.",
+      "publisher": {
+        "id": "unbiased",
+        "name": "Unbiased"
+      },
+      "family": null,
+      "releasedAt": "2026-09-17T23:02:58Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 262144,
+      "maxOutputTokens": 131072,
+      "architecture": {
+        "modality": "text+image-\u003etext",
+        "inputModalities": [
+          "text",
+          "image"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "max_tokens",
+        "response_format",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 2.5,
+            "outputPerMillion": 7.5,
+            "cacheReadPerMillion": 0.25,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "unbiased/pareto",
+            "url": "https://openrouter.ai/unbiased/pareto",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "unbiased/pareto",
+        "url": "https://openrouter.ai/unbiased/pareto",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_e8e67fd06113d89d7e1b",
+      "sourceId": "~deepseek/deepseek-pro-latest",
+      "canonicalSlug": "~deepseek/deepseek-pro-latest",
+      "name": "DeepSeek Pro Latest",
+      "description": "This model always redirects to the latest model in the DeepSeek Pro family.",
+      "publisher": {
+        "id": "~deepseek",
+        "name": "~deepseek"
+      },
+      "family": null,
+      "releasedAt": "2026-09-14T15:19:34Z",
+      "status": "available",
+      "isAlias": false,
+      "contextWindowTokens": 1048576,
+      "maxOutputTokens": 393216,
+      "architecture": {
+        "modality": "text-\u003etext",
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Router"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.2276,
+            "outputPerMillion": 3.5,
+            "cacheReadPerMillion": 0.2276,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "~deepseek/deepseek-pro-latest",
+            "url": "https://openrouter.ai/~deepseek/deepseek-pro-latest",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "~deepseek/deepseek-pro-latest",
+        "url": "https://openrouter.ai/~deepseek/deepseek-pro-latest",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_fc3942ad0eae0d80a014",
+      "sourceId": "~deepseek/deepseek-flash-latest",
+      "canonicalSlug": "~deepseek/deepseek-flash-latest",
+      "name": "DeepSeek Flash Latest",
+      "description": "This model always redirects to the latest model in the DeepSeek Flash family.",
+      "publisher": {
+        "id": "~deepseek",
+        "name": "~deepseek"
+      },
+      "family": null,
+      "releasedAt": "2026-09-14T15:19:10Z",
+      "status": "available",
+      "isAlias": false,
+      "contextWindowTokens": 1048576,
+      "maxOutputTokens": 943718,
+      "architecture": {
+        "modality": "text+image-\u003etext",
+        "inputModalities": [
+          "text",
+          "image"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Router"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.024599999999999997,
+            "outputPerMillion": 0.6,
+            "cacheReadPerMillion": 0.024599999999999997,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "~deepseek/deepseek-flash-latest",
+            "url": "https://openrouter.ai/~deepseek/deepseek-flash-latest",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "~deepseek/deepseek-flash-latest",
+        "url": "https://openrouter.ai/~deepseek/deepseek-flash-latest",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_9e65b2ef6f7701618230",
+      "sourceId": "inference-net/schematron-v2-turbo",
+      "canonicalSlug": "inference-net/schematron-v2-turbo-20260902",
+      "name": "Schematron V2 Turbo",
+      "description": "Schematron V2 Turbo is a 3B-parameter HTML-to-JSON extraction model from Inference.net. It prioritizes throughput for high-volume extraction workloads. Extraction instructions must be supplied through a JSON schema in response_format rather...",
+      "publisher": {
+        "id": "inference-net",
+        "name": "Inference Net"
+      },
+      "family": null,
+      "releasedAt": "2026-09-12T01:35:49Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 128000,
+      "maxOutputTokens": 8192,
+      "architecture": {
+        "modality": "text-\u003etext",
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "top_k",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.03,
+            "outputPerMillion": 0.15,
+            "cacheReadPerMillion": 0.03,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "inference-net/schematron-v2-turbo",
+            "url": "https://openrouter.ai/inference-net/schematron-v2-turbo",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "inference-net/schematron-v2-turbo",
+        "url": "https://openrouter.ai/inference-net/schematron-v2-turbo",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_c833d5d717ac049364a5",
+      "sourceId": "inference-net/schematron-v2-small",
+      "canonicalSlug": "inference-net/schematron-v2-small-20260902",
+      "name": "Schematron V2 Small",
+      "description": "Schematron V2 Small is a 3B-parameter HTML-to-JSON extraction model from Inference.net. It prioritizes extraction quality for complex schemas and long pages. Extraction instructions must be supplied through a JSON schema...",
+      "publisher": {
+        "id": "inference-net",
+        "name": "Inference Net"
+      },
+      "family": null,
+      "releasedAt": "2026-09-12T01:35:33Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 128000,
+      "maxOutputTokens": 4096,
+      "architecture": {
+        "modality": "text-\u003etext",
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "logit_bias",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "top_k",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.049999999999999996,
+            "outputPerMillion": 0.22999999999999998,
+            "cacheReadPerMillion": 0.049999999999999996,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "inference-net/schematron-v2-small",
+            "url": "https://openrouter.ai/inference-net/schematron-v2-small",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "inference-net/schematron-v2-small",
+        "url": "https://openrouter.ai/inference-net/schematron-v2-small",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_a4fd20a0eabe58cb4a6a",
+      "sourceId": "~openai/gpt-astra-latest",
+      "canonicalSlug": "~openai/gpt-astra-latest",
+      "name": "GPT Astra Latest",
+      "description": "This model always redirects to the latest model in the GPT Astra family.",
+      "publisher": {
+        "id": "~openai",
+        "name": "~openai"
+      },
+      "family": null,
+      "releasedAt": "2026-09-11T12:48:52Z",
+      "status": "available",
+      "isAlias": false,
+      "contextWindowTokens": 1050000,
+      "maxOutputTokens": 128000,
+      "architecture": {
+        "modality": "text+image+file-\u003etext",
+        "inputModalities": [
+          "file",
+          "image",
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Router"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 10,
+            "outputPerMillion": 50,
+            "cacheReadPerMillion": 1,
+            "cacheWritePerMillion": 12.5,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "~openai/gpt-astra-latest",
+            "url": "https://openrouter.ai/~openai/gpt-astra-latest",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "~openai/gpt-astra-latest",
+        "url": "https://openrouter.ai/~openai/gpt-astra-latest",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_e68e1c822f05ab3982e7",
+      "sourceId": "~openai/gpt-sol-latest",
+      "canonicalSlug": "~openai/gpt-sol-latest",
+      "name": "GPT Sol Latest",
+      "description": "This model always redirects to the latest model in the GPT Sol family.",
+      "publisher": {
+        "id": "~openai",
+        "name": "~openai"
+      },
+      "family": null,
+      "releasedAt": "2026-09-11T12:48:48Z",
+      "status": "available",
+      "isAlias": false,
+      "contextWindowTokens": 1050000,
+      "maxOutputTokens": 128000,
+      "architecture": {
+        "modality": "text+image+file-\u003etext",
+        "inputModalities": [
+          "file",
+          "image",
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Router"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 2,
+            "outputPerMillion": 10,
+            "cacheReadPerMillion": 0.09999999999999999,
+            "cacheWritePerMillion": 2.5,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "~openai/gpt-sol-latest",
+            "url": "https://openrouter.ai/~openai/gpt-sol-latest",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "~openai/gpt-sol-latest",
+        "url": "https://openrouter.ai/~openai/gpt-sol-latest",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_123a6682c6df3ceb6b11",
+      "sourceId": "~openai/gpt-terra-latest",
+      "canonicalSlug": "~openai/gpt-terra-latest",
+      "name": "GPT Terra Latest",
+      "description": "This model always redirects to the latest model in the GPT Terra family.",
+      "publisher": {
+        "id": "~openai",
+        "name": "~openai"
+      },
+      "family": null,
+      "releasedAt": "2026-09-11T12:48:45Z",
+      "status": "available",
+      "isAlias": false,
+      "contextWindowTokens": 1050000,
+      "maxOutputTokens": 128000,
+      "architecture": {
+        "modality": "text+image+file-\u003etext",
+        "inputModalities": [
+          "file",
+          "image",
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Router"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "max_completion_tokens",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 2,
+            "outputPerMillion": 12,
+            "cacheReadPerMillion": 0.19999999999999998,
+            "cacheWritePerMillion": 2.5,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "~openai/gpt-terra-latest",
+            "url": "https://openrouter.ai/~openai/gpt-terra-latest",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "~openai/gpt-terra-latest",
+        "url": "https://openrouter.ai/~openai/gpt-terra-latest",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_fb72d3a2925bbfa2bb09",
+      "sourceId": "sakana/fugu-ultra-v2",
+      "canonicalSlug": "sakana/fugu-ultra-v2-20260911",
+      "name": "Fugu Ultra v2",
+      "description": "Fugu Ultra v2 is the higher-performance model in Sakana AI's Fugu family. Rather than a single monolithic model, Fugu is a learned multi-agent orchestration system: a language model trained to...",
+      "publisher": {
+        "id": "sakana",
+        "name": "Sakana"
+      },
+      "family": null,
+      "releasedAt": "2026-09-11T05:43:03Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1000000,
+      "maxOutputTokens": 128000,
+      "architecture": {
+        "modality": "text+image+file-\u003etext",
+        "inputModalities": [
+          "text",
+          "image",
+          "file"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "reasoning",
+        "reasoning_effort",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "web_search_options"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 5,
+            "outputPerMillion": 30,
+            "cacheReadPerMillion": 0.5,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "sakana/fugu-ultra-v2",
+            "url": "https://openrouter.ai/sakana/fugu-ultra-v2",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "sakana/fugu-ultra-v2",
+        "url": "https://openrouter.ai/sakana/fugu-ultra-v2",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_055ea20d4a2da84e4e76",
+      "sourceId": "sakana/fugu-max",
+      "canonicalSlug": "sakana/fugu-max-20260911",
+      "name": "Fugu Max",
+      "description": "Fugu Max is the cost-performance model in Sakana AI's Fugu family. Rather than a single monolithic model, Fugu is a learned multi-agent orchestration system: a language model trained to route...",
+      "publisher": {
+        "id": "sakana",
+        "name": "Sakana"
+      },
+      "family": null,
+      "releasedAt": "2026-09-11T05:32:51Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1000000,
+      "maxOutputTokens": 128000,
+      "architecture": {
+        "modality": "text+image+file-\u003etext",
+        "inputModalities": [
+          "text",
+          "image",
+          "file"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "reasoning",
+        "reasoning_effort",
+        "structured_outputs",
+        "tool_choice",
+        "tools",
+        "web_search_options"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 2,
+            "outputPerMillion": 6,
+            "cacheReadPerMillion": 0.25,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "sakana/fugu-max",
+            "url": "https://openrouter.ai/sakana/fugu-max",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "sakana/fugu-max",
+        "url": "https://openrouter.ai/sakana/fugu-max",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_f9ab73a7a9295005eb33",
+      "sourceId": "inclusionai/ling-3.0-flash-vl",
+      "canonicalSlug": "inclusionai/ling-3.0-flash-vl-20260910",
+      "name": "Ling 3.0 Flash VL",
+      "description": "Ling 3.0 Flash VL builds on Ling 3.0 Flash (124B total / 5.5B active MoE from InclusionAI), further strengthening its language capabilities while adding native visual perception and advanced visual...",
+      "publisher": {
+        "id": "inclusionai",
+        "name": "Inclusionai"
+      },
+      "family": null,
+      "releasedAt": "2026-09-10T16:01:54Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 262144,
+      "maxOutputTokens": 32768,
+      "architecture": {
+        "modality": "text+image+video-\u003etext",
+        "inputModalities": [
+          "text",
+          "image",
+          "video"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.020999999999999998,
+            "outputPerMillion": 0.061599999999999995,
+            "cacheReadPerMillion": 0.004200000000000001,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "inclusionai/ling-3.0-flash-vl",
+            "url": "https://openrouter.ai/inclusionai/ling-3.0-flash-vl",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [
+        {
+          "key": "intelligence",
+          "name": "Intelligence Index",
+          "category": "general",
+          "score": 24.6,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "inclusionai/ling-3.0-flash-vl",
+            "url": "https://openrouter.ai/inclusionai/ling-3.0-flash-vl",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        },
+        {
+          "key": "coding",
+          "name": "Coding Index",
+          "category": "coding",
+          "score": 57,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "inclusionai/ling-3.0-flash-vl",
+            "url": "https://openrouter.ai/inclusionai/ling-3.0-flash-vl",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        },
+        {
+          "key": "agentic",
+          "name": "Agentic Index",
+          "category": "agentic",
+          "score": 28.7,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "inclusionai/ling-3.0-flash-vl",
+            "url": "https://openrouter.ai/inclusionai/ling-3.0-flash-vl",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        }
+      ],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "inclusionai/ling-3.0-flash-vl",
+        "url": "https://openrouter.ai/inclusionai/ling-3.0-flash-vl",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_88b6460ec112862e4dd9",
+      "sourceId": "deepseek/deepseek-v4.1-flash",
+      "canonicalSlug": "deepseek/deepseek-v4.1-flash-20260910",
+      "name": "DeepSeek V4.1 Flash",
+      "description": "DeepSeek V4.1 Flash is a sparse mixture-of-experts model from DeepSeek, and the first built on the company's Causal Encoder-Decoder (CED) architecture. It activates 8B parameters on input and 16B on...",
+      "publisher": {
+        "id": "deepseek",
+        "name": "DeepSeek"
+      },
+      "family": null,
+      "releasedAt": "2026-09-10T06:21:25Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1048576,
+      "maxOutputTokens": 943718,
+      "architecture": {
+        "modality": "text+image-\u003etext",
+        "inputModalities": [
+          "text",
+          "image"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "DeepSeek"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.03,
+            "outputPerMillion": 0.5,
+            "cacheReadPerMillion": 0.01,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "deepseek/deepseek-v4.1-flash",
+            "url": "https://openrouter.ai/deepseek/deepseek-v4.1-flash",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [
+        {
+          "key": "intelligence",
+          "name": "Intelligence Index",
+          "category": "general",
+          "score": 39.5,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "deepseek/deepseek-v4.1-flash",
+            "url": "https://openrouter.ai/deepseek/deepseek-v4.1-flash",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        }
+      ],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "deepseek/deepseek-v4.1-flash",
+        "url": "https://openrouter.ai/deepseek/deepseek-v4.1-flash",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_42dfb5e4ef4aff17bc61",
+      "sourceId": "deepseek/deepseek-v4.1-flash:batch",
+      "canonicalSlug": "deepseek/deepseek-v4.1-flash-20260910",
+      "name": "DeepSeek V4.1 Flash (batch)",
+      "description": "DeepSeek V4.1 Flash is a sparse mixture-of-experts model from DeepSeek, and the first built on the company's Causal Encoder-Decoder (CED) architecture. It activates 8B parameters on input and 16B on...",
+      "publisher": {
+        "id": "deepseek",
+        "name": "DeepSeek"
+      },
+      "family": null,
+      "releasedAt": "2026-09-10T06:21:25Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1048576,
+      "maxOutputTokens": 131072,
+      "architecture": {
+        "modality": "text+image-\u003etext",
+        "inputModalities": [
+          "text",
+          "image"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "DeepSeek"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.112,
+            "outputPerMillion": 0.33599999999999997,
+            "cacheReadPerMillion": 0.00336,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "deepseek/deepseek-v4.1-flash:batch",
+            "url": "https://openrouter.ai/deepseek/deepseek-v4.1-flash:batch",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [
+        {
+          "key": "intelligence",
+          "name": "Intelligence Index",
+          "category": "general",
+          "score": 39.5,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "deepseek/deepseek-v4.1-flash:batch",
+            "url": "https://openrouter.ai/deepseek/deepseek-v4.1-flash:batch",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        }
+      ],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "deepseek/deepseek-v4.1-flash:batch",
+        "url": "https://openrouter.ai/deepseek/deepseek-v4.1-flash:batch",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_ebb71a5e007630f66daf",
+      "sourceId": "inception/mercury-2.5",
+      "canonicalSlug": "inception/mercury-2.5-20260908",
+      "name": "Mercury 2.5",
+      "description": "Mercury 2.5 is the fastest reasoning LLM, and the latest diffusion LLM (dLLM) from Inception. Instead of generating tokens sequentially, Mercury 2.5 produces and refines multiple tokens in parallel, achieving...",
+      "publisher": {
+        "id": "inception",
+        "name": "Inception"
+      },
+      "family": null,
+      "releasedAt": "2026-09-08T18:28:57Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 260000,
+      "maxOutputTokens": 65536,
+      "architecture": {
+        "modality": "text-\u003etext",
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.04,
+            "outputPerMillion": 0.15,
+            "cacheReadPerMillion": 0.004,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "inception/mercury-2.5",
+            "url": "https://openrouter.ai/inception/mercury-2.5",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [
+        {
+          "key": "intelligence",
+          "name": "Intelligence Index",
+          "category": "general",
+          "score": 12.3,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "inception/mercury-2.5",
+            "url": "https://openrouter.ai/inception/mercury-2.5",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        }
+      ],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "inception/mercury-2.5",
+        "url": "https://openrouter.ai/inception/mercury-2.5",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_4c1c059602a3d6b108ca",
+      "sourceId": "nex-agi/nex-n2.5-mini",
+      "canonicalSlug": "nex-agi/nex-n2.5-mini-20260908",
+      "name": "Nex-N2.5-Mini",
+      "description": "Nex-N2.5 is an agentic model built to turn goals into working, verified outcomes. Its core strength is agentic coding within a visual feedback loop: it can explore codebases, implement multi-file...",
+      "publisher": {
+        "id": "nex-agi",
+        "name": "Nex Agi"
+      },
+      "family": null,
+      "releasedAt": "2026-09-08T17:54:21Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 262144,
+      "maxOutputTokens": 235929,
+      "architecture": {
+        "modality": "text+image-\u003etext",
+        "inputModalities": [
+          "text",
+          "image"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Qwen3"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "structured_outputs",
+        "temperature",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.024999999999999998,
+            "outputPerMillion": 0.09999999999999999,
+            "cacheReadPerMillion": 0.0025,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "nex-agi/nex-n2.5-mini",
+            "url": "https://openrouter.ai/nex-agi/nex-n2.5-mini",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "nex-agi/nex-n2.5-mini",
+        "url": "https://openrouter.ai/nex-agi/nex-n2.5-mini",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_e6fbac75c181490a84c2",
+      "sourceId": "nex-agi/nex-n2.5-pro",
+      "canonicalSlug": "nex-agi/nex-n2.5-pro-20260907",
+      "name": "Nex-N2.5-Pro",
+      "description": "Nex-N2.5 is an agentic model built to turn goals into working, verified outcomes. Its core strength is agentic coding within a visual feedback loop: it can explore codebases, implement multi-file...",
+      "publisher": {
+        "id": "nex-agi",
+        "name": "Nex Agi"
+      },
+      "family": null,
+      "releasedAt": "2026-09-08T17:54:10Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 262144,
+      "maxOutputTokens": 235929,
+      "architecture": {
+        "modality": "text+image-\u003etext",
+        "inputModalities": [
+          "text",
+          "image"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Qwen3"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.075,
+            "outputPerMillion": 0.25,
+            "cacheReadPerMillion": 0.015,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "nex-agi/nex-n2.5-pro",
+            "url": "https://openrouter.ai/nex-agi/nex-n2.5-pro",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "nex-agi/nex-n2.5-pro",
+        "url": "https://openrouter.ai/nex-agi/nex-n2.5-pro",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_858c7103c5e9a712873b",
+      "sourceId": "inclusionai/ling-3.0-flash-sante:free",
+      "canonicalSlug": "inclusionai/ling-3.0-flash-sante-20260904",
+      "name": "Ling 3.0 Flash Sante (free)",
+      "description": "Ling 3.0 Flash Sante is a health and medicine-focused mixture-of-experts model from InclusionAI, built on Ling 3.0 Flash with 5.1B active parameters out of 124B total. It is designed for...",
+      "publisher": {
+        "id": "inclusionai",
+        "name": "Inclusionai"
+      },
+      "family": null,
+      "releasedAt": "2026-09-04T18:19:06Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 262144,
+      "maxOutputTokens": 32768,
+      "architecture": {
+        "modality": "text-\u003etext",
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "seed",
+        "stop",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0,
+            "outputPerMillion": 0,
+            "cacheReadPerMillion": null,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "inclusionai/ling-3.0-flash-sante:free",
+            "url": "https://openrouter.ai/inclusionai/ling-3.0-flash-sante:free",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "inclusionai/ling-3.0-flash-sante:free",
+        "url": "https://openrouter.ai/inclusionai/ling-3.0-flash-sante:free",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_8d45fb410477f6506da2",
+      "sourceId": "qwen/qwen3.8-max-0902",
+      "canonicalSlug": "qwen/qwen3.8-max-20260902",
+      "name": "Qwen3.8 Max (0902)",
+      "description": "Qwen3.8 Max 0902 is an updated snapshot of Qwen3.8 Max from Alibaba's Qwen team. It is a 2.4-trillion-parameter mixture-of-experts model that accepts text, image, and video input and returns text,...",
+      "publisher": {
+        "id": "qwen",
+        "name": "Qwen"
+      },
+      "family": null,
+      "releasedAt": "2026-09-03T21:08:24Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1000000,
+      "maxOutputTokens": 131072,
+      "architecture": {
+        "modality": "text+image+video-\u003etext",
+        "inputModalities": [
+          "text",
+          "image",
+          "video"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Qwen"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logprobs",
+        "max_tokens",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 2,
+            "outputPerMillion": 6,
+            "cacheReadPerMillion": 0.25,
+            "cacheWritePerMillion": 2.5,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "qwen/qwen3.8-max-0902",
+            "url": "https://openrouter.ai/qwen/qwen3.8-max-0902",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [
+        {
+          "key": "intelligence",
+          "name": "Intelligence Index",
+          "category": "general",
+          "score": 45.4,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "qwen/qwen3.8-max-0902",
+            "url": "https://openrouter.ai/qwen/qwen3.8-max-0902",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        },
+        {
+          "key": "coding",
+          "name": "Coding Index",
+          "category": "coding",
+          "score": 76.2,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "qwen/qwen3.8-max-0902",
+            "url": "https://openrouter.ai/qwen/qwen3.8-max-0902",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        },
+        {
+          "key": "agentic",
+          "name": "Agentic Index",
+          "category": "agentic",
+          "score": 56,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "qwen/qwen3.8-max-0902",
+            "url": "https://openrouter.ai/qwen/qwen3.8-max-0902",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        }
+      ],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "qwen/qwen3.8-max-0902",
+        "url": "https://openrouter.ai/qwen/qwen3.8-max-0902",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_b27b36bba47e00de5418",
+      "sourceId": "meta/muse-spark-1.3-contributor",
+      "canonicalSlug": "meta/muse-spark-1.3-contributor-20260902",
+      "name": "Muse Spark 1.3 Contributor",
+      "description": "Muse Spark 1.3 Contributor is the cost-efficient contributor tier of Meta’s multimodal reasoning model for experimentation, learning, and early-stage agentic, multi-agent, and coding workflows. It is designed to track information...",
+      "publisher": {
+        "id": "meta",
+        "name": "Meta"
+      },
+      "family": null,
+      "releasedAt": "2026-09-02T20:38:39Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1048576,
+      "maxOutputTokens": 943718,
+      "architecture": {
+        "modality": "text+image+file+video-\u003etext",
+        "inputModalities": [
+          "text",
+          "image",
+          "video",
+          "file"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.09999999999999999,
+            "outputPerMillion": 0.19999999999999998,
+            "cacheReadPerMillion": 0.002,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "meta/muse-spark-1.3-contributor",
+            "url": "https://openrouter.ai/meta/muse-spark-1.3-contributor",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "meta/muse-spark-1.3-contributor",
+        "url": "https://openrouter.ai/meta/muse-spark-1.3-contributor",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_112fc99b205c70a24eba",
+      "sourceId": "meta/muse-spark-1.3",
+      "canonicalSlug": "meta/muse-spark-1.3-20260902",
+      "name": "Muse Spark 1.3",
+      "description": "Muse Spark 1.3 is a multimodal reasoning model from Meta for long-running agentic, multi-agent, and coding workflows. It is designed to keep track of information across extended tasks, work through...",
+      "publisher": {
+        "id": "meta",
+        "name": "Meta"
+      },
+      "family": null,
+      "releasedAt": "2026-09-02T19:45:59Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1048576,
+      "maxOutputTokens": 943718,
+      "architecture": {
+        "modality": "text+image+file+video-\u003etext",
+        "inputModalities": [
+          "text",
+          "image",
+          "video",
+          "file"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 1.25,
+            "outputPerMillion": 4.25,
+            "cacheReadPerMillion": 0.15,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "meta/muse-spark-1.3",
+            "url": "https://openrouter.ai/meta/muse-spark-1.3",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "meta/muse-spark-1.3",
+        "url": "https://openrouter.ai/meta/muse-spark-1.3",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_0bcaa8309af95ff4e79c",
+      "sourceId": "google/gemini-3.8-flash",
+      "canonicalSlug": "google/gemini-3.8-flash-20260902",
+      "name": "Gemini 3.8 Flash",
+      "description": "Gemini 3.8 Flash is Google's most intelligent Flash model with significant gains from 3.7 Flash across software engineering, agentic tasks, and multi-step reasoning.",
+      "publisher": {
+        "id": "google",
+        "name": "Google"
+      },
+      "family": null,
+      "releasedAt": "2026-09-02T15:14:16Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1048576,
+      "maxOutputTokens": 65536,
+      "architecture": {
+        "modality": "text+image+file+audio+video-\u003etext",
+        "inputModalities": [
+          "text",
+          "image",
+          "video",
+          "file",
+          "audio"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Gemini"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.75,
+            "outputPerMillion": 3.75,
+            "cacheReadPerMillion": 0.075,
+            "cacheWritePerMillion": 0.0416666666666667,
+            "request": null,
+            "image": 7.5e-7
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "google/gemini-3.8-flash",
+            "url": "https://openrouter.ai/google/gemini-3.8-flash",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [
+        {
+          "key": "intelligence",
+          "name": "Intelligence Index",
+          "category": "general",
+          "score": 40.9,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "google/gemini-3.8-flash",
+            "url": "https://openrouter.ai/google/gemini-3.8-flash",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        },
+        {
+          "key": "coding",
+          "name": "Coding Index",
+          "category": "coding",
+          "score": 76.3,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "google/gemini-3.8-flash",
+            "url": "https://openrouter.ai/google/gemini-3.8-flash",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        },
+        {
+          "key": "agentic",
+          "name": "Agentic Index",
+          "category": "agentic",
+          "score": 40.2,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "google/gemini-3.8-flash",
+            "url": "https://openrouter.ai/google/gemini-3.8-flash",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        }
+      ],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "google/gemini-3.8-flash",
+        "url": "https://openrouter.ai/google/gemini-3.8-flash",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_3852acf78c44e090ebde",
+      "sourceId": "google/gemini-3.8-flash:batch",
+      "canonicalSlug": "google/gemini-3.8-flash-20260902",
+      "name": "Gemini 3.8 Flash (batch)",
+      "description": "Gemini 3.8 Flash is Google's most intelligent Flash model with significant gains from 3.7 Flash across software engineering, agentic tasks, and multi-step reasoning.",
+      "publisher": {
+        "id": "google",
+        "name": "Google"
+      },
+      "family": null,
+      "releasedAt": "2026-09-02T15:14:16Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1048576,
+      "maxOutputTokens": 65536,
+      "architecture": {
+        "modality": "text+image+file+audio+video-\u003etext",
+        "inputModalities": [
+          "text",
+          "image",
+          "video",
+          "file",
+          "audio"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Gemini"
+      },
+      "supportedParameters": [
+        "include_reasoning",
+        "max_tokens",
+        "reasoning",
+        "reasoning_effort",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "tool_choice",
+        "tools"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.375,
+            "outputPerMillion": 1.875,
+            "cacheReadPerMillion": 0.0375,
+            "cacheWritePerMillion": 0.0416666666666667,
+            "request": null,
+            "image": 3.75e-7
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "google/gemini-3.8-flash:batch",
+            "url": "https://openrouter.ai/google/gemini-3.8-flash:batch",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [
+        {
+          "key": "intelligence",
+          "name": "Intelligence Index",
+          "category": "general",
+          "score": 40.9,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "google/gemini-3.8-flash:batch",
+            "url": "https://openrouter.ai/google/gemini-3.8-flash:batch",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        },
+        {
+          "key": "coding",
+          "name": "Coding Index",
+          "category": "coding",
+          "score": 76.3,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "google/gemini-3.8-flash:batch",
+            "url": "https://openrouter.ai/google/gemini-3.8-flash:batch",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        },
+        {
+          "key": "agentic",
+          "name": "Agentic Index",
+          "category": "agentic",
+          "score": 40.2,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "google/gemini-3.8-flash:batch",
+            "url": "https://openrouter.ai/google/gemini-3.8-flash:batch",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        }
+      ],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "google/gemini-3.8-flash:batch",
+        "url": "https://openrouter.ai/google/gemini-3.8-flash:batch",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_c3fe27c255e78b5c5cf7",
+      "sourceId": "ibm-granite/granite-4.2-8b",
+      "canonicalSlug": "ibm-granite/granite-4.2-8b-20260831",
+      "name": "Granite 4.2 8B",
+      "description": "Granite 4.2 8B is a dense reasoning model from IBM. It is suited for mathematics, code generation, multilingual dialogue, and agentic workflows that need multi-step reasoning. It supports full, low-effort,...",
+      "publisher": {
+        "id": "ibm-granite",
+        "name": "Ibm Granite"
+      },
+      "family": null,
+      "releasedAt": "2026-08-31T20:06:20Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 131072,
+      "maxOutputTokens": 117964,
+      "architecture": {
+        "modality": "text-\u003etext",
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.06,
+            "outputPerMillion": 0.25,
+            "cacheReadPerMillion": 0.015,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "ibm-granite/granite-4.2-8b",
+            "url": "https://openrouter.ai/ibm-granite/granite-4.2-8b",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [
+        {
+          "key": "intelligence",
+          "name": "Intelligence Index",
+          "category": "general",
+          "score": 11.1,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "ibm-granite/granite-4.2-8b",
+            "url": "https://openrouter.ai/ibm-granite/granite-4.2-8b",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        },
+        {
+          "key": "coding",
+          "name": "Coding Index",
+          "category": "coding",
+          "score": 22.4,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "ibm-granite/granite-4.2-8b",
+            "url": "https://openrouter.ai/ibm-granite/granite-4.2-8b",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        },
+        {
+          "key": "agentic",
+          "name": "Agentic Index",
+          "category": "agentic",
+          "score": 1.3,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "ibm-granite/granite-4.2-8b",
+            "url": "https://openrouter.ai/ibm-granite/granite-4.2-8b",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        }
+      ],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "ibm-granite/granite-4.2-8b",
+        "url": "https://openrouter.ai/ibm-granite/granite-4.2-8b",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_42a27eb76d315c87997f",
+      "sourceId": "tencent/hy4-preview",
+      "canonicalSlug": "tencent/hy4-preview-20260827",
+      "name": "Hy4 preview",
+      "description": "Tencent: Hy4 preview is a mixture-of-experts model from Tencent, with 49B active parameters out of 770B total. It is designed for coding agents, complex tool-use workflows, and productivity tasks that...",
+      "publisher": {
+        "id": "tencent",
+        "name": "Tencent"
+      },
+      "family": null,
+      "releasedAt": "2026-08-28T06:09:35Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 1048576,
+      "maxOutputTokens": 64000,
+      "architecture": {
+        "modality": "text-\u003etext",
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "max_completion_tokens",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "reasoning_effort",
+        "repetition_penalty",
+        "response_format",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.834,
+            "outputPerMillion": 2.501,
+            "cacheReadPerMillion": 0.041999999999999996,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "tencent/hy4-preview",
+            "url": "https://openrouter.ai/tencent/hy4-preview",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "tencent/hy4-preview",
+        "url": "https://openrouter.ai/tencent/hy4-preview",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    },
+    {
+      "id": "mdl_ed16a27af84cc1565a67",
+      "sourceId": "inclusionai/ling-3.0-flash-fin",
+      "canonicalSlug": "inclusionai/ling-3.0-flash-fin-20260827",
+      "name": "Ling 3.0 Flash Fin",
+      "description": "Ling 3.0 Flash Fin is a finance-focused mixture-of-experts model from InclusionAI, built on Ling 3.0 Flash with 5.1B active parameters out of 124B total. It is designed for real-world investment...",
+      "publisher": {
+        "id": "inclusionai",
+        "name": "Inclusionai"
+      },
+      "family": null,
+      "releasedAt": "2026-08-27T15:58:10Z",
+      "status": "available",
+      "isAlias": true,
+      "contextWindowTokens": 262144,
+      "maxOutputTokens": 235929,
+      "architecture": {
+        "modality": "text-\u003etext",
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "tokenizer": "Other"
+      },
+      "supportedParameters": [
+        "frequency_penalty",
+        "include_reasoning",
+        "logit_bias",
+        "logprobs",
+        "max_tokens",
+        "min_p",
+        "presence_penalty",
+        "reasoning",
+        "repetition_penalty",
+        "seed",
+        "stop",
+        "structured_outputs",
+        "temperature",
+        "tool_choice",
+        "tools",
+        "top_k",
+        "top_logprobs",
+        "top_p"
+      ],
+      "servingRoutes": [
+        {
+          "aggregator": {
+            "id": "openrouter",
+            "name": "OpenRouter"
+          },
+          "inferenceProvider": null,
+          "pricing": {
+            "currency": "USD",
+            "unit": "per_million_tokens",
+            "inputPerMillion": 0.06,
+            "outputPerMillion": 0.18,
+            "cacheReadPerMillion": 0.012,
+            "cacheWritePerMillion": null,
+            "request": null,
+            "image": null
+          },
+          "observedAt": "2026-10-01T10:26:17.375699Z",
+          "source": {
+            "name": "OpenRouter",
+            "externalId": "inclusionai/ling-3.0-flash-fin",
+            "url": "https://openrouter.ai/inclusionai/ling-3.0-flash-fin",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          }
+        }
+      ],
+      "benchmarks": [
+        {
+          "key": "intelligence",
+          "name": "Intelligence Index",
+          "category": "general",
+          "score": 22.6,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "inclusionai/ling-3.0-flash-fin",
+            "url": "https://openrouter.ai/inclusionai/ling-3.0-flash-fin",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        },
+        {
+          "key": "coding",
+          "name": "Coding Index",
+          "category": "coding",
+          "score": 55.6,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "inclusionai/ling-3.0-flash-fin",
+            "url": "https://openrouter.ai/inclusionai/ling-3.0-flash-fin",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        },
+        {
+          "key": "agentic",
+          "name": "Agentic Index",
+          "category": "agentic",
+          "score": 27.9,
+          "scale": "index",
+          "source": {
+            "name": "Artificial Analysis via OpenRouter",
+            "externalId": "inclusionai/ling-3.0-flash-fin",
+            "url": "https://openrouter.ai/inclusionai/ling-3.0-flash-fin",
+            "observedAt": "2026-10-01T10:26:17.375699Z"
+          },
+          "harness": null,
+          "evaluatedAt": null
+        }
+      ],
+      "source": {
+        "name": "OpenRouter",
+        "externalId": "inclusionai/ling-3.0-flash-fin",
+        "url": "https://openrouter.ai/inclusionai/ling-3.0-flash-fin",
+        "observedAt": "2026-10-01T10:26:17.375699Z"
+      }
+    }
+  ]
+}
