@@ -1,39 +1,46 @@
 import { expect, test } from '@playwright/test'
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/#top')
-  await expect(page.getByText('LIVE API')).toBeVisible()
+  await page.goto('/#/latest')
+  await expect(page.getByText('LIVE', { exact: true })).toBeVisible()
 })
 
-test('loads the live Go catalog and filters models', async ({ page }) => {
-  await expect(page.locator('.hero-metrics').getByText('MODELS LOADED')).toBeVisible()
+test('shows a production latest-models homepage backed by the live API', async ({ page }) => {
+  await expect(page.getByRole('heading', { name: /Know what’s new/ })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Latest by provider' })).toBeVisible()
   const loaded = Number(await page.locator('.hero-metrics strong').first().innerText())
   expect(loaded).toBeGreaterThan(10)
-
-  await page.getByPlaceholder('Search model, publisher, or source ID').fill('Claude Sonnet 5.5')
-  await expect(page.locator('.catalog-meta')).toContainText('matching records')
-  await expect(page.getByRole('button', { name: /Claude Sonnet 5\.5 Anthropic/ }).first()).toBeVisible()
-  await expect(page.getByRole('button', { name: /GPT-6\.1 Sol Pro/ })).toHaveCount(0)
+  await expect(page.locator('.latest-card')).toHaveCount(8)
+  await expect(page.getByRole('link', { name: 'Data model' })).toHaveCount(0)
+  await expect(page.getByRole('link', { name: 'API', exact: true })).toHaveCount(0)
 })
 
-test('opens a model record and compares two models', async ({ page }) => {
-  await page.getByRole('button', { name: /Claude Sonnet 5\.5 Anthropic/ }).first().click()
+test('filters the complete model catalog and opens a model profile', async ({ page }) => {
+  await page.getByRole('link', { name: 'Models', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Explore every model' })).toBeVisible()
+  await page.getByPlaceholder('Search model, provider, or source ID').fill('Claude Sonnet 5.5')
+  await expect(page.locator('.catalog-meta')).toContainText('matching models')
+  const model = page.getByRole('button', { name: /Claude Sonnet 5\.5/ }).first()
+  await expect(model).toBeVisible()
+  await model.click()
   const drawer = page.getByRole('complementary', { name: 'Claude Sonnet 5.5 details' })
-  await expect(drawer).toBeVisible()
+  await expect(drawer).toContainText('At a glance')
   await expect(drawer).toContainText('anthropic/claude-sonnet-5.5')
-  await expect(drawer).toContainText('$2.00')
   await drawer.getByRole('button', { name: 'Close details' }).click()
-
-  const checks = page.locator('.compare-check input[type="checkbox"]')
-  await checks.nth(0).check()
-  await checks.nth(1).check()
-  await page.getByRole('button', { name: 'Compare models' }).click()
-  await expect(page.getByRole('heading', { name: 'Model comparison' })).toBeVisible()
-  await expect(page.locator('.comparison-table')).toContainText('Input / MTok')
-  await expect(page.locator('.comparison-heading')).toHaveCount(3)
 })
 
-test('persists theme and exposes the detailed source mapping', async ({ page }) => {
+test('drills from the provider directory into all models for a provider', async ({ page }) => {
+  await page.getByRole('link', { name: 'Providers', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Models, by provider' })).toBeVisible()
+  await page.getByPlaceholder('Find a provider').fill('Anthropic')
+  await page.getByRole('link', { name: /Anthropic/ }).click()
+  await expect(page.getByRole('heading', { name: 'Anthropic', exact: true })).toBeVisible()
+  await expect(page.getByText('LATEST OBSERVED MODEL')).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'All Anthropic models' })).toBeVisible()
+  await expect(page.locator('.model-row').first()).toBeVisible()
+})
+
+test('compares selected models and persists the theme', async ({ page }) => {
   const toggle = page.getByRole('button', { name: /Switch to .* theme/ })
   const initial = await page.locator('html').getAttribute('data-theme')
   await toggle.click()
@@ -42,11 +49,12 @@ test('persists theme and exposes the detailed source mapping', async ({ page }) 
   await page.reload()
   await expect(page.locator('html')).toHaveAttribute('data-theme', changed)
 
-  await page.getByRole('link', { name: 'DATA MODEL' }).click()
-  await expect(page.getByRole('heading', { name: 'Awba data model' })).toBeVisible()
-  await page.getByRole('button', { name: /Source API mapping/i }).click()
-  await expect(page.locator('.request-line')).toContainText('GET')
-  await expect(page.locator('.request-line')).toContainText('https://openrouter.ai/api/v1/models')
-  await expect(page.locator('.header-table')).toContainText('Bearer <OPENROUTER_API_KEY>')
-  await expect(page.getByText('data[].canonical_slug', { exact: true }).first()).toBeVisible()
+  await page.getByRole('link', { name: 'Models', exact: true }).click()
+  const checks = page.locator('.compare-check input[type="checkbox"]')
+  await checks.nth(0).check()
+  await checks.nth(1).check()
+  await page.getByRole('link', { name: 'Compare models' }).click()
+  await expect(page.getByRole('heading', { name: 'Compare what matters' })).toBeVisible()
+  await expect(page.locator('.comparison-table')).toContainText('Input / MTok')
+  await expect(page.locator('.comparison-heading')).toHaveCount(3)
 })

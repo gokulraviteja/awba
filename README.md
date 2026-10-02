@@ -4,12 +4,13 @@ Awba is a developer-stack platform in progress. Its first module is a normalized
 
 This repository contains the Awba web application and MCP protocol adapter:
 
-- A React/Vite catalog UI with search, filters, model details, and comparison
-- An interactive LLD data-model workbench covering all provisional entities, columns, sources, and design gaps
+- A React/Vite product UI for latest models, provider discovery, provider drill-down, model details, and comparison
 - A typed client for the separate Go HTTP API
 - A representative offline snapshot for graceful frontend fallback
 - A read-only TypeScript MCP server that delegates to the Go API
-- End-to-end browser coverage for the catalog and LLD workflows
+- End-to-end browser coverage for the primary product workflows
+
+The schema catalog and source-mapping modules remain in `src/data` and `src/components` as engineering references, but they are intentionally not part of the customer-facing navigation or application routes.
 
 ## Documentation
 
@@ -56,9 +57,7 @@ Start the API and web UI:
 npm run dev:full
 ```
 
-Open `http://localhost:5173`. The UI calls the Go API through Vite's `/api` proxy and falls back to `public/catalog.sample.json` when the API is unavailable.
-
-Open `http://localhost:5173/#schema` (or select **Data model** in the header) for the entity-by-entity LLD workbench.
+Open `http://localhost:5173`. The UI calls the Go API through Vite's `/api` proxy and falls back to `public/catalog.sample.json` when the API is unavailable. Product routes are `#/latest`, `#/models`, `#/providers`, `#/providers/{id}`, and `#/compare`.
 
 To run the API, UI, and MCP service together:
 

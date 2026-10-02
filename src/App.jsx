@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import LogoMark from './components/LogoMark'
-import SchemaExplorer from './components/SchemaExplorer'
 import ThreeScene from './components/ThreeScene'
-import { catalogApiUrl, loadCatalog } from './api/catalog'
+import { loadCatalog } from './api/catalog'
 
 const FALLBACK_URL = '/catalog.sample.json'
 
@@ -10,6 +9,16 @@ function initialTheme() {
   const saved = window.localStorage.getItem('awba-theme')
   if (saved === 'light' || saved === 'dark') return saved
   return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+}
+
+function parseRoute() {
+  const path = window.location.hash.replace(/^#\/?/, '').split('?')[0]
+  if (!path || path === 'top' || path === 'latest') return { page: 'latest' }
+  if (path === 'models' || path === 'catalog') return { page: 'models' }
+  if (path === 'providers') return { page: 'providers' }
+  if (path.startsWith('providers/')) return { page: 'provider', id: decodeURIComponent(path.slice(10)) }
+  if (path === 'compare') return { page: 'compare' }
+  return { page: 'latest' }
 }
 
 function formatMoney(value) {
@@ -30,12 +39,12 @@ function benchmark(model, key) {
   return model.benchmarks?.find((item) => item.key === key)?.score ?? null
 }
 
-function route(model) {
+function servingRoute(model) {
   return model.servingRoutes?.[0] ?? { pricing: {} }
 }
 
 function dateLabel(value) {
-  if (!value) return 'Unknown'
+  if (!value) return 'Date unavailable'
   return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(value))
 }
 
@@ -49,320 +58,174 @@ function relativeTime(value) {
   return `${Math.round(hours / 24)}d ago`
 }
 
+const modelDate = (model) => new Date(model.releasedAt ?? 0).getTime()
+const modelModalities = (model) => [...(model.architecture?.inputModalities ?? []), ...(model.architecture?.outputModalities ?? [])]
+  .filter((item, index, all) => all.indexOf(item) === index)
+const publisherInitials = (name) => name.split(/\s+/).slice(0, 2).map((part) => part[0]).join('').toUpperCase()
+
 function Score({ label, value }) {
-  return (
-    <div className="score-cell" title={`${label}: ${value ?? 'not available'}`}>
-      <span>{label.slice(0, 3).toUpperCase()}</span>
-      <div className="score-bar"><i style={{ width: `${Math.min(value ?? 0, 100)}%` }} /></div>
-      <strong>{value == null ? '—' : value.toFixed(1)}</strong>
-    </div>
-  )
+  return <div className="score-cell" title={`${label}: ${value ?? 'not available'}`}><span>{label.slice(0, 3).toUpperCase()}</span><div className="score-bar"><i style={{ width: `${Math.min(value ?? 0, 100)}%` }} /></div><strong>{value == null ? '—' : value.toFixed(1)}</strong></div>
 }
 
-function ModelRow({ model, selected, onSelect, onOpen }) {
-  const pricing = route(model).pricing ?? {}
+function PublisherAvatar({ publisher, large = false }) {
+  return <span className={`publisher-avatar${large ? ' large' : ''}`} data-publisher={publisher.id}>{publisherInitials(publisher.name)}</span>
+}
+
+function ModelRow({ model, selected, onSelect, onOpen, showPublisher = true }) {
+  const pricing = servingRoute(model).pricing ?? {}
   return (
     <article className="model-row">
-      <label className="compare-check" title="Add to comparison">
-        <input type="checkbox" checked={selected} onChange={() => onSelect(model)} />
-        <span />
-      </label>
-      <button className="model-identity" onClick={() => onOpen(model)}>
-        <span className="publisher-dot" data-publisher={model.publisher.id}>{model.publisher.name.slice(0, 1)}</span>
-        <span>
-          <strong>{model.name}</strong>
-          <small>{model.publisher.name} · {model.status}</small>
-        </span>
-      </button>
-      <div className="model-numbers price-pair">
-        <span><small>IN</small>{formatMoney(pricing.inputPerMillion)}</span>
-        <span><small>OUT</small>{formatMoney(pricing.outputPerMillion)}</span>
-      </div>
-      <div className="model-numbers context-value">
-        <strong>{formatTokens(model.contextWindowTokens)}</strong>
-        <small>{formatTokens(model.maxOutputTokens)} output</small>
-      </div>
-      <div className="modality-list">
-        {[...(model.architecture?.inputModalities ?? []), ...(model.architecture?.outputModalities ?? [])]
-          .filter((item, index, all) => all.indexOf(item) === index)
-          .slice(0, 3)
-          .map((item) => <span key={item}>{item}</span>)}
-      </div>
-      <div className="row-scores">
-        <Score label="Intelligence" value={benchmark(model, 'intelligence')} />
-        <Score label="Coding" value={benchmark(model, 'coding')} />
-        <Score label="Agentic" value={benchmark(model, 'agentic')} />
-      </div>
+      <label className="compare-check" title="Add to comparison"><input aria-label={`Compare ${model.name}`} type="checkbox" checked={selected} onChange={() => onSelect(model)} /><span /></label>
+      <button className="model-identity" onClick={() => onOpen(model)}><PublisherAvatar publisher={model.publisher} /><span><strong>{model.name}</strong><small>{showPublisher ? `${model.publisher.name} · ` : ''}{dateLabel(model.releasedAt)}</small></span></button>
+      <div className="model-numbers price-pair"><span><small>INPUT</small>{formatMoney(pricing.inputPerMillion)}</span><span><small>OUTPUT</small>{formatMoney(pricing.outputPerMillion)}</span></div>
+      <div className="model-numbers context-value"><strong>{formatTokens(model.contextWindowTokens)}</strong><small>{formatTokens(model.maxOutputTokens)} output</small></div>
+      <div className="modality-list">{modelModalities(model).slice(0, 3).map((item) => <span key={item}>{item}</span>)}</div>
+      <div className="row-scores"><Score label="Intelligence" value={benchmark(model, 'intelligence')} /><Score label="Coding" value={benchmark(model, 'coding')} /><Score label="Agentic" value={benchmark(model, 'agentic')} /></div>
       <button className="row-arrow" onClick={() => onOpen(model)} aria-label={`Open ${model.name}`}>↗</button>
     </article>
   )
 }
 
-function DetailPanel({ model, onClose, onCompare, selected }) {
+function ModelList({ models, selected, onSelect, onOpen, limit, showPublisher = true }) {
+  return <><div className="model-list-head"><span /><span>Model</span><span>Price / MTok</span><span>Context</span><span>Modalities</span><span>Benchmarks</span><span /></div><div className="model-list">{models.slice(0, limit).map((model) => <ModelRow key={model.id} model={model} selected={selected.some((item) => item.id === model.id)} onSelect={onSelect} onOpen={onOpen} showPublisher={showPublisher} />)}{!models.length && <div className="empty-state"><strong>No models found</strong><span>Try changing the search or filters.</span></div>}</div></>
+}
+
+function DetailPanel({ model, onClose, onCompare, selected, onProvider }) {
+  useEffect(() => {
+    if (!model) return undefined
+    const handleKey = (event) => event.key === 'Escape' && onClose()
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [model, onClose])
   if (!model) return null
-  const servingRoute = route(model)
-  const pricing = servingRoute.pricing ?? {}
+  const route = servingRoute(model)
+  const pricing = route.pricing ?? {}
   return (
     <div className="drawer-backdrop" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>
       <aside className="detail-panel" aria-label={`${model.name} details`}>
-        <div className="drawer-header">
-          <div><span className="kicker">MODEL RECORD</span><h2>{model.name}</h2><p>{model.publisher.name}</p></div>
-          <button onClick={onClose} aria-label="Close details">×</button>
-        </div>
-
-        <p className="detail-description">{model.description || 'No description was supplied by this source.'}</p>
-
-        <div className="detail-actions">
-          <button className={selected ? 'secondary active' : 'secondary'} onClick={() => onCompare(model)}>
-            {selected ? 'Remove from comparison' : 'Add to comparison'}
-          </button>
-          <a href={model.source.url} target="_blank" rel="noreferrer">Source ↗</a>
-        </div>
-
-        <section className="detail-section">
-          <h3>Identity</h3>
-          <dl>
-            <div><dt>Awba ID</dt><dd>{model.id}</dd></div>
-            <div><dt>Source ID</dt><dd>{model.sourceId}</dd></div>
-            <div><dt>Canonical slug</dt><dd>{model.canonicalSlug}</dd></div>
-            <div><dt>Family</dt><dd>{model.family ?? 'Not supplied'}</dd></div>
-            <div><dt>Source created</dt><dd>{dateLabel(model.releasedAt)}</dd></div>
-          </dl>
-        </section>
-
-        <section className="detail-section">
-          <h3>Pricing through {servingRoute.aggregator?.name ?? 'source route'}</h3>
-          <div className="metric-grid">
-            <div><span>Input / MTok</span><strong>{formatMoney(pricing.inputPerMillion)}</strong></div>
-            <div><span>Output / MTok</span><strong>{formatMoney(pricing.outputPerMillion)}</strong></div>
-            <div><span>Cache read</span><strong>{formatMoney(pricing.cacheReadPerMillion)}</strong></div>
-            <div><span>Cache write</span><strong>{formatMoney(pricing.cacheWritePerMillion)}</strong></div>
-          </div>
-          {!servingRoute.inferenceProvider && <p className="data-note">Underlying inference provider is not supplied by this catalog endpoint.</p>}
-        </section>
-
-        <section className="detail-section">
-          <h3>Benchmarks</h3>
-          {model.benchmarks?.length ? model.benchmarks.map((item) => (
-            <div className="benchmark-line" key={item.key}>
-              <span><strong>{item.name}</strong><small>{item.source.name}</small></span>
-              <b>{item.score.toFixed(1)}</b>
-            </div>
-          )) : <p className="empty-copy">No normalized benchmark result is present for this model.</p>}
-        </section>
-
-        <section className="detail-section">
-          <h3>Supported parameters</h3>
-          <div className="tag-cloud">
-            {model.supportedParameters?.map((parameter) => <span key={parameter}>{parameter}</span>)}
-          </div>
-        </section>
+        <div className="drawer-header"><div><span className="kicker">MODEL PROFILE</span><h2>{model.name}</h2><button className="publisher-link" onClick={() => onProvider(model.publisher.id)}>{model.publisher.name} ↗</button></div><button onClick={onClose} aria-label="Close details">×</button></div>
+        <p className="detail-description">{model.description || 'No description was supplied by the source.'}</p>
+        <div className="detail-actions"><button className={selected ? 'secondary active' : 'secondary'} onClick={() => onCompare(model)}>{selected ? 'Remove from comparison' : 'Add to comparison'}</button><a href={model.source.url} target="_blank" rel="noreferrer">View source ↗</a></div>
+        <section className="detail-section"><h3>At a glance</h3><div className="metric-grid"><div><span>Input / MTok</span><strong>{formatMoney(pricing.inputPerMillion)}</strong></div><div><span>Output / MTok</span><strong>{formatMoney(pricing.outputPerMillion)}</strong></div><div><span>Context window</span><strong>{formatTokens(model.contextWindowTokens)}</strong></div><div><span>Max output</span><strong>{formatTokens(model.maxOutputTokens)}</strong></div></div></section>
+        <section className="detail-section"><h3>Capabilities</h3><div className="tag-cloud">{modelModalities(model).map((item) => <span key={item}>{item}</span>)}</div><dl><div><dt>Architecture</dt><dd>{model.architecture?.modality ?? 'Not supplied'}</dd></div><div><dt>Tokenizer</dt><dd>{model.architecture?.tokenizer ?? 'Not supplied'}</dd></div><div><dt>Availability</dt><dd>{model.status}</dd></div></dl></section>
+        <section className="detail-section"><h3>Benchmarks</h3>{model.benchmarks?.length ? model.benchmarks.map((item) => <div className="benchmark-line" key={item.key}><span><strong>{item.name}</strong><small>{item.source.name}</small></span><b>{item.score.toFixed(1)}</b></div>) : <p className="empty-copy">No normalized benchmark result is available for this model yet.</p>}</section>
+        <section className="detail-section"><h3>Supported parameters</h3><div className="tag-cloud">{model.supportedParameters?.map((parameter) => <span key={parameter}>{parameter}</span>)}</div></section>
+        <section className="detail-section"><h3>Source & identity</h3><dl><div><dt>Source ID</dt><dd>{model.sourceId}</dd></div><div><dt>Canonical slug</dt><dd>{model.canonicalSlug}</dd></div><div><dt>Observed release</dt><dd>{dateLabel(model.releasedAt)}</dd></div><div><dt>Pricing route</dt><dd>{route.aggregator?.name ?? 'Not supplied'}</dd></div></dl><p className="data-note">Release and pricing values reflect the connected catalog source. Awba does not infer missing fields.</p></section>
       </aside>
     </div>
   )
 }
 
-function ComparePanel({ models, onClose, onRemove }) {
-  if (!models.length) return null
+function ComparisonTable({ models, onRemove }) {
   const attributes = [
-    ['Publisher', (model) => model.publisher.name],
-    ['Context', (model) => formatTokens(model.contextWindowTokens)],
-    ['Max output', (model) => formatTokens(model.maxOutputTokens)],
-    ['Input / MTok', (model) => formatMoney(route(model).pricing?.inputPerMillion)],
-    ['Output / MTok', (model) => formatMoney(route(model).pricing?.outputPerMillion)],
-    ['Intelligence', (model) => benchmark(model, 'intelligence')?.toFixed(1) ?? '—'],
-    ['Coding', (model) => benchmark(model, 'coding')?.toFixed(1) ?? '—'],
-    ['Agentic', (model) => benchmark(model, 'agentic')?.toFixed(1) ?? '—'],
-    ['Source created', (model) => dateLabel(model.releasedAt)],
+    ['Provider', (model) => model.publisher.name], ['Context', (model) => formatTokens(model.contextWindowTokens)], ['Max output', (model) => formatTokens(model.maxOutputTokens)],
+    ['Input / MTok', (model) => formatMoney(servingRoute(model).pricing?.inputPerMillion)], ['Output / MTok', (model) => formatMoney(servingRoute(model).pricing?.outputPerMillion)],
+    ['Intelligence', (model) => benchmark(model, 'intelligence')?.toFixed(1) ?? '—'], ['Coding', (model) => benchmark(model, 'coding')?.toFixed(1) ?? '—'], ['Agentic', (model) => benchmark(model, 'agentic')?.toFixed(1) ?? '—'],
+    ['Observed release', (model) => dateLabel(model.releasedAt)],
   ]
-  return (
-    <div className="compare-modal">
-      <div className="compare-dialog">
-        <div className="drawer-header">
-          <div><span className="kicker">SIDE BY SIDE</span><h2>Model comparison</h2></div>
-          <button onClick={onClose}>×</button>
-        </div>
-        <div className="comparison-table" style={{ '--model-count': models.length }}>
-          <div className="comparison-heading"><span>Attribute</span></div>
-          {models.map((model) => (
-            <div className="comparison-heading" key={model.id}>
-              <strong>{model.name}</strong>
-              <small>{model.publisher.name}</small>
-              <button onClick={() => onRemove(model)}>Remove</button>
-            </div>
-          ))}
-          {attributes.flatMap(([label, getter]) => [
-            <div className="comparison-label" key={`${label}-label`}>{label}</div>,
-            ...models.map((model) => <div className="comparison-value" key={`${label}-${model.id}`}>{getter(model)}</div>),
-          ])}
-        </div>
-      </div>
-    </div>
-  )
+  return <div className="comparison-scroll"><div className="comparison-table" style={{ '--model-count': models.length }}><div className="comparison-heading"><span>Attribute</span></div>{models.map((model) => <div className="comparison-heading" key={model.id}><strong>{model.name}</strong><small>{model.publisher.name}</small><button onClick={() => onRemove(model)}>Remove</button></div>)}{attributes.flatMap(([label, getter]) => [<div className="comparison-label" key={`${label}-label`}>{label}</div>, ...models.map((model) => <div className="comparison-value" key={`${label}-${model.id}`}>{getter(model)}</div>)])}</div></div>
 }
 
-export default function App() {
-  const [theme, setTheme] = useState(initialTheme)
-  const [page, setPage] = useState(window.location.hash === '#schema' ? 'schema' : 'models')
-  const [catalog, setCatalog] = useState(null)
-  const [loadError, setLoadError] = useState('')
-  const [sourceMode, setSourceMode] = useState('live')
+function PageIntro({ eyebrow, title, copy, children }) {
+  return <div className="page-intro"><div><span className="page-eyebrow">{eyebrow}</span><h1>{title}</h1><p>{copy}</p></div>{children}</div>
+}
+
+function LatestPage({ catalog, publishers, selected, onSelect, onOpen, theme }) {
+  const latest = publishers.slice().sort((a, b) => modelDate(b.latest) - modelDate(a.latest))
+  const recentModels = [...catalog.models].sort((a, b) => modelDate(b) - modelDate(a)).slice(0, 12)
+  return <main>
+    <section className="product-hero"><div className="hero-grid" /><div className="hero-copy"><div className="eyebrow"><i /> LIVE MODEL INTELLIGENCE</div><h1>Know what’s new<br /><em>across AI.</em></h1><p>Track the latest models from every provider, compare pricing and capabilities, and choose with confidence.</p><div className="hero-actions"><a className="primary-action" href="#/models">Explore all models <span>→</span></a><a className="text-action" href="#/providers">Browse providers</a></div></div><div className="scene-wrap"><ThreeScene theme={theme} /></div><div className="hero-metrics"><div><strong>{catalog.models.length}</strong><span>TRACKED MODELS</span></div><div><strong>{publishers.length}</strong><span>PROVIDERS</span></div><div><strong>{catalog.models.filter((model) => model.benchmarks?.length).length}</strong><span>BENCHMARKED</span></div></div></section>
+    <section className="content-section latest-section"><div className="section-heading"><div><span>01</span><h2>Latest by provider</h2></div><a href="#/providers">View all providers →</a></div><p className="section-copy">The newest model observed for each provider in our connected catalog.</p><div className="latest-grid">{latest.slice(0, 8).map((provider) => { const pricing = servingRoute(provider.latest).pricing ?? {}; return <article className="latest-card" key={provider.id}><div className="provider-card-head"><PublisherAvatar publisher={provider} /><a href={`#/providers/${encodeURIComponent(provider.id)}`}>{provider.name} <span>↗</span></a></div><button className="latest-model-button" onClick={() => onOpen(provider.latest)}><strong>{provider.latest.name}</strong><span>{dateLabel(provider.latest.releasedAt)}</span></button><div className="latest-card-metrics"><span><small>INPUT / MTOK</small>{formatMoney(pricing.inputPerMillion)}</span><span><small>CONTEXT</small>{formatTokens(provider.latest.contextWindowTokens)}</span></div></article> })}</div></section>
+    <section className="content-section recent-section"><div className="section-heading"><div><span>02</span><h2>Recently observed</h2></div><a href="#/models">Full model catalog →</a></div><p className="section-copy">Recent catalog additions across all providers. Dates are source-reported where available.</p><ModelList models={recentModels} selected={selected} onSelect={onSelect} onOpen={onOpen} limit={12} /></section>
+  </main>
+}
+
+function ModelsPage({ catalog, publishers, selected, onSelect, onOpen }) {
   const [query, setQuery] = useState('')
   const [publisher, setPublisher] = useState('all')
   const [modality, setModality] = useState('all')
   const [sort, setSort] = useState('newest')
   const [limit, setLimit] = useState(30)
+  const models = useMemo(() => {
+    const needle = query.trim().toLowerCase()
+    return [...catalog.models].filter((model) => (!needle || `${model.name} ${model.publisher.name} ${model.sourceId}`.toLowerCase().includes(needle)) && (publisher === 'all' || model.publisher.id === publisher) && (modality === 'all' || modelModalities(model).includes(modality))).sort((a, b) => {
+      if (sort === 'name') return a.name.localeCompare(b.name)
+      if (sort === 'context') return b.contextWindowTokens - a.contextWindowTokens
+      if (sort === 'price') return (servingRoute(a).pricing?.inputPerMillion ?? Infinity) - (servingRoute(b).pricing?.inputPerMillion ?? Infinity)
+      if (sort === 'intelligence') return (benchmark(b, 'intelligence') ?? -1) - (benchmark(a, 'intelligence') ?? -1)
+      return modelDate(b) - modelDate(a)
+    })
+  }, [catalog, modality, publisher, query, sort])
+  useEffect(() => setLimit(30), [modality, publisher, query, sort])
+  return <main className="page-main"><PageIntro eyebrow="MODEL CATALOG" title="Explore every model" copy="Search and compare normalized pricing, context windows, modalities, and benchmark coverage."><div className="intro-stat"><strong>{catalog.models.length}</strong><span>models tracked</span></div></PageIntro><section className="content-section catalog-content"><div className="filter-panel"><label className="search-input"><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search model, provider, or source ID" /></label><label><span>Provider</span><select value={publisher} onChange={(event) => setPublisher(event.target.value)}><option value="all">All providers</option>{publishers.map((item) => <option value={item.id} key={item.id}>{item.name} ({item.count})</option>)}</select></label><label><span>Modality</span><select value={modality} onChange={(event) => setModality(event.target.value)}><option value="all">All modalities</option><option value="text">Text</option><option value="image">Image</option><option value="audio">Audio</option><option value="video">Video</option><option value="file">File</option></select></label><label><span>Sort</span><select value={sort} onChange={(event) => setSort(event.target.value)}><option value="newest">Newest observed</option><option value="intelligence">Intelligence</option><option value="price">Input price</option><option value="context">Context</option><option value="name">Name</option></select></label></div><div className="catalog-meta"><span>{models.length} matching models</span><span>Choose up to 3 to compare</span></div><ModelList models={models} selected={selected} onSelect={onSelect} onOpen={onOpen} limit={limit} />{limit < models.length && <button className="load-button" onClick={() => setLimit((value) => value + 30)}>Load 30 more <span>↓</span></button>}</section></main>
+}
+
+function ProvidersPage({ publishers }) {
+  const [query, setQuery] = useState('')
+  const visible = publishers.filter((provider) => provider.name.toLowerCase().includes(query.trim().toLowerCase()))
+  return <main className="page-main"><PageIntro eyebrow="PROVIDER DIRECTORY" title="Models, by provider" copy="See what each AI provider offers, their newest observed model, and the depth of their catalog."><div className="intro-stat"><strong>{publishers.length}</strong><span>providers indexed</span></div></PageIntro><section className="content-section provider-content"><label className="directory-search"><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Find a provider" /></label><div className="provider-directory-meta"><span>{visible.length} providers</span><span>Sorted by catalog size</span></div><div className="provider-grid">{visible.map((provider) => <a className="provider-card" href={`#/providers/${encodeURIComponent(provider.id)}`} key={provider.id}><div><PublisherAvatar publisher={provider} large /><span className="provider-arrow">↗</span></div><h2>{provider.name}</h2><p>{provider.latest.name}</p><div className="provider-card-foot"><span>{provider.count} {provider.count === 1 ? 'model' : 'models'}</span><span>Latest · {dateLabel(provider.latest.releasedAt)}</span></div></a>)}</div></section></main>
+}
+
+function ProviderPage({ provider, selected, onSelect, onOpen }) {
+  const [query, setQuery] = useState('')
+  const [limit, setLimit] = useState(30)
+  if (!provider) return <main className="page-main"><div className="not-found"><h1>Provider not found</h1><a href="#/providers">Back to providers</a></div></main>
+  const models = provider.models.filter((model) => `${model.name} ${model.sourceId}`.toLowerCase().includes(query.trim().toLowerCase()))
+  const priced = provider.models.filter((model) => servingRoute(model).pricing?.inputPerMillion != null).length
+  const benchmarked = provider.models.filter((model) => model.benchmarks?.length).length
+  return <main className="page-main"><section className="provider-hero"><a className="back-link" href="#/providers">← All providers</a><div className="provider-title"><PublisherAvatar publisher={provider} large /><div><span>MODEL PROVIDER</span><h1>{provider.name}</h1><p>{provider.count} models currently tracked</p></div></div><div className="provider-stats"><div><strong>{provider.count}</strong><span>MODELS</span></div><div><strong>{priced}</strong><span>WITH PRICING</span></div><div><strong>{benchmarked}</strong><span>BENCHMARKED</span></div></div></section><section className="content-section provider-detail-content"><div className="latest-spotlight"><div><span className="page-eyebrow">LATEST OBSERVED MODEL</span><h2>{provider.latest.name}</h2><p>{provider.latest.description || 'No source description is available.'}</p></div><div className="spotlight-stats"><span><small>OBSERVED RELEASE</small>{dateLabel(provider.latest.releasedAt)}</span><span><small>CONTEXT</small>{formatTokens(provider.latest.contextWindowTokens)}</span><span><small>INPUT / MTOK</small>{formatMoney(servingRoute(provider.latest).pricing?.inputPerMillion)}</span><button onClick={() => onOpen(provider.latest)}>View model →</button></div></div><div className="provider-model-heading"><div><h2>All {provider.name} models</h2><p>Newest observed first</p></div><label className="directory-search compact"><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={`Search ${provider.name}`} /></label></div><div className="catalog-meta"><span>{models.length} matching models</span><span>Choose up to 3 to compare</span></div><ModelList models={models} selected={selected} onSelect={onSelect} onOpen={onOpen} limit={limit} showPublisher={false} />{limit < models.length && <button className="load-button" onClick={() => setLimit((value) => value + 30)}>Load 30 more <span>↓</span></button>}</section></main>
+}
+
+function ComparePage({ models, allModels, onToggle, onOpen }) {
+  const [query, setQuery] = useState('')
+  const candidates = query.trim() ? allModels.filter((model) => `${model.name} ${model.publisher.name}`.toLowerCase().includes(query.toLowerCase())).slice(0, 8) : []
+  return <main className="page-main"><PageIntro eyebrow="MODEL COMPARISON" title="Compare what matters" copy="Put up to three models side by side across price, context, benchmarks, and release information."><div className="intro-stat"><strong>{models.length}/3</strong><span>models selected</span></div></PageIntro><section className="content-section compare-content"><div className="compare-picker"><label className="directory-search"><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search for a model to add" /></label>{candidates.length > 0 && <div className="candidate-list">{candidates.map((model) => <button key={model.id} disabled={models.length >= 3 && !models.some((item) => item.id === model.id)} onClick={() => { onToggle(model); setQuery('') }}><PublisherAvatar publisher={model.publisher} /><span><strong>{model.name}</strong><small>{model.publisher.name}</small></span><b>{models.some((item) => item.id === model.id) ? 'Remove' : 'Add +'}</b></button>)}</div>}</div>{models.length >= 2 ? <ComparisonTable models={models} onRemove={onToggle} /> : <div className="compare-empty"><div className="compare-venn"><i /><i /><span>{models.length}</span></div><h2>Select at least two models</h2><p>Search above or add models from anywhere in the catalog.</p><a href="#/models">Browse all models →</a></div>}{models.length === 1 && <div className="selected-preview"><span>Selected</span><button onClick={() => onOpen(models[0])}>{models[0].name} · {models[0].publisher.name} ↗</button></div>}</section></main>
+}
+
+export default function App() {
+  const [theme, setTheme] = useState(initialTheme)
+  const [route, setRoute] = useState(parseRoute)
+  const [catalog, setCatalog] = useState(null)
+  const [loadError, setLoadError] = useState('')
+  const [sourceMode, setSourceMode] = useState('live')
   const [detail, setDetail] = useState(null)
   const [selected, setSelected] = useState([])
-  const [comparing, setComparing] = useState(false)
 
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme
-    document.documentElement.style.colorScheme = theme
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#080a0d' : '#f4f6f1')
-    window.localStorage.setItem('awba-theme', theme)
-  }, [theme])
-
-  useEffect(() => {
-    const onHashChange = () => setPage(window.location.hash === '#schema' ? 'schema' : 'models')
-    window.addEventListener('hashchange', onHashChange)
-    return () => window.removeEventListener('hashchange', onHashChange)
-  }, [])
-
+  useEffect(() => { document.documentElement.dataset.theme = theme; document.documentElement.style.colorScheme = theme; document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#080a0d' : '#f4f6f1'); window.localStorage.setItem('awba-theme', theme) }, [theme])
+  useEffect(() => { const onHashChange = () => { setRoute(parseRoute()); setDetail(null); window.scrollTo(0, 0) }; window.addEventListener('hashchange', onHashChange); return () => window.removeEventListener('hashchange', onHashChange) }, [])
   useEffect(() => {
     const controller = new AbortController()
     async function load() {
-      try {
-        setCatalog(await loadCatalog(controller.signal))
-      } catch (error) {
+      try { setCatalog(await loadCatalog(controller.signal)) } catch (error) {
         if (error.name === 'AbortError') return
-        try {
-          const response = await fetch(FALLBACK_URL, { signal: controller.signal })
-          if (!response.ok) throw new Error('sample unavailable')
-          setCatalog(await response.json())
-          setSourceMode('sample')
-        } catch (fallbackError) {
-          if (fallbackError.name !== 'AbortError') setLoadError('Neither the Awba API nor the sample catalog could be loaded.')
-        }
+        try { const response = await fetch(FALLBACK_URL, { signal: controller.signal }); if (!response.ok) throw new Error('sample unavailable'); setCatalog(await response.json()); setSourceMode('sample') }
+        catch (fallbackError) { if (fallbackError.name !== 'AbortError') setLoadError('Neither the Awba API nor the sample catalog could be loaded.') }
       }
     }
-    load()
-    return () => controller.abort()
+    load(); return () => controller.abort()
   }, [])
 
   const publishers = useMemo(() => {
-    const counts = new Map()
-    for (const model of catalog?.models ?? []) {
-      const current = counts.get(model.publisher.id) ?? { ...model.publisher, count: 0 }
-      current.count++
-      counts.set(model.publisher.id, current)
-    }
-    return [...counts.values()].sort((a, b) => b.count - a.count)
+    const records = new Map()
+    for (const model of catalog?.models ?? []) { const current = records.get(model.publisher.id) ?? { ...model.publisher, count: 0, models: [], latest: model }; current.count++; current.models.push(model); if (modelDate(model) > modelDate(current.latest)) current.latest = model; records.set(model.publisher.id, current) }
+    return [...records.values()].map((provider) => ({ ...provider, models: provider.models.sort((a, b) => modelDate(b) - modelDate(a)) })).sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
   }, [catalog])
 
-  const models = useMemo(() => {
-    const needle = query.trim().toLowerCase()
-    const result = (catalog?.models ?? []).filter((model) => {
-      const queryMatch = !needle || `${model.name} ${model.publisher.name} ${model.sourceId}`.toLowerCase().includes(needle)
-      const publisherMatch = publisher === 'all' || model.publisher.id === publisher
-      const modalities = [...(model.architecture?.inputModalities ?? []), ...(model.architecture?.outputModalities ?? [])]
-      const modalityMatch = modality === 'all' || modalities.includes(modality)
-      return queryMatch && publisherMatch && modalityMatch
-    })
-    return result.sort((a, b) => {
-      if (sort === 'name') return a.name.localeCompare(b.name)
-      if (sort === 'context') return b.contextWindowTokens - a.contextWindowTokens
-      if (sort === 'price') return (route(a).pricing?.inputPerMillion ?? Infinity) - (route(b).pricing?.inputPerMillion ?? Infinity)
-      if (sort === 'intelligence') return (benchmark(b, 'intelligence') ?? -1) - (benchmark(a, 'intelligence') ?? -1)
-      return new Date(b.releasedAt ?? 0) - new Date(a.releasedAt ?? 0)
-    })
-  }, [catalog, modality, publisher, query, sort])
+  function toggleSelected(model) { setSelected((current) => current.some((item) => item.id === model.id) ? current.filter((item) => item.id !== model.id) : current.length >= 3 ? current : [...current, model]) }
+  function openProvider(id) { setDetail(null); window.location.hash = `/providers/${encodeURIComponent(id)}` }
+  const currentProvider = route.page === 'provider' ? publishers.find((item) => item.id === route.id) : null
 
-  useEffect(() => setLimit(30), [modality, publisher, query, sort])
-
-  function toggleSelected(model) {
-    setSelected((current) => {
-      if (current.some((item) => item.id === model.id)) return current.filter((item) => item.id !== model.id)
-      if (current.length >= 3) return [...current.slice(1), model]
-      return [...current, model]
-    })
-  }
-
-  const benchmarkCount = catalog?.models.filter((model) => model.benchmarks?.length).length ?? 0
-  const maxContext = catalog?.models.reduce((maximum, model) => Math.max(maximum, model.contextWindowTokens ?? 0), 0) ?? 0
-
-  return (
-    <div className="app-shell">
-      <header className="topbar">
-        <a href="#top" className="wordmark" aria-label="Awba home"><LogoMark />AWBA</a>
-        <nav><a className={page === 'models' ? 'active' : ''} href="#catalog">Models</a><a className={page === 'schema' ? 'active' : ''} href="#schema">Data model</a><a href={catalogApiUrl}>API</a></nav>
-        <div className="topbar-actions">
-          <div className="live-state"><i className={sourceMode === 'live' ? '' : 'sample'} />{sourceMode === 'live' ? 'LIVE API' : 'SAMPLE DATA'}</div>
-          <button
-            className="theme-toggle"
-            type="button"
-            onClick={() => setTheme((current) => current === 'dark' ? 'light' : 'dark')}
-            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
-          >
-            <span aria-hidden="true">{theme === 'dark' ? '☼' : '◐'}</span>
-            {theme === 'dark' ? 'LIGHT' : 'DARK'}
-          </button>
-        </div>
-      </header>
-
-      {page === 'schema' ? <SchemaExplorer /> : <main id="top">
-        <section className="hero-section">
-          <div className="hero-grid" />
-          <div className="hero-content">
-            <div className="eyebrow"><i /> DEVELOPER INTELLIGENCE / POC 01</div>
-            <h1>One index for the<br /><em>AI model stack.</em></h1>
-            <p>Explore models, publishers, prices, context windows, capabilities, and benchmark coverage through one normalized developer interface.</p>
-            <a className="hero-cta" href="#catalog">Explore model data <span>↓</span></a>
-          </div>
-          <div className="scene-wrap"><ThreeScene theme={theme} /></div>
-          <div className="hero-metrics">
-            <div><strong>{catalog?.models.length ?? '—'}</strong><span>MODELS LOADED</span></div>
-            <div><strong>{publishers.length || '—'}</strong><span>PUBLISHERS</span></div>
-            <div><strong>{benchmarkCount || '—'}</strong><span>WITH BENCHMARKS</span></div>
-            <div><strong>{formatTokens(maxContext)}</strong><span>MAX CONTEXT</span></div>
-          </div>
-        </section>
-
-        <section className="catalog-section" id="catalog">
-          <div className="section-title">
-            <div><span>01</span><h2>Model catalog</h2></div>
-            <p>Normalized from live source data. Missing values remain visible instead of being inferred.</p>
-          </div>
-
-          <div className="filter-panel">
-            <label className="search-input"><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search model, publisher, or source ID" /></label>
-            <label><span>Publisher</span><select value={publisher} onChange={(event) => setPublisher(event.target.value)}><option value="all">All publishers</option>{publishers.map((item) => <option value={item.id} key={item.id}>{item.name} ({item.count})</option>)}</select></label>
-            <label><span>Modality</span><select value={modality} onChange={(event) => setModality(event.target.value)}><option value="all">All modalities</option><option value="text">Text</option><option value="image">Image</option><option value="audio">Audio</option><option value="video">Video</option><option value="file">File</option></select></label>
-            <label><span>Sort</span><select value={sort} onChange={(event) => setSort(event.target.value)}><option value="newest">Newest</option><option value="intelligence">Intelligence</option><option value="price">Input price</option><option value="context">Context</option><option value="name">Name</option></select></label>
-          </div>
-
-          <div className="catalog-meta" id="data">
-            <span>{models.length} matching records</span>
-            <span>{catalog ? `${catalog.source?.name ?? 'Source'} · updated ${relativeTime(catalog.retrievedAt)}` : 'Loading source data'}</span>
-          </div>
-
-          <div className="model-list-head"><span /><span>Model</span><span>Price / MTok</span><span>Context</span><span>Modalities</span><span>Benchmarks</span><span /></div>
-          <div className="model-list">
-            {!catalog && !loadError && Array.from({ length: 8 }, (_, index) => <div className="row-skeleton" key={index} />)}
-            {loadError && <div className="error-box"><strong>Catalog unavailable</strong><span>{loadError}</span></div>}
-            {models.slice(0, limit).map((model) => <ModelRow key={model.id} model={model} selected={selected.some((item) => item.id === model.id)} onSelect={toggleSelected} onOpen={setDetail} />)}
-          </div>
-
-          {limit < models.length && <button className="load-button" onClick={() => setLimit((value) => value + 30)}>Load 30 more <span>↓</span></button>}
-        </section>
-      </main>}
-
-      <footer><a className="wordmark" href="#top" aria-label="Awba home"><LogoMark />AWBA</a><p>Evidence before assumptions. Every value keeps its source.</p><a href="https://openrouter.ai/models" target="_blank" rel="noreferrer">Source catalog ↗</a></footer>
-
-      {selected.length > 0 && <div className="compare-tray"><span>{selected.length}/3 selected</span><div>{selected.map((model) => <button onClick={() => toggleSelected(model)} key={model.id}>{model.name} ×</button>)}</div><button className="compare-button" disabled={selected.length < 2} onClick={() => setComparing(true)}>Compare models</button></div>}
-      <DetailPanel model={detail} onClose={() => setDetail(null)} onCompare={toggleSelected} selected={detail ? selected.some((item) => item.id === detail.id) : false} />
-      {comparing && <ComparePanel models={selected} onClose={() => setComparing(false)} onRemove={toggleSelected} />}
-    </div>
-  )
+  return <div className="app-shell">
+    <header className="topbar"><a href="#/latest" className="wordmark" aria-label="Awba home"><LogoMark />AWBA</a><nav aria-label="Main navigation"><a className={route.page === 'latest' ? 'active' : ''} href="#/latest">Latest</a><a className={route.page === 'models' ? 'active' : ''} href="#/models">Models</a><a className={route.page === 'providers' || route.page === 'provider' ? 'active' : ''} href="#/providers">Providers</a><a className={route.page === 'compare' ? 'active' : ''} href="#/compare">Compare{selected.length ? ` (${selected.length})` : ''}</a></nav><div className="topbar-actions"><div className="live-state"><i className={sourceMode === 'live' ? '' : 'sample'} />{sourceMode === 'live' ? 'LIVE' : 'SAMPLE'}</div><button className="theme-toggle" type="button" onClick={() => setTheme((current) => current === 'dark' ? 'light' : 'dark')} aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}><span aria-hidden="true">{theme === 'dark' ? '☼' : '◐'}</span>{theme === 'dark' ? 'LIGHT' : 'DARK'}</button></div></header>
+    {!catalog && !loadError && <main className="loading-page"><LogoMark /><span>Loading the model index</span><i /></main>}
+    {loadError && <main className="loading-page"><div className="error-box"><strong>Catalog unavailable</strong><span>{loadError}</span></div></main>}
+    {catalog && route.page === 'latest' && <LatestPage catalog={catalog} publishers={publishers} selected={selected} onSelect={toggleSelected} onOpen={setDetail} theme={theme} />}
+    {catalog && route.page === 'models' && <ModelsPage catalog={catalog} publishers={publishers} selected={selected} onSelect={toggleSelected} onOpen={setDetail} />}
+    {catalog && route.page === 'providers' && <ProvidersPage publishers={publishers} />}
+    {catalog && route.page === 'provider' && <ProviderPage provider={currentProvider} selected={selected} onSelect={toggleSelected} onOpen={setDetail} />}
+    {catalog && route.page === 'compare' && <ComparePage models={selected} allModels={catalog.models} onToggle={toggleSelected} onOpen={setDetail} />}
+    <footer><a className="wordmark" href="#/latest" aria-label="Awba home"><LogoMark />AWBA</a><p>AI model intelligence for developers.</p><span>{catalog ? `${catalog.source?.name ?? 'Catalog'} · updated ${relativeTime(catalog.retrievedAt)}` : 'Connecting to catalog'}</span></footer>
+    {selected.length > 0 && route.page !== 'compare' && <div className="compare-tray"><span>{selected.length}/3 selected</span><div>{selected.map((model) => <button onClick={() => toggleSelected(model)} key={model.id}>{model.name} ×</button>)}</div><a className={selected.length < 2 ? 'compare-button disabled' : 'compare-button'} href={selected.length < 2 ? undefined : '#/compare'}>Compare models</a></div>}
+    <DetailPanel model={detail} onClose={() => setDetail(null)} onCompare={toggleSelected} selected={detail ? selected.some((item) => item.id === detail.id) : false} onProvider={openProvider} />
+  </div>
 }
