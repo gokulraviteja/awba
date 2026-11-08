@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/diwali",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/diwali/",
+      "destination": "/index.html"
+    }
+  ]
+}

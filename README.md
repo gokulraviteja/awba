@@ -102,3 +102,9 @@ This runs the backend test suite, MCP tests and type-check/build, the production
 The production target is AWS: CloudFront/S3 for the frontend, an Application Load Balancer with ECS/Fargate services for the Go API and MCP adapter, RDS PostgreSQL, SQS-backed ingestion workers, and EventBridge schedules. The backend already provides PostgreSQL persistence plus file-backed local development; AWS infrastructure remains the next deployment phase.
 
 The existing public site is deployed with Vercel at [awba.dev](https://awba.dev). The production migration plan and service boundaries are described in the architecture document.
+
+## Diwali courtyard
+
+Open `/diwali` for eight interactive fireworks, an animated character that lights
+each selection and runs back before the display, optional sound, and gentle motion.
+Run `npm run test:diwali` to verify every animation sequence and replay.
