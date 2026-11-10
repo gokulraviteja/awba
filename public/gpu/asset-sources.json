@@ -1,0 +1,12 @@
+{
+  "fe-front": "https://www.nvidia.com/content/dam/en-zz/Solutions/geforce/graphic-cards/50-series/rtx-5090/geforce-rtx-5090-gallery-shot-1-ari.jpg",
+  "fe-back": "https://www.nvidia.com/content/dam/en-zz/Solutions/geforce/graphic-cards/50-series/rtx-5090/geforce-rtx-5090-gallery-shot-2-ari.jpg",
+  "astral-front": "https://dlcdnwebimgs.asus.com/files/media/2473ffde-c3ac-4533-9dd5-e5896f281998/v1/img/cooling/pd.png",
+  "astral-back": "https://dlcdnwebimgs.asus.com/files/media/2473ffde-c3ac-4533-9dd5-e5896f281998/v1/img/cooling/pd-back.png",
+  "nitro-front": "https://media.cdn.sapphiretech.com.cn/-/media/sites/sapphire/pim/product-images/11348_01_rx9070xt_nitro_16ggddr6/rx9070xt_nitro_photo_c01_800x500.ashx?v=e3320692facb41c28e8340c1b01686e9",
+  "nitro-back": "https://media.cdn.sapphiretech.com.cn/-/media/sites/sapphire/pim/product-images/11348_01_rx9070xt_nitro_16ggddr6/rx9070xt_nitro_photo_c03_800x500.ashx?v=85f2cf8e402e4749b72f9f560c5ebe72",
+  "pulse-front": "https://media.cdn.sapphiretech.com.cn/-/media/sites/sapphire/pim/product-images/11348_03_rx9070xt_pulse_16ggddr6/rx9070xt_pulse_photo_c01_800x500.ashx?v=c0e23daa79d4428eaa10f5b1da50082e",
+  "pure-front": "https://media.cdn.sapphiretech.com.cn/-/media/sites/sapphire/pim/product-images/11348_02_rx9070xt_pure_16ggddr6/rx9070xt_pure_photo_c01_800x500.ashx?v=4f6b3314b44c4a42882a5f98b0404402",
+  "steel-2": "https://www.asrock.com/Graphics-Card/photo/Intel%20Arc%20B580%20Steel%20Legend%2012GB%20OC(M2).png",
+  "steel-3": "https://www.asrock.com/Graphics-Card/photo/Intel%20Arc%20B580%20Steel%20Legend%2012GB%20OC(M3).png"
+}

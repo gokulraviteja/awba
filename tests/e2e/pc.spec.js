@@ -5,7 +5,7 @@ test("PC guide loads directly and exposes every component and its types", async 
 }) => {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
-  await page.goto("/pc");
+  await page.goto("/pc/guide");
   await expect(page).toHaveTitle(/Inside the PC/);
   await expect(
     page.getByRole("heading", { name: "Inside the PC." }),
@@ -51,7 +51,7 @@ test("PC guide loads directly and exposes every component and its types", async 
 test("assembly walkthrough reaches first boot and returns to the beginning", async ({
   page,
 }) => {
-  await page.goto("/pc/");
+  await page.goto("/pc/guide/");
   await page.getByRole("button", { name: /02Assemble/ }).click();
   await expect(
     page.getByRole("heading", { name: "Seat the processor", exact: true }),
@@ -78,7 +78,7 @@ test("assembly walkthrough reaches first boot and returns to the beginning", asy
 test("build checker catches socket, RAM, cooling and display failures independently", async ({
   page,
 }) => {
-  await page.goto("/pc#build-check");
+  await page.goto("/pc/guide#build-check");
   await expect(
     page.getByRole("heading", { name: "A compatible starting point." }),
   ).toBeVisible();
@@ -127,7 +127,7 @@ test("build checker catches socket, RAM, cooling and display failures independen
 test("frame lab calculates intervals and resolutions without predicting FPS", async ({
   page,
 }) => {
-  await page.goto("/pc#performance");
+  await page.goto("/pc/guide#performance");
   await expect(page.locator(".pc-time-bars")).toContainText("2.78 ms");
   await expect(page.locator(".pc-time-bars")).toContainText("2.50 ms");
   await page.getByRole("button", { name: "144Hz", exact: true }).click();
@@ -146,7 +146,7 @@ test("frame lab calculates intervals and resolutions without predicting FPS", as
 test("quote calculator persists only user prices and knowledge check gives feedback", async ({
   page,
 }) => {
-  await page.goto("/pc#build-check");
+  await page.goto("/pc/guide#build-check");
   await page.locator(".pc-price-details>summary").click();
   await page
     .locator(".pc-cost-grid")
@@ -188,7 +188,7 @@ test("mobile workbench and reduced motion remain usable without horizontal overf
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/pc");
+  await page.goto("/pc/guide");
   await expect(page.getByLabel("Reduce motion", { exact: true })).toBeChecked();
   await expect(page.getByRole("button", { name: /Rotate/ })).toBeDisabled();
   await page
@@ -220,7 +220,7 @@ test("guide remains navigable if WebGL is unavailable", async ({ page }) => {
       return original.call(this, type, ...args);
     };
   });
-  await page.goto("/pc");
+  await page.goto("/pc/guide");
   await expect(page.locator(".pc-three-host")).toHaveAttribute(
     "data-scene-status",
     "fallback",
