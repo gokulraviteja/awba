@@ -285,7 +285,7 @@ export default function GPUPage() {
     [photo, setPhoto] = useState(0),
     [depth, setDepth] = useState(0),
     [compare, setCompare] = useState([]),
-    [help, setHelp] = useState(false),
+    [moveOpen, setMoveOpen] = useState(false),
     [welcome, setWelcome] = useState(true),
     [player, setPlayer] = useState({ x: 0, z: 16, yaw: 0 }),
     [hovered, setHovered] = useState(null);
@@ -302,6 +302,7 @@ export default function GPUPage() {
     const g = gpus.find((g) => g.id === d.gpu);
     setSelected(g);
     setDesign(d);
+    setMoveOpen(false);
     setMode("inspect");
     setPanel(null);
     setPhoto(0);
@@ -310,13 +311,14 @@ export default function GPUPage() {
     if (exhibit.gpu) {
       setSelected(exhibit.gpu);
       setDesign(exhibit.design);
+      setMoveOpen(false);
       setMode("inspect");
       setPanel(null);
       setPhoto(0);
     } else chooseDesign(exhibit);
   };
   useEffect(() => {
-    document.title = "PC Play Lab — Explore gaming hardware | Awba";
+    document.title = "PC Museum — Graphics, up close | Awba";
     document.documentElement.dataset.theme = "dark";
     document.body.classList.add("gpu-body");
     const s = createGpuScene(host.current, {
@@ -329,7 +331,8 @@ export default function GPUPage() {
         if (
           Math.abs(p.x) > 0.4 ||
           Math.abs(p.z - 16) > 0.4 ||
-          Math.abs(p.yaw) > 0.3
+          Math.abs(p.yaw) > 0.3 ||
+          Math.abs(p.pitch - 0.08) > 0.08
         )
           setWelcome(false);
       },
@@ -358,7 +361,7 @@ export default function GPUPage() {
         return;
       if (e.key === "Escape") {
         setMode("vault");
-        setHelp(false);
+        setMoveOpen(false);
         setWelcome(false);
       }
     };
@@ -368,6 +371,7 @@ export default function GPUPage() {
   const chooseGpu = (g) => {
     setSelected(g);
     setDesign(defaultDesign(g));
+    setMoveOpen(false);
     setMode("inspect");
     setPanel(null);
     setPhoto(0);
@@ -384,12 +388,6 @@ export default function GPUPage() {
     () => compare.map((id) => gpus.find((g) => g.id === id)),
     [compare],
   );
-  const nearbyRack = museumRacks.find(
-    (r) =>
-      Math.abs(player.z - (3 - r.bay * 13)) < 5 &&
-      Math.sign(player.x) === r.side &&
-      Math.abs(player.x) > 1,
-  );
   const currentPart = anatomy.find((p) => p.id === part);
   const accent = makers[selected.maker].color;
   const toVault = () => {
@@ -398,6 +396,7 @@ export default function GPUPage() {
   };
   const closePanel = useCallback(() => setPanel(null), []);
   const visitRack = (id) => {
+    setMoveOpen(false);
     setMode("vault");
     setPanel(null);
     setWelcome(false);
@@ -437,7 +436,7 @@ export default function GPUPage() {
         className="gpu-scene"
         ref={host}
         data-scene-status={status}
-        aria-label="Walkable 3D gaming PC lab"
+        aria-label="Walkable 3D PC museum"
       />
       <div className="gpu-vignette" />
       <header className="gpu-header">
@@ -467,53 +466,23 @@ export default function GPUPage() {
           </svg>
           awba
           <span className="gpu-header-slash">/</span>
-          <span className="gpu-brand-sub">PLAY LAB</span>
+          <span className="gpu-brand-sub">PC MUSEUM</span>
         </a>
-        <nav aria-label="GPU navigation">
-          <button
-            className={mode === "vault" ? "active" : ""}
-            onClick={toVault}
-          >
-            Explore <span>↗</span>
-          </button>
-          <button onClick={() => setPanel("designs")}>Design archive</button>
-          <button onClick={() => setPanel("basics")}>GPU basics</button>
-        </nav>
-        <div className="gpu-header-actions">
-          <button
-            className="gpu-header-compare"
-            aria-label="Open GPU comparison"
-            onClick={() => setPanel("compare")}
-          >
-            Compare <span>{compare.length}</span>
-          </button>
-          <button
-            className="gpu-index-button"
-            onClick={() => setPanel("catalog")}
-          >
-            Model index <span>{gpus.length}</span>
-            <Arrow />
-          </button>
-        </div>
+        <button
+          className="gpu-menu-trigger"
+          aria-label="Open menu"
+          onClick={() => {
+            setMoveOpen(false);
+            setPanel("menu");
+          }}
+        >
+          <span>Menu</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M3 6h14M3 13h14" stroke="currentColor" strokeWidth="1.4" />
+          </svg>
+        </button>
       </header>
-      <div className="gpu-topline gpu-mono">
-        <span>
-          <i />
-          PART 01 <em>/</em> GRAPHICS CARD
-        </span>
-        <span className="gpu-topline-right">
-          {mode === "vault"
-            ? "GPU WING / PLAY LAB"
-            : "GPU BENCH / HANDS-ON MODE"}
-          <em>
-            {status === "ready"
-              ? "LIVE 3D"
-              : status === "loading"
-                ? "LOADING 3D"
-                : "PHOTO MODE"}
-          </em>
-        </span>
-      </div>
+
       {mode !== "intro" && mode !== "vault" && (
         <section className="gpu-inspector" aria-live="polite">
           <button className="gpu-back" onClick={toVault}>
@@ -531,6 +500,30 @@ export default function GPUPage() {
             {design.brand} {design.name}
             <span>↗</span>
           </button>
+          <div className="gpu-view-switch" role="group" aria-label="Card view">
+            <button
+              aria-pressed={mode !== "inside" && mode !== "photos"}
+              onClick={() => setMode("inspect")}
+            >
+              01 <span>Exterior</span>
+            </button>
+            <button
+              aria-pressed={mode === "inside"}
+              onClick={() => setMode("inside")}
+            >
+              02 <span>Inside</span>
+            </button>
+            <button
+              aria-pressed={mode === "photos"}
+              onClick={() => {
+                setMode("photos");
+                setPhoto(0);
+              }}
+            >
+              03 <span>Real photos</span>
+            </button>
+          </div>
+
           <div className="gpu-specs">
             <div>
               <strong>
@@ -578,6 +571,11 @@ export default function GPUPage() {
               <details className="gpu-card-details">
                 <summary>About this card design</summary>
                 <p className="gpu-design-note">{design.note}</p>
+                <p className="gpu-fineprint">
+                  Original, simplified 3D study; not manufacturer CAD. See Real
+                  photos for manufacturer imagery. Anatomy layers are
+                  illustrative.
+                </p>
                 {design.length && (
                   <span className="gpu-dimensions gpu-mono">
                     {design.length} MM LONG · {design.slots} SLOTS
@@ -600,154 +598,84 @@ export default function GPUPage() {
       )}
       {mode === "vault" && (
         <>
-          <section
-            className={`gpu-museum-title ${welcome ? "is-welcome" : ""}`}
-          >
-            <span className="gpu-mono">
-              GAMING PC / INTERACTIVE HARDWARE LAB
-            </span>
-            <h1>
-              {welcome ? (
-                <>
-                  Step inside.
-                  <br />
-                  <span>Power up.</span>
-                </>
-              ) : nearbyRack ? (
-                `${nearbyRack.maker} / ${nearbyRack.generation}`
-              ) : (
-                "Graphics wing."
-              )}
-            </h1>
-            {welcome ? (
-              <>
-                <p>
-                  Explore the hardware behind your game.
-                  <br />
-                  Walk the lab. Pick a GPU.
-                  <br />
-                  Learn what powers your next frame.
-                </p>
-                <button
-                  className="gpu-primary"
-                  onClick={() => setWelcome(false)}
-                >
-                  Start walking <Arrow />
-                </button>
-              </>
-            ) : (
-              <p>
-                Approach a rack. Click a labelled card.
+          {welcome && (
+            <section className="gpu-museum-title is-welcome">
+              <span className="gpu-mono">THE PC MUSEUM</span>
+              <h1>
+                Graphics,
                 <br />
-                Or choose a destination on the floor map.
+                <span>up close.</span>
+              </h1>
+              <p>
+                Walk through the collection.
+                <br />
+                Select a card. Your guide will explain it.
               </p>
-            )}
-          </section>
-          <div className="gpu-crosshair" aria-hidden="true">
-            +
-          </div>
-          <div className="gpu-exhibit-hint" aria-live="polite">
-            {hovered ? (
-              <>
-                <span className="gpu-mono">EXHIBIT IN VIEW</span>
-                <strong>{hovered}</strong>
-                <span>Click to inspect ↗</span>
-              </>
-            ) : (
-              <span>Drag the room to look around</span>
-            )}
-          </div>
-          <div className="gpu-walk-controls">
-            <div className="gpu-walk-heading">
-              <span className="gpu-mono">WALK</span>
-              <span>W A S D</span>
-            </div>
-            <div className="gpu-walk-pad">
-              {walkButton("forward", "Walk forward", "↑")}
-              {walkButton("left", "Walk left", "←")}
-              {walkButton("back", "Walk backward", "↓")}
-              {walkButton("right", "Walk right", "→")}
-            </div>
-            <div className="gpu-turn-pad">
-              {walkButton("turnLeft", "Turn left", "↶")}
-              <span>LOOK</span>
-              {walkButton("turnRight", "Turn right", "↷")}
-            </div>
-            <button
-              className="gpu-entrance"
-              onClick={() => {
-                scene.current?.reset();
-                setWelcome(true);
-              }}
-            >
-              ↺ Back to entrance
-            </button>
-          </div>
-          <aside className="gpu-floor-map" aria-label="Museum floor map">
-            <header>
-              <span className="gpu-mono">LAB MAP</span>
-              <span>CLICK A RACK TO VISIT</span>
-            </header>
-            <div className="gpu-floor-plan">
-              <div className="gpu-map-aisle">
-                <i
-                  style={{
-                    top: `${Math.max(3, Math.min(95, ((player.z + 44) / 62) * 100))}%`,
-                    left: `${50 + player.x * 4}%`,
-                    transform: `translate(-50%,-50%) rotate(${player.yaw}rad)`,
-                  }}
-                />
-              </div>
-              {[...museumRacks]
-                .sort((a, b) => b.bay - a.bay || a.side - b.side)
-                .map((r) => (
-                  <button
-                    key={r.id}
-                    aria-label={`Visit ${r.maker} ${r.generation} rack`}
-                    style={{ "--rack-color": makers[r.maker].color }}
-                    onClick={() => visitRack(r.id)}
-                  >
-                    <small>{r.maker.toUpperCase()}</small>
-                    {r.generation}
-                  </button>
-                ))}
-            </div>
-            <footer>
-              <span>
-                <i /> YOU
-              </span>
-              <button onClick={() => setPanel("catalog")}>
-                ALL {gpus.length} MODELS ↗
+              <button className="gpu-primary" onClick={() => setWelcome(false)}>
+                Start exploring <Arrow />
               </button>
-            </footer>
-          </aside>
+            </section>
+          )}
+
+          {hovered && (
+            <div className="gpu-exhibit-hint" aria-live="polite">
+              <strong>{hovered}</strong>
+              <span>Click to inspect ↗</span>
+            </div>
+          )}
+          <button
+            className="gpu-move-trigger"
+            aria-label={
+              moveOpen ? "Hide movement controls" : "Show movement controls"
+            }
+            aria-expanded={moveOpen}
+            onClick={() => {
+              setMoveOpen(!moveOpen);
+              setWelcome(false);
+            }}
+          >
+            Move <span>↗</span>
+          </button>
+          {moveOpen && (
+            <div className="gpu-walk-controls">
+              <button
+                className="gpu-move-close"
+                aria-label="Close movement controls"
+                onClick={() => setMoveOpen(false)}
+              >
+                ×
+              </button>
+
+              <div className="gpu-walk-heading">
+                <span className="gpu-mono">WALK</span>
+                <span>W A S D</span>
+              </div>
+              <div className="gpu-walk-pad">
+                {walkButton("forward", "Walk forward", "↑")}
+                {walkButton("left", "Walk left", "←")}
+                {walkButton("back", "Walk backward", "↓")}
+                {walkButton("right", "Walk right", "→")}
+              </div>
+              <div className="gpu-turn-pad">
+                {walkButton("turnLeft", "Turn left", "↶")}
+                <span>LOOK</span>
+                {walkButton("turnRight", "Turn right", "↷")}
+              </div>
+              <button
+                className="gpu-entrance"
+                onClick={() => {
+                  scene.current?.reset();
+                  setWelcome(true);
+                }}
+              >
+                ↺ Back to entrance
+              </button>
+            </div>
+          )}
         </>
       )}
       {mode !== "vault" && (
         <>
-          <div className="gpu-view-switch" role="group" aria-label="Card view">
-            <button
-              aria-pressed={mode !== "inside" && mode !== "photos"}
-              onClick={() => setMode("inspect")}
-            >
-              01 <span>Exterior</span>
-            </button>
-            <button
-              aria-pressed={mode === "inside"}
-              onClick={() => setMode("inside")}
-            >
-              02 <span>Inside</span>
-            </button>
-            <button
-              aria-pressed={mode === "photos"}
-              onClick={() => {
-                setMode("photos");
-                setPhoto(0);
-              }}
-            >
-              03 <span>Real photos</span>
-            </button>
-          </div>
           {mode === "photos" && (
             <div className="gpu-photo-view">
               {design.photos.length ? (
@@ -821,32 +749,6 @@ export default function GPUPage() {
               ))}
             </div>
           )}
-          {mode !== "photos" && (
-            <div className="gpu-camera-controls">
-              <button
-                aria-label="Reset card orientation"
-                onClick={() => scene.current?.reset()}
-              >
-                ↺ <span>Reset</span>
-              </button>
-              <button
-                aria-pressed={spin}
-                disabled={reduced}
-                onClick={() => setSpin(!spin)}
-              >
-                {spin ? "Ⅱ" : "▷"} <span>Auto rotate</span>
-              </button>
-            </div>
-          )}
-          <div className="gpu-card-caption gpu-mono">
-            <span style={{ color: accent }}>●</span>{" "}
-            {design.brand.toUpperCase()} / {design.name.toUpperCase()}
-            <small>
-              {mode === "inside"
-                ? "ILLUSTRATIVE LAYERS · NOT A REPAIR GUIDE"
-                : "ORIGINAL 3D DESIGN STUDY · NOT MANUFACTURER CAD"}
-            </small>
-          </div>
         </>
       )}
       {status === "fallback" && mode !== "photos" && (
@@ -863,123 +765,151 @@ export default function GPUPage() {
           OPENING THE MUSEUM <i />
         </div>
       )}
-      {mode !== "vault" && (
-        <footer className="gpu-bottom">
-          <div className="gpu-bottom-label gpu-mono">
-            ON THE DESK
-            <span>
-              {design.id === "study"
-                ? "—"
-                : String(
-                    designs.findIndex((d) => d.id === design.id) + 1,
-                  ).padStart(2, "0")}{" "}
-              / {String(designs.length).padStart(2, "0")}
-            </span>
-          </div>
-          <div className="gpu-design-rail" aria-label="Featured card designs">
-            {designs.map((d) => (
-              <button
-                key={d.id}
-                aria-label={`Inspect ${d.brand} ${d.name}`}
-                aria-pressed={design.id === d.id}
-                onClick={() => chooseDesign(d)}
-              >
-                {d.photos[0] ? (
-                  <img src={`/gpu/${d.photos[0]}`} alt="" />
-                ) : (
-                  <span className="gpu-rail-glyph">▥</span>
-                )}
-                <span>
-                  <small>{d.brand.toUpperCase()}</small>
-                  {d.name}
-                </span>
-              </button>
-            ))}
-          </div>
-          <button
-            className="gpu-compare-button"
-            onClick={() => setPanel("compare")}
-          >
-            Compare<span>{compare.length.toString().padStart(2, "0")}</span>
-          </button>
-        </footer>
-      )}
-      <div className="gpu-utility gpu-mono">
-        <span>
-          {mode === "vault"
-            ? "W A S D TO WALK · DRAG TO LOOK · CLICK A LABELLED CARD"
-            : "DRAG TO ORBIT · SELECT A VIEW TO EXPLORE"}
-        </span>
-        <div>
-          <label>
-            <input
-              type="checkbox"
-              checked={reduced}
-              onChange={(e) => {
-                setReduced(e.target.checked);
-                if (e.target.checked) setSpin(false);
-              }}
-            />{" "}
-            Still mode
-          </label>
-          <button
-            aria-label="Show navigation help"
-            onClick={() => setHelp(!help)}
-          >
-            ?
-          </button>
-          <a href="/pc/guide">PC foundations ↗</a>
-        </div>
+      <div className="gpu-quiet-hint">
+        {mode === "vault"
+          ? "WASD to walk · drag to look · select a card"
+          : "Drag the card to rotate"}
       </div>
-      {help && (
-        <div className="gpu-help">
-          <button aria-label="Close help" onClick={() => setHelp(false)}>
-            ×
-          </button>
-          <strong>Make yourself at home.</strong>
-          <p>
-            Museum: W / S walks forward and back. A / D moves sideways. Drag
-            anywhere in the room to look around, or use the turn buttons. Arrow
-            keys also work.
-          </p>
-          <p>
-            Desk: drag the card to rotate. Select Inside to separate the layers.
-            Real photos shows manufacturer imagery.
-          </p>
-          <p>
-            The floor map takes you straight to a named rack. Click any
-            displayed card to inspect it. Esc returns to the museum. Use the
-            Model index for the complete catalog.
-          </p>
-        </div>
-      )}
       {panel && (
         <Dialog
+          key={panel}
           title={
-            panel === "guide"
-              ? `Meet ${selected.name}.`
-              : panel === "catalog"
-                ? "Find your silicon."
-                : panel === "designs"
-                  ? "Same chip. Different character."
-                  : panel === "basics"
-                    ? "Start with the small chip."
-                    : "Put them side by side."
+            panel === "menu"
+              ? "Explore at your pace."
+              : panel === "guide"
+                ? `Meet ${selected.name}.`
+                : panel === "catalog"
+                  ? "Find your silicon."
+                  : panel === "designs"
+                    ? "Same chip. Different character."
+                    : panel === "basics"
+                      ? "Start with the small chip."
+                      : "Put them side by side."
           }
           kicker={
-            panel === "guide"
-              ? "YOUR MUSEUM GUIDE"
-              : panel === "catalog"
-                ? "THE MODEL INDEX"
-                : panel === "designs"
-                  ? "THE DESIGN ARCHIVE"
-                  : panel === "basics"
-                    ? "GRAPHICS CARD / FIELD NOTES"
-                    : "COMPARE / UP TO THREE"
+            panel === "menu"
+              ? "THE PC MUSEUM"
+              : panel === "guide"
+                ? "YOUR MUSEUM GUIDE"
+                : panel === "catalog"
+                  ? "THE MODEL INDEX"
+                  : panel === "designs"
+                    ? "THE DESIGN ARCHIVE"
+                    : panel === "basics"
+                      ? "GRAPHICS CARD / FIELD NOTES"
+                      : "COMPARE / UP TO THREE"
           }
           onClose={closePanel}
           wide={panel === "designs" || panel === "compare"}
         >
+          {panel === "menu" && (
+            <div className="gpu-menu-content">
+              <nav className="gpu-menu-links" aria-label="Museum menu">
+                <button onClick={() => setPanel("catalog")}>
+                  Model index <span>{gpus.length}</span>
+                </button>
+                <button
+                  aria-label="Design archive"
+                  onClick={() => setPanel("designs")}
+                >
+                  Design archive <span>↗</span>
+                </button>
+                <button
+                  aria-label="GPU basics"
+                  onClick={() => setPanel("basics")}
+                >
+                  GPU basics <span>↗</span>
+                </button>
+                <button
+                  aria-label="Open GPU comparison"
+                  onClick={() => setPanel("compare")}
+                >
+                  Compare GPUs <span>{compare.length}</span>
+                </button>
+                {mode !== "vault" && (
+                  <button onClick={toVault}>
+                    Return to museum <span>↗</span>
+                  </button>
+                )}
+              </nav>
+              <details className="gpu-menu-destinations">
+                <summary>Jump to a display bay</summary>
+                <div>
+                  {museumRacks.map((r) => (
+                    <button
+                      key={r.id}
+                      aria-label={`Visit ${r.maker} ${r.generation} rack`}
+                      onClick={() => visitRack(r.id)}
+                    >
+                      <span>{r.maker}</span>
+                      {r.generation}
+                    </button>
+                  ))}
+                </div>
+              </details>
+              <details className="gpu-menu-help">
+                <summary>Movement & help</summary>
+                <p>
+                  W / S moves forward and back. A / D moves sideways. Drag the
+                  room to look around. Arrow keys also work. Select any card to
+                  inspect it and meet your guide.
+                </p>
+                <button
+                  onClick={() => {
+                    setPanel(null);
+                    setMode("vault");
+                    setMoveOpen(true);
+                    setWelcome(false);
+                  }}
+                >
+                  Show movement controls ↗
+                </button>
+                <button
+                  onClick={() => {
+                    setPanel(null);
+                    setMode("vault");
+                    scene.current?.reset();
+                    setWelcome(true);
+                  }}
+                >
+                  Back to entrance ↗
+                </button>
+              </details>
+              <div className="gpu-menu-settings">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={reduced}
+                    onChange={(e) => {
+                      setReduced(e.target.checked);
+                      if (e.target.checked) setSpin(false);
+                    }}
+                  />{" "}
+                  Still mode
+                </label>
+                {mode !== "vault" && (
+                  <>
+                    <button
+                      aria-label="Reset card orientation"
+                      onClick={() => scene.current?.reset()}
+                    >
+                      Reset card
+                    </button>
+                    <button
+                      aria-pressed={spin}
+                      disabled={reduced}
+                      onClick={() => setSpin(!spin)}
+                    >
+                      Auto rotate
+                    </button>
+                  </>
+                )}
+              </div>
+              <a className="gpu-menu-foundations" href="/pc/guide">
+                PC foundations & assembly ↗
+              </a>
+            </div>
+          )}
           {panel === "guide" && (
             <GPUGuideChat
               key={selected.id + design.id}

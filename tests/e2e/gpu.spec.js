@@ -1,23 +1,43 @@
 import { expect, test } from "@playwright/test";
 
+async function openMenuItem(page, name) {
+  await page.getByRole("button", { name: "Open menu", exact: true }).click();
+  await page
+    .getByRole("dialog")
+    .getByRole("button", { name, exact: true })
+    .click();
+}
+async function visitRack(page, name) {
+  await page.getByRole("button", { name: "Open menu", exact: true }).click();
+  await page.getByText("Jump to a display bay", { exact: true }).click();
+  await page.getByRole("button", { name, exact: true }).click();
+}
+async function selectDesign(page, name) {
+  await openMenuItem(page, "Design archive");
+  await page.getByRole("dialog").getByRole("button", { name }).click();
+}
+
 test("GPU vault loads a live scene and switches between distinct real designs", async ({
   page,
 }) => {
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/pc");
-  await expect(page).toHaveTitle(/PC Play Lab/, { timeout: 15_000 });
+  await expect(page).toHaveTitle(/PC Museum/, { timeout: 15_000 });
   await expect(
-    page.getByRole("heading", { name: "Step inside. Power up." }),
+    page.getByRole("heading", { name: "Graphics, up close." }),
   ).toBeVisible();
   await expect(page.locator(".gpu-scene")).toHaveAttribute(
     "data-scene-status",
     /ready|fallback/,
   );
+  await expect(page.locator(".gpu-floor-map")).toHaveCount(0);
+  await expect(page.locator(".gpu-walk-controls")).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: "Model index 47", exact: true }),
+  ).toHaveCount(0);
   await page.screenshot({ path: "test-results/pc-museum-desktop.png" });
-  await page
-    .getByRole("button", { name: "Design archive", exact: true })
-    .click();
+  await openMenuItem(page, "Design archive");
   await page
     .getByRole("dialog")
     .getByRole("button", { name: /ASUS.*ROG Astral/ })
@@ -25,9 +45,7 @@ test("GPU vault loads a live scene and switches between distinct real designs", 
   await expect(page.locator(".gpu-inspector h1")).toHaveText("RTX 5090");
   await expect(page.locator(".gpu-design-note")).toContainText("fourth fan");
   await expect(page.locator(".gpu-dimensions")).toContainText("357.6");
-  await page
-    .getByRole("button", { name: "Inspect Sapphire NITRO+ OC", exact: true })
-    .click();
+  await selectDesign(page, /Sapphire.*NITRO\+\ OC/i);
   await expect(page.locator(".gpu-inspector h1")).toHaveText("RX 9070 XT");
   await page
     .getByRole("button", { name: "03 Real photos", exact: true })
@@ -55,9 +73,7 @@ test("model index filters generations and memory variants, then compares actual 
   page,
 }) => {
   await page.goto("/pc/");
-  await page
-    .getByRole("button", { name: "Model index 47", exact: true })
-    .click();
+  await openMenuItem(page, "Model index 47");
   const dialog = page.getByRole("dialog");
   await dialog.getByRole("button", { name: "NVIDIA", exact: true }).click();
   await page
@@ -77,17 +93,13 @@ test("model index filters generations and memory variants, then compares actual 
     .fill("no-card-matches");
   await expect(page.locator(".gpu-no-results")).toBeVisible();
   await page.getByRole("button", { name: "Close panel", exact: true }).click();
-  await page
-    .getByRole("button", { name: "Open GPU comparison", exact: true })
-    .click();
+  await openMenuItem(page, "Open GPU comparison");
   await expect(page.locator(".gpu-comparison article")).toHaveCount(2);
   await expect(page.locator(".gpu-comparison")).toContainText("16GB GDDR7");
   await expect(page.locator(".gpu-comparison")).toContainText("8GB GDDR7");
   await expect(page.locator(".gpu-comparison")).toContainText("180W");
   await page.getByRole("button", { name: "Close panel", exact: true }).click();
-  await page
-    .getByRole("button", { name: "Model index 47", exact: true })
-    .click();
+  await openMenuItem(page, "Model index 47");
   await page
     .getByRole("dialog")
     .getByRole("button", { name: "Intel", exact: true })
@@ -111,7 +123,12 @@ test("museum supports walking, turning, named racks and direct exhibit selection
     "ready",
   );
   await page
-    .getByRole("button", { name: "Start walking", exact: true })
+    .getByRole("button", { name: "Start exploring", exact: true })
+    .click();
+  await expect(page.locator(".gpu-museum-title")).toHaveCount(0);
+  await page.screenshot({ path: "test-results/pc-museum-cleared.png" });
+  await page
+    .getByRole("button", { name: "Show movement controls", exact: true })
     .click();
   await page
     .getByRole("button", { name: "Walk forward", exact: true })
@@ -144,9 +161,7 @@ test("museum supports walking, turning, named racks and direct exhibit selection
     })
     .toBeGreaterThan(0.2);
   await page.keyboard.up("ArrowRight");
-  await page
-    .getByRole("button", { name: "Visit NVIDIA RTX 50 rack", exact: true })
-    .click();
+  await visitRack(page, "Visit NVIDIA RTX 50 rack");
   await expect(page.locator(".gpu-page")).toHaveAttribute(
     "data-player-x",
     "-2.60",
@@ -155,9 +170,7 @@ test("museum supports walking, turning, named racks and direct exhibit selection
     "data-player-z",
     "3.00",
   );
-  await expect(page.locator(".gpu-museum-title h1")).toHaveText(
-    "NVIDIA / RTX 50",
-  );
+  await expect(page.locator(".gpu-museum-title")).toHaveCount(0);
   await page.screenshot({ path: "test-results/pc-museum-nameplates.png" });
   // The card at the centre of this human-height rack view is the labelled 5060 Ti.
   await expect
@@ -176,7 +189,7 @@ test("museum supports walking, turning, named racks and direct exhibit selection
     "data-player-z",
     "3.00",
   );
-  await page.getByRole("button", { name: "GPU basics", exact: true }).click();
+  await openMenuItem(page, "GPU basics");
   await expect(page.getByRole("dialog")).toContainText("board partner");
   await expect(page.getByRole("dialog")).toContainText("2.78ms");
   await page.keyboard.press("Escape");
@@ -189,28 +202,28 @@ test("mobile supports still mode, browsing, photos and the design archive withou
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/pc");
+  await expect(page.locator(".gpu-floor-map")).toHaveCount(0);
+  await expect(page.locator(".gpu-walk-controls")).toHaveCount(0);
+  await page.getByRole("button", { name: "Open menu", exact: true }).click();
   await expect(page.getByLabel("Still mode", { exact: true })).toBeChecked();
+  await page.getByRole("button", { name: "Close panel", exact: true }).click();
   await page.screenshot({ path: "test-results/pc-museum-mobile.png" });
-  await page
-    .getByRole("button", { name: "Visit AMD RX 9000 rack", exact: true })
-    .click();
+  await visitRack(page, "Visit AMD RX 9000 rack");
   await expect(page.locator(".gpu-page")).toHaveAttribute(
     "data-player-x",
     "2.60",
   );
-  await page
-    .getByRole("button", { name: "Model index 47", exact: true })
-    .click();
+  await openMenuItem(page, "Model index 47");
   await page
     .getByLabel("Search GPU models", { exact: true })
     .fill("RX 9070 XT");
   await page.locator(".gpu-model-pick").click();
+  await page.getByRole("button", { name: "Open menu", exact: true }).click();
   await expect(
     page.getByRole("button", { name: /Auto rotate/ }),
   ).toBeDisabled();
-  await page
-    .getByRole("button", { name: "Inspect Sapphire PURE", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Close panel", exact: true }).click();
+  await selectDesign(page, /Sapphire.*PURE/i);
   await expect(page.locator(".gpu-inspector h1")).toHaveText("RX 9070 XT");
   await page
     .getByRole("button", { name: "03 Real photos", exact: true })
@@ -259,9 +272,7 @@ test("catalog and official photos remain available when WebGL is unavailable", a
     "src",
     "/gpu/fe-front.jpg",
   );
-  await page
-    .getByRole("button", { name: "Model index 47", exact: true })
-    .click();
+  await openMenuItem(page, "Model index 47");
   await page.getByLabel("Search GPU models", { exact: true }).fill("RX 9070");
   await expect(page.locator(".gpu-model-list article")).toHaveCount(2);
 });
@@ -270,9 +281,7 @@ test("museum guide explains the selected GPU and answers contextual follow-ups",
   page,
 }) => {
   await page.goto("/pc");
-  await page
-    .getByRole("button", { name: "Model index 47", exact: true })
-    .click();
+  await openMenuItem(page, "Model index 47");
   await page
     .getByLabel("Search GPU models", { exact: true })
     .fill("RTX 5060 Ti 16GB");
@@ -311,12 +320,7 @@ test("museum guide explains the selected GPU and answers contextual follow-ups",
     "don’t have live Indian prices",
   );
   await page.getByRole("button", { name: "Close panel", exact: true }).click();
-  await page
-    .getByRole("button", {
-      name: "Inspect ASRock Steel Legend OC",
-      exact: true,
-    })
-    .click();
+  await selectDesign(page, /ASRock.*Steel Legend/i);
   await expect(guide).toContainText("Intel");
   await expect(guide).toContainText("12GB");
   await expect(guide).toContainText("ASRock");

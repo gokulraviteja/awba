@@ -16,7 +16,7 @@ createRoot(document.getElementById("root")).render(
       fallback={
         <div style={{ padding: 40 }}>
           {isPC
-            ? "Powering up the PC Play Lab…"
+            ? "Opening the PC museum…"
             : isDiwali
               ? "Lighting the courtyard…"
               : "Loading Awba…"}

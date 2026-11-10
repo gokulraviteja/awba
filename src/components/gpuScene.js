@@ -426,8 +426,8 @@ export function createGpuScene(
     };
   }
   const scene = new T.Scene();
-  scene.background = new T.Color("#0b081a");
-  scene.fog = new T.FogExp2("#17102d", 0.014);
+  scene.background = new T.Color("#121010");
+  scene.fog = new T.FogExp2("#201d1d", 0.014);
   renderer.setPixelRatio(Math.min(devicePixelRatio, 1.6));
   renderer.outputColorSpace = T.SRGBColorSpace;
   renderer.toneMapping = T.ACESFilmicToneMapping;
@@ -441,31 +441,31 @@ export function createGpuScene(
   scene.environmentIntensity = 0.48;
   environment.dispose();
   pmrem.dispose();
-  scene.add(new T.HemisphereLight("#d9d1ff", "#121024", 1.1));
-  const key = new T.DirectionalLight("#d9edff", 3);
+  scene.add(new T.HemisphereLight("#ded6d1", "#1b1919", 1.1));
+  const key = new T.DirectionalLight("#fff2ec", 3);
   key.position.set(-3, 9, 8);
   scene.add(key);
-  const rim = new T.DirectionalLight("#6a5bff", 3);
+  const rim = new T.DirectionalLight("#cb8989", 1.3);
   rim.position.set(9, 6, -6);
   scene.add(rim);
-  const warm = new T.DirectionalLight("#63eee7", 2.4);
+  const warm = new T.DirectionalLight("#e9dfd8", 1.5);
   warm.position.set(-8, 3, 1);
   scene.add(warm);
-  const steel = metal("#a0a0b4", 0.32, 0.6),
-    deck = metal("#252039", 0.43, 0.52),
-    lightmat = new T.MeshBasicMaterial({ color: "#91f5ed" }),
-    orange = new T.MeshBasicMaterial({ color: "#bb82ff" });
+  const steel = metal("#aea6a6", 0.32, 0.6),
+    deck = metal("#2f2b2a", 0.43, 0.52),
+    lightmat = new T.MeshBasicMaterial({ color: "#e26665" }),
+    orange = new T.MeshBasicMaterial({ color: "#e26665" });
   const floor = new T.Mesh(
     new T.PlaneGeometry(170, 190),
-    metal("#171425", 0.44, 0.45),
+    metal("#1e1b1b", 0.44, 0.45),
   );
   floor.rotation.x = -Math.PI / 2;
   floor.position.set(0, -0.15, -45);
   scene.add(floor);
-  const violet = new T.MeshBasicMaterial({ color: "#a16bff" });
-  const cyan = new T.MeshBasicMaterial({ color: "#55f6e5" });
-  const shell = metal("#555267", 0.4, 0.55);
-  const carbon = metal("#1a1629", 0.64, 0.25);
+  const violet = new T.MeshBasicMaterial({ color: "#b84240" });
+  const cyan = new T.MeshBasicMaterial({ color: "#a59b97" });
+  const shell = metal("#615958", 0.4, 0.55);
+  const carbon = metal("#211e1e", 0.64, 0.25);
   // The room is an oversized PC chassis: broad panels and circuit-board paths.
   block(scene, 0.35, 9.5, 65, carbon, -9.2, 4.5, -14, 0.12);
   block(scene, 0.35, 9.5, 65, carbon, 9.2, 4.5, -14, 0.12);
@@ -476,7 +476,7 @@ export function createGpuScene(
       10,
       0.06,
       8.8,
-      metal(bay % 2 ? "#232035" : "#1b192a", 0.5, 0.4),
+      metal(bay % 2 ? "#2c2929" : "#232020", 0.5, 0.4),
       0,
       -0.12,
       z,
@@ -528,7 +528,7 @@ export function createGpuScene(
         6.8,
         0.032,
         0.025,
-        metal("#39324e", 0.6, 0.3),
+        metal("#433d3d", 0.6, 0.3),
         0,
         0.9 + vent * 0.75,
         -1.08,
@@ -571,12 +571,12 @@ export function createGpuScene(
           2.56,
           0.37,
           0.055,
-          new T.MeshBasicMaterial({ color: "#151020" }),
+          new T.MeshBasicMaterial({ color: "#191717" }),
           x,
           y,
           1.29,
         );
-        const name = label(gpu.name, "#edf4f5", 500);
+        const name = label(gpu.name, "#f1f1f1", 500);
         name.scale.setScalar(0.88);
         name.position.set(x, y, 1.326);
         group.add(name);
@@ -587,7 +587,7 @@ export function createGpuScene(
     title.position.set(0, 7.5, 1.23);
     title.scale.setScalar(1.6);
     group.add(title);
-    const bayLabel = label("GPU / " + generation, "#c7c3ed", 600);
+    const bayLabel = label("GPU / " + generation, "#d9d7d7", 600);
     bayLabel.position.set(side * 5.5, 4.15, 8.7 - bay * 13);
     bayLabel.scale.setScalar(0.9);
     scene.add(bayLabel);
@@ -635,56 +635,16 @@ export function createGpuScene(
     block(scene, 11.1, 0.28, 0.38, shell, 0, 8.45, z, 0.06);
     block(scene, 10.8, 0.045, 0.08, bay % 2 ? cyan : violet, 0, 8.23, z + 0.22);
   }
-  // Oversized cooling fans give the lab a recognisable gaming-PC silhouette.
-  const roomFans = [];
-  for (const side of [-1, 1]) {
-    const panel = new T.Group();
-    panel.position.set(side * 6.3, 4.9, 8.6);
-    panel.rotation.y = side === -1 ? Math.PI / 2 : -Math.PI / 2;
-    block(panel, 3.6, 7.1, 0.18, carbon, 0, 0, 0, 0.2);
-    for (let i = 0; i < 2; i++) {
-      const f = fan(1.43);
-      f.position.set(0, -1.65 + i * 3.3, 0.16);
-      panel.add(f);
-      roomFans.push(f);
-      const halo = new T.Mesh(
-        new T.TorusGeometry(1.48, 0.065, 8, 72),
-        side < 0 ? cyan : violet,
-      );
-      halo.position.copy(f.position);
-      panel.add(halo);
-      const inner = new T.Mesh(
-        new T.TorusGeometry(1.33, 0.018, 6, 64),
-        side < 0 ? violet : cyan,
-      );
-      inner.position.copy(f.position);
-      inner.position.z += 0.03;
-      panel.add(inner);
-    }
-    scene.add(panel);
-  }
   const endPanel = new T.Group();
   endPanel.position.set(0, 4.2, -48);
   block(endPanel, 18, 8.5, 0.35, carbon, 0, 0, 0, 0.3);
-  for (let i = 0; i < 3; i++) {
-    const f = fan(1.9);
-    f.position.set(-5 + i * 5, 0.8, 0.3);
-    endPanel.add(f);
-    roomFans.push(f);
-    const ring = new T.Mesh(
-      new T.TorusGeometry(2, 0.09, 8, 80),
-      i % 2 ? cyan : violet,
-    );
-    ring.position.copy(f.position);
-    endPanel.add(ring);
-  }
-  const signature = label("AWBA / PLAY LAB", "#f4efff", 900);
-  signature.position.set(0, -2.8, 0.25);
+  const signature = label("GRAPHICS / AWBA", "#e26665", 900);
+  signature.position.set(0, 0, 0.25);
   signature.scale.setScalar(2);
   endPanel.add(signature);
   scene.add(endPanel);
   for (let i = 0; i < 4; i++) {
-    const t = label("0" + (i + 1) + " / GPU BAY", "#9e8cce", 500);
+    const t = label("0" + (i + 1) + " / GPU BAY", "#b1aaa9", 500);
     t.rotation.x = -Math.PI / 2;
     t.position.set(0, -0.055, 8 - i * 13);
     scene.add(t);
@@ -990,8 +950,7 @@ export function createGpuScene(
     if (!state.reducedMotion)
       for (const f of hero.userData.fans)
         f.userData.blades.rotation.z += dt * 1.7;
-    if (!state.reducedMotion)
-      for (const f of roomFans) f.userData.blades.rotation.z += dt * 0.3;
+
     renderer.render(scene, camera);
   }
   frame = requestAnimationFrame(render);
