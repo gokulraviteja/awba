@@ -1,5 +1,5 @@
 import * as T from "three";
-import { createMuseumGuide, createScanner } from "./museumCharacters.js";
+import { createScanner } from "./museumCharacters.js";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
@@ -404,7 +404,6 @@ export function createGpuScene(
     onDepth,
     onPosition = () => {},
     onHover = () => {},
-    onGuide = () => {},
     onPointerLock = () => {},
     onCaptureError = () => {},
     reducedMotion = false,
@@ -704,21 +703,6 @@ export function createGpuScene(
     block(pedestal, 0.18, 0.35, 0.45, deck, x, 1.93, 0, 0.04);
   pedestal.position.set(2.15, 0, 0);
   stage.add(pedestal);
-  const guide = createMuseumGuide();
-  guide.position.set(2.2, 0, 10.5);
-  scene.add(guide);
-  const guideHit = new T.Mesh(
-    new T.BoxGeometry(0.95, 2.7, 0.8),
-    new T.MeshBasicMaterial({ visible: false }),
-  );
-  guideHit.position.y = 1.35;
-  guideHit.userData.guide = true;
-  guide.add(guideHit);
-  clickable.push(guideHit);
-  const guideName = label("ARI / MUSEUM GUIDE", "#e9d4cf", 650);
-  guideName.position.set(0, 2.8, 0);
-  guideName.scale.setScalar(0.45);
-  guide.add(guideName);
   const scanner = createScanner();
   camera.add(scanner);
   scene.add(camera);
@@ -730,7 +714,6 @@ export function createGpuScene(
       part: "chip",
       spin: false,
       firstPerson: false,
-      tourActive: false,
       reducedMotion,
     },
     depth = 0,
@@ -837,29 +820,22 @@ export function createGpuScene(
   function inspectHit(hit) {
     if (!hit) return;
     if (isLocked()) document.exitPointerLock();
-    if (hit.object.userData.guide) onGuide();
-    else onSelect(hit.object.userData.exhibit);
+    onSelect(hit.object.userData.exhibit);
   }
   const lockChange = () => {
     blur();
     onPointerLock(isLocked());
   };
   const mouseLook = (e) => {
-    if (
-      !isLocked() ||
-      state.mode !== "vault" ||
-      state.paused ||
-      state.tourActive
-    )
-      return;
-    walk.yaw -= e.movementX * 0.0025;
+    if (!isLocked() || state.mode !== "vault" || state.paused) return;
+    walk.yaw += e.movementX * 0.0025;
     walk.pitch = Math.max(
       -0.75,
       Math.min(0.85, walk.pitch - e.movementY * 0.0025),
     );
   };
   const onDown = (e) => {
-    if (state.paused || state.tourActive || e.button !== 0) return;
+    if (state.paused || e.button !== 0) return;
     skipLockClick =
       !lockUnavailable &&
       state.firstPerson &&
@@ -883,14 +859,14 @@ export function createGpuScene(
     renderer.domElement.setPointerCapture(e.pointerId);
   };
   const onMove = (e) => {
-    if (state.paused || state.tourActive || isLocked()) return;
+    if (state.paused || isLocked()) return;
     if (down) {
       const dx = e.clientX - down.x,
         dy = e.clientY - down.y;
       if (Math.abs(dx) + Math.abs(dy) > 4) drag = true;
       if (state.mode === "vault") {
-        walk.yaw = down.yaw - dx * 0.006;
-        walk.pitch = Math.max(-0.65, Math.min(0.8, down.pitch + dy * 0.004));
+        walk.yaw = down.yaw + dx * 0.006;
+        walk.pitch = Math.max(-0.65, Math.min(0.8, down.pitch - dy * 0.004));
       } else {
         targetRY = down.ry + dx * 0.008;
         targetRX = Math.max(-1.3, Math.min(1.3, down.rx + dy * 0.006));
@@ -898,9 +874,7 @@ export function createGpuScene(
     } else if (state.mode === "vault") {
       const p = pick(e);
       renderer.domElement.style.cursor = p ? "pointer" : "grab";
-      const name = p?.object.userData.guide
-        ? "Ari · Museum guide"
-        : p?.object.userData.exhibit?.gpu.name || null;
+      const name = p?.object.userData.exhibit?.gpu.name || null;
       if (name !== hovered) {
         hovered = name;
         onHover(name);
@@ -908,7 +882,7 @@ export function createGpuScene(
     }
   };
   const onUp = (e) => {
-    if (state.paused || state.tourActive) {
+    if (state.paused) {
       down = null;
       return;
     }
@@ -922,7 +896,7 @@ export function createGpuScene(
     down = null;
   };
   const wheel = (e) => {
-    if (state.mode !== "vault" || state.paused || state.tourActive) return;
+    if (state.mode !== "vault" || state.paused) return;
     e.preventDefault();
     move(e.deltaY * 0.003, 0, 1);
     reportPosition();
@@ -931,7 +905,6 @@ export function createGpuScene(
     if (
       state.mode !== "vault" ||
       state.paused ||
-      state.tourActive ||
       ["INPUT", "SELECT", "TEXTAREA"].includes(e.target.tagName) ||
       e.metaKey ||
       e.ctrlKey ||
@@ -1028,7 +1001,7 @@ export function createGpuScene(
       const right =
         (keys.has("KeyD") || held.has("right") ? 1 : 0) -
         (keys.has("KeyA") || held.has("left") ? 1 : 0);
-      if (!state.paused && !state.tourActive) {
+      if (!state.paused) {
         walk.yaw +=
           ((keys.has("ArrowRight") || held.has("turnRight") ? 1 : 0) -
             (keys.has("ArrowLeft") || held.has("turnLeft") ? 1 : 0)) *
@@ -1069,20 +1042,15 @@ export function createGpuScene(
     hero.visible = !vault;
     museum.visible = vault;
     stage.visible = !vault;
-    scanner.visible = vault && state.firstPerson && !state.tourActive;
+    scanner.visible = vault && state.firstPerson;
     scanner.position.y =
       -0.29 +
       (!state.reducedMotion && (keys.size || held.size)
         ? Math.sin(now * 0.009) * 0.012
         : 0);
-    guide.visible = vault;
-    if (!state.tourActive || !state.guideRack)
-      guide.position.x = mobile ? 0.65 : 2.2;
-    if (vault && !state.tourActive) {
+    if (vault) {
       const p = pick({ clientX: 0, clientY: 0 }, true);
-      const name = p?.object.userData.guide
-        ? "Ari · Museum guide"
-        : p?.object.userData.exhibit?.gpu.name || null;
+      const name = p?.object.userData.exhibit?.gpu.name || null;
       if (name !== hovered) {
         hovered = name;
         onHover(name);
@@ -1147,11 +1115,7 @@ export function createGpuScene(
         targetRX = -0.12;
         targetRY = -0.35;
       }
-      if (
-        next.paused ||
-        (next.mode && next.mode !== "vault") ||
-        next.tourActive
-      ) {
+      if (next.paused || (next.mode && next.mode !== "vault")) {
         if (isLocked()) document.exitPointerLock();
         keys.clear();
         held.clear();
@@ -1164,16 +1128,6 @@ export function createGpuScene(
         held.clear();
       }
       state = { ...state, ...next };
-      if (next.tourActive !== undefined || next.guideRack !== undefined) {
-        const r =
-          state.tourActive && museumRacks.find((r) => r.id === state.guideRack);
-        guide.position.set(
-          r ? r.side * 4.2 : 2.2,
-          0,
-          r ? 5.2 - r.bay * 13 : 10.5,
-        );
-        guide.rotation.y = r ? (-r.side * Math.PI) / 2 : 0;
-      }
     },
     enterFirstPerson() {
       renderer.domElement.focus({ preventScroll: true });

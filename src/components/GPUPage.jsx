@@ -9,8 +9,6 @@ import {
 import { createGpuScene } from "./gpuScene.js";
 import "./gpu.css";
 import { GPUAssistant, GPUGuideChat } from "./GPUAssistant.jsx";
-import MuseumTour, { GuidePortrait } from "./MuseumTour.jsx";
-import { tourStops } from "./gpuTour.js";
 
 const Arrow = ({ direction = "right" }) => (
   <svg
@@ -286,8 +284,6 @@ export default function GPUPage() {
     [mode, setMode] = useState("vault"),
     [panel, setPanel] = useState(null),
     [status, setStatus] = useState("loading"),
-    [tourIndex, setTourIndex] = useState(null),
-    [tourResume, setTourResume] = useState(0),
     [firstPerson, setFirstPerson] = useState(false),
     [locked, setLocked] = useState(false),
     [captureFailed, setCaptureFailed] = useState(false),
@@ -302,10 +298,7 @@ export default function GPUPage() {
     [spin, setSpin] = useState(false);
   const host = useRef(null),
     scene = useRef(null),
-    selectRef = useRef(null),
-    guideRef = useRef(null);
-  const tourActive = tourIndex !== null;
-  const tourStep = tourActive ? tourStops[tourIndex] : null;
+    selectRef = useRef(null);
   const chooseDesign = (d) => {
     const g = gpus.find((g) => g.id === d.gpu);
     setSelected(g);
@@ -313,7 +306,7 @@ export default function GPUPage() {
     setMoveOpen(false);
     setMode("inspect");
     setPanel(null);
-    setTourIndex(null);
+
     setWelcome(false);
   };
   selectRef.current = (exhibit) => {
@@ -323,7 +316,7 @@ export default function GPUPage() {
       setMoveOpen(false);
       setMode("inspect");
       setPanel(null);
-      setTourIndex(null);
+
       setWelcome(false);
     } else chooseDesign(exhibit);
   };
@@ -335,7 +328,6 @@ export default function GPUPage() {
       onSelect: (d) => selectRef.current(d),
       onStatus: setStatus,
       onDepth: () => {},
-      onGuide: () => guideRef.current(),
       onPointerLock: setLocked,
       onCaptureError: () => setCaptureFailed(true),
       onHover: setHovered,
@@ -364,19 +356,17 @@ export default function GPUPage() {
       mode,
       spin,
       firstPerson,
-      tourActive,
-      guideRack: tourStep?.rack,
       reducedMotion: reduced,
       paused: !!panel,
     });
-  }, [design, mode, spin, reduced, panel, firstPerson, tourActive, tourStep]);
+  }, [design, mode, spin, reduced, panel, firstPerson]);
   useEffect(() => {
     const handler = (e) => {
       if (panel || ["INPUT", "SELECT", "TEXTAREA"].includes(e.target.tagName))
         return;
       if (e.key === "Escape") {
         if (locked) return;
-        setTourIndex(null);
+
         setMode("vault");
         setMoveOpen(false);
         setWelcome(false);
@@ -391,7 +381,7 @@ export default function GPUPage() {
     setMoveOpen(false);
     setMode("inspect");
     setPanel(null);
-    setTourIndex(null);
+
     setWelcome(false);
   };
   const toggleCompare = (id) =>
@@ -408,52 +398,21 @@ export default function GPUPage() {
   );
   const accent = makers[selected.maker].color;
   const toVault = () => {
-    setTourIndex(null);
     setMode("vault");
     setPanel(null);
   };
   const closePanel = useCallback(() => setPanel(null), []);
   const visitRack = (id) => {
-    setTourIndex(null);
     setMoveOpen(false);
     setMode("vault");
     setPanel(null);
     setWelcome(false);
     scene.current?.navigate(id);
   };
-  const goTour = (index) => {
-    const step = tourStops[index];
-    if (!step) return;
-    setTourIndex(index);
-    setTourResume(index);
-    setWelcome(false);
-    setMoveOpen(false);
-    setPanel(null);
-    setFirstPerson(false);
-    setSpin(false);
-    setMode(step.view);
-    if (step.gpu) {
-      setSelected(step.gpu);
-      setDesign(step.design);
-    }
-    if (step.rack) scene.current?.navigate(step.rack);
-    else scene.current?.entrance();
-  };
-  const endTour = () => {
-    setTourIndex(null);
-    setMode("vault");
-    setWelcome(false);
-  };
   const explore = () => {
     setWelcome(false);
     setFirstPerson(true);
     scene.current?.enterFirstPerson();
-  };
-  guideRef.current = () => {
-    setTourIndex(null);
-    setFirstPerson(false);
-    setWelcome(true);
-    scene.current?.entrance();
   };
   const walkButton = (direction, label, glyph) => (
     <button
@@ -481,7 +440,6 @@ export default function GPUPage() {
     <main
       className={`gpu-page gpu-mode-${mode}`}
       style={{ "--gpu-accent": accent }}
-      data-tour-active={tourActive}
       data-first-person={firstPerson}
       data-pointer-locked={locked}
       data-capture-unavailable={captureFailed}
@@ -540,7 +498,7 @@ export default function GPUPage() {
         </button>
       </header>
 
-      {mode !== "vault" && !tourActive && (
+      {mode !== "vault" && (
         <section className="gpu-inspector" aria-live="polite">
           <button className="gpu-back" onClick={toVault}>
             <Arrow direction="left" /> Back to museum
@@ -614,33 +572,24 @@ export default function GPUPage() {
       )}
       {mode === "vault" && (
         <>
-          {welcome && !tourActive && (
-            <section
-              className="museum-invitation"
-              aria-label="Meet your museum guide"
-            >
-              <div className="museum-invitation-host">
-                <GuidePortrait />
-                <span>ARI / YOUR MUSEUM GUIDE</span>
-              </div>
+          {welcome && (
+            <section className="museum-entry" aria-label="Enter the PC museum">
+              <span className="gpu-mono">THE GRAPHICS COLLECTION</span>
               <h1>
-                Every great build
+                Aim. Explore.
                 <br />
-                starts with curiosity.
+                Understand.
               </h1>
               <p>
-                Hi, I’m Ari. Want a tour? We’ll start with what a GPU does, then
-                explore its evolution and every model in this collection.
+                WASD to move. Look around, aim at a card, then click to inspect
+                it.
               </p>
-              <button className="gpu-primary" onClick={() => goTour(0)}>
-                Take the tour <Arrow />
-              </button>
-              <button className="museum-explore" onClick={explore}>
-                Explore on my own ↗
+              <button className="gpu-primary" onClick={explore}>
+                Enter museum <Arrow />
               </button>
             </section>
           )}
-          {!welcome && !tourActive && (
+          {!welcome && (
             <div
               className={`museum-crosshair ${hovered ? "has-target" : ""}`}
               aria-hidden="true"
@@ -652,23 +601,19 @@ export default function GPUPage() {
               <b />
             </div>
           )}
-          {!welcome && !tourActive && !firstPerson && (
+          {!welcome && !firstPerson && (
             <button className="museum-fps-enter" onClick={explore}>
               Enter first-person ↗
             </button>
           )}
 
-          {hovered && !tourActive && !welcome && (
+          {hovered && !welcome && (
             <div className="gpu-exhibit-hint" aria-live="polite">
               <strong>{hovered}</strong>
-              <span>
-                {hovered.startsWith("Ari")
-                  ? "Click to meet your guide"
-                  : "Click / E to inspect"}
-              </span>
+              <span>Click / E to inspect</span>
             </div>
           )}
-          {!tourActive && (
+          {
             <button
               className="gpu-move-trigger"
               aria-label={
@@ -682,7 +627,7 @@ export default function GPUPage() {
             >
               Move <span>↗</span>
             </button>
-          )}
+          }
           {moveOpen && (
             <div className="gpu-walk-controls">
               <button
@@ -721,21 +666,13 @@ export default function GPUPage() {
           )}
         </>
       )}
-      {tourActive && (
-        <MuseumTour
-          index={tourIndex}
-          onGo={goTour}
-          onEnd={endTour}
-          paused={!!panel}
-        />
-      )}
-      {status === "fallback" && !tourActive && (
+      {status === "fallback" && (
         <div className="gpu-webgl-fallback">
           <span className="gpu-mono">3D UNAVAILABLE ON THIS DEVICE</span>
           <button className="gpu-primary" onClick={() => setPanel("catalog")}>
             Browse GPU models <Arrow />
           </button>
-          <p>The catalog, specifications and guided tour still work.</p>
+          <p>The catalog, specifications and model explanations still work.</p>
         </div>
       )}
       {status === "loading" && (
@@ -743,7 +680,7 @@ export default function GPUPage() {
           OPENING THE MUSEUM <i />
         </div>
       )}
-      {!tourActive && (
+      {
         <div className="gpu-quiet-hint">
           {mode === "vault"
             ? locked
@@ -755,7 +692,7 @@ export default function GPUPage() {
                 : "WASD move · drag to look · aim + E or click a card"
             : "Drag the card to rotate"}
         </div>
-      )}
+      }
       {panel && (
         <Dialog
           key={panel}
@@ -776,7 +713,7 @@ export default function GPUPage() {
             panel === "menu"
               ? "THE PC MUSEUM"
               : panel === "guide"
-                ? "YOUR MUSEUM GUIDE"
+                ? "YOUR GPU ASSISTANT"
                 : panel === "catalog"
                   ? "THE MODEL INDEX"
                   : panel === "designs"
@@ -791,15 +728,6 @@ export default function GPUPage() {
           {panel === "menu" && (
             <div className="gpu-menu-content">
               <nav className="gpu-menu-links" aria-label="Museum menu">
-                <button onClick={() => goTour(tourResume)}>
-                  {tourResume ? "Resume guided tour" : "Take a guided tour"}
-                  <span>↗</span>
-                </button>
-                {tourResume > 0 && (
-                  <button onClick={() => goTour(0)}>
-                    Restart tour <span>↗</span>
-                  </button>
-                )}
                 <button onClick={() => setPanel("catalog")}>
                   Model index <span>{gpus.length}</span>
                 </button>
@@ -865,7 +793,7 @@ export default function GPUPage() {
                   onClick={() => {
                     setPanel(null);
                     setMode("vault");
-                    setTourIndex(null);
+
                     setFirstPerson(false);
                     scene.current?.entrance();
                     setWelcome(true);

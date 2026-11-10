@@ -4258,7 +4258,7 @@
 }
 
 /* First-person museum: the collection is the canvas; controls stay contextual. */
-.museum-invitation {
+.museum-entry {
   position: absolute;
   z-index: 4;
   left: 6.2%;
@@ -4267,7 +4267,7 @@
   color: #f4efec;
   pointer-events: auto;
 }
-.museum-invitation-host {
+.museum-entry-host {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -4280,20 +4280,20 @@
   height: 42px;
   flex: 0 0 auto;
 }
-.museum-invitation h1 {
+.museum-entry h1 {
   font-size: clamp(32px, 3.2vw, 58px);
   font-weight: 500;
   letter-spacing: -0.045em;
   line-height: 1.08;
   margin: 24px 0 20px;
 }
-.museum-invitation p {
+.museum-entry p {
   max-width: 370px;
   color: #c2b8b4;
   font-size: 14px;
   line-height: 1.85;
 }
-.museum-invitation .gpu-primary {
+.museum-entry .gpu-primary {
   margin-top: 24px;
   font-size: 13px;
   padding: 15px 23px !important;
@@ -4581,7 +4581,7 @@
   display: none;
 }
 @media (max-width: 800px) {
-  .museum-invitation {
+  .museum-entry {
     left: 25px;
     top: auto;
     bottom: 95px;
@@ -4593,24 +4593,24 @@
     border-radius: 12px;
     background: #161416eb;
   }
-  .museum-invitation h1 {
+  .museum-entry h1 {
     font-size: 33px;
     margin: 18px 0 14px;
   }
-  .museum-invitation p {
+  .museum-entry p {
     font-size: 12px;
     line-height: 1.75;
   }
-  .museum-invitation .gpu-primary {
+  .museum-entry .gpu-primary {
     margin-top: 16px;
     padding: 12px 17px !important;
     font-size: 12px;
   }
-  .museum-invitation-host {
+  .museum-entry-host {
     font-size: 8px;
     gap: 9px;
   }
-  .museum-invitation .museum-guide-portrait {
+  .museum-entry .museum-guide-portrait {
     width: 33px;
     height: 33px;
   }
@@ -4688,14 +4688,14 @@
   }
 }
 @media (max-height: 650px) and (min-width: 801px) {
-  .museum-invitation {
+  .museum-entry {
     top: 22%;
   }
-  .museum-invitation h1 {
+  .museum-entry h1 {
     font-size: 36px;
     margin: 16px 0;
   }
-  .museum-invitation p {
+  .museum-entry p {
     font-size: 12px;
   }
   .museum-tour {
@@ -4728,7 +4728,7 @@
   margin: 22px 0 0;
 }
 @media (max-width: 800px) {
-  .museum-invitation svg.museum-guide-portrait {
+  .museum-entry svg.museum-guide-portrait {
     width: 33px;
     height: 33px;
   }

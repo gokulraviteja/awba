@@ -60,7 +60,7 @@ export function answerGpuQuestion(question, gpu, design) {
   if (/what|explain|hello|hi|summary|tell|work|do|render/.test(q))
     return (
       explainGpu(gpu, design) +
-      " The GPU performs graphics computation; the large fans and metal cooler move its heat out of the card. The guided tour explains how these parts work together."
+      " The GPU performs graphics computation; the large fans and metal cooler move its heat out of the card. The cooler and memory support the chip’s work."
     );
   return `I can explain ${gpu.name} using the museum’s catalog: its name and generation, memory, power and fit, board partners, or your CS2 goal. Try one of the questions above. I don’t have live benchmark results, prices or a general web-search connection.`;
 }

@@ -26,7 +26,7 @@ test("GPU vault loads a live scene and switches between distinct real designs", 
   await expect(page).toHaveTitle(/PC Museum/, { timeout: 15_000 });
   await expect(
     page.getByRole("heading", {
-      name: "Every great build starts with curiosity.",
+      name: /Aim\. Explore\./,
     }),
   ).toBeVisible();
   await expect(page.locator(".gpu-scene")).toHaveAttribute(
@@ -118,7 +118,7 @@ test("museum supports walking, turning, named racks and direct exhibit selection
   await page
     .getByRole("button", { name: "Show movement controls", exact: true })
     .click();
-  await expect(page.locator(".museum-invitation")).toHaveCount(0);
+  await expect(page.locator(".museum-entry")).toHaveCount(0);
   await page.screenshot({ path: "test-results/pc-museum-cleared.png" });
   await page
     .getByRole("button", { name: "Walk forward", exact: true })
@@ -160,7 +160,7 @@ test("museum supports walking, turning, named racks and direct exhibit selection
     "data-player-z",
     "3.00",
   );
-  await expect(page.locator(".museum-invitation")).toHaveCount(0);
+  await expect(page.locator(".museum-entry")).toHaveCount(0);
   await page.screenshot({ path: "test-results/pc-museum-nameplates.png" });
   // The card at the centre of this human-height rack view is the labelled 5060 Ti.
   await expect
@@ -233,7 +233,7 @@ test("mobile supports still mode, browsing and the design archive without overfl
   ).toBe(true);
 });
 
-test("catalog and guided learning remain available when WebGL is unavailable", async ({
+test("catalog and model explanations remain available without WebGL", async ({
   page,
 }) => {
   await page.addInitScript(() => {
@@ -252,15 +252,13 @@ test("catalog and guided learning remain available when WebGL is unavailable", a
   await page
     .getByRole("button", { name: "Browse GPU models", exact: true })
     .click();
-  await page.getByLabel("Search GPU models", { exact: true }).fill("RX 9070");
-  await expect(page.locator(".gpu-model-list article")).toHaveCount(2);
-  await page.getByRole("button", { name: "Close panel", exact: true }).click();
   await page
-    .getByRole("button", { name: "Take the tour", exact: true })
-    .click();
+    .getByLabel("Search GPU models", { exact: true })
+    .fill("RX 9070 XT");
+  await page.locator(".gpu-model-pick").click();
   await expect(
-    page.getByRole("region", { name: "Guided museum tour" }),
-  ).toContainText("Hi, I’m Ari");
+    page.getByRole("region", { name: "Museum guide", exact: true }),
+  ).toContainText("RDNA 4");
 });
 
 test("museum guide explains the selected GPU and answers contextual follow-ups", async ({
@@ -313,51 +311,52 @@ test("museum guide explains the selected GPU and answers contextual follow-ups",
   await page.screenshot({ path: "test-results/pc-museum-guide.png" });
 });
 
-test("optional guide covers history, every catalog model and resumable chapters", async ({
+test("mouse look and keyboard movement follow their stated directions, with no tour UI", async ({
   page,
 }) => {
-  const errors = [];
-  page.on("pageerror", (e) => errors.push(e.message));
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/pc");
-  const tour = page.getByRole("region", { name: "Guided museum tour" });
-  await expect(tour).toHaveCount(0);
+  await expect(page.locator(".gpu-scene")).toHaveAttribute(
+    "data-scene-status",
+    "ready",
+  );
+  await expect(page.getByRole("button", { name: /Take.*tour/i })).toHaveCount(
+    0,
+  );
   await page
-    .getByRole("button", { name: "Take the tour", exact: true })
+    .getByRole("button", { name: "Show movement controls", exact: true })
     .click();
-  await expect(tour).toContainText("Hi, I’m Ari");
+  const museum = page.locator(".gpu-page");
+  const canvas = page.locator(".gpu-scene canvas");
+  await canvas.focus();
+  await page.keyboard.down("a");
+  await expect
+    .poll(async () => Number(await museum.getAttribute("data-player-x")))
+    .toBeLessThan(-0.4);
+  await page.keyboard.up("a");
+  await page.keyboard.down("d");
+  await expect
+    .poll(async () => Number(await museum.getAttribute("data-player-x")))
+    .toBeGreaterThan(0.4);
+  await page.keyboard.up("d");
+  await page.mouse.move(640, 360);
+  await page.mouse.down();
+  await page.mouse.move(740, 360, { steps: 8 });
+  await page.mouse.up();
+  await expect
+    .poll(async () => Number(await museum.getAttribute("data-player-yaw")))
+    .toBeGreaterThan(0.5);
+  await page.mouse.move(740, 360);
+  await page.mouse.down();
+  await page.mouse.move(540, 360, { steps: 8 });
+  await page.mouse.up();
+  await expect
+    .poll(async () => Number(await museum.getAttribute("data-player-yaw")))
+    .toBeLessThan(-0.5);
+  await page.getByRole("button", { name: "Open menu", exact: true }).click();
   await expect(
-    page.getByRole("button", { name: "Previous tour stop" }),
-  ).toBeDisabled();
-  await page.getByRole("button", { name: "Continue →", exact: true }).click();
-  await expect(tour).toContainText("A GPU turns a scene into pixels.");
-  const jump = page.getByLabel("Tour chapter or model", { exact: true });
-  await expect(jump.locator('option[value^="model-"]')).toHaveCount(47);
-  await jump.selectOption("history-1999");
-  await expect(tour).toContainText("GeForce 256");
-  await expect(tour.locator(".museum-tour-year")).toHaveText("1999");
-  await jump.selectOption("model-rtx-5060-ti-16gb");
-  await expect(tour).toContainText("16GB of GDDR7");
-  await expect(tour).toContainText("separate 8GB version");
-  await expect(page.locator(".gpu-inspector")).toHaveCount(0);
-  await expect(page.locator(".gpu-page")).toHaveClass(/gpu-mode-inspect/);
-  await page.getByRole("button", { name: "Continue →", exact: true }).click();
-  await expect(tour).toContainText("8GB of GDDR7");
-  await jump.selectOption("model-rx-9070-xt");
-  await expect(tour).toContainText("RDNA 4");
-  await jump.selectOption("model-arc-b580");
-  await expect(tour).toContainText("12GB of GDDR6");
-  await expect(tour).toContainText("190W");
-  await page.getByRole("button", { name: "End tour", exact: true }).click();
-  await expect(tour).toHaveCount(0);
-  await expect(page.locator(".gpu-page")).toHaveClass(/gpu-mode-vault/);
-  await openMenuItem(page, "Resume guided tour ↗");
-  await expect(tour).toContainText("Arc B580");
-  await jump.selectOption("your-cs2-pc");
-  await page
-    .getByRole("button", { name: "Finish tour →", exact: true })
-    .click();
-  await expect(tour).toHaveCount(0);
-  expect(errors).toEqual([]);
+    page.getByRole("dialog").getByRole("button", { name: /tour/i }),
+  ).toHaveCount(0);
 });
 
 test("first-person mode aims from the crosshair, inspects with E and releases mouse for panels", async ({
@@ -369,9 +368,7 @@ test("first-person mode aims from the crosshair, inspects with E and releases mo
     "data-scene-status",
     "ready",
   );
-  await page
-    .getByRole("button", { name: "Explore on my own ↗", exact: true })
-    .click();
+  await page.getByRole("button", { name: "Enter museum", exact: true }).click();
   await expect(page.locator(".gpu-page")).toHaveAttribute(
     "data-first-person",
     "true",
@@ -443,30 +440,4 @@ test("first-person mode aims from the crosshair, inspects with E and releases mo
     "data-pointer-locked",
     "false",
   );
-});
-
-test("mobile guided tour is readable and can jump to an individual model", async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/pc");
-  await page
-    .getByRole("button", { name: "Take the tour", exact: true })
-    .click();
-  await page
-    .getByLabel("Tour chapter or model", { exact: true })
-    .selectOption("model-rx-9070-xt");
-  const tour = page.getByRole("region", { name: "Guided museum tour" });
-  await expect(tour).toContainText("RX 9070 XT");
-  await page.screenshot({ path: "test-results/pc-museum-mobile-tour.png" });
-  expect(
-    await page.evaluate(
-      () => document.documentElement.scrollWidth <= innerWidth,
-    ),
-  ).toBe(true);
-  const bounds = await tour.boundingBox();
-  expect(bounds.y).toBeGreaterThan(60);
-  expect(bounds.y + bounds.height).toBeLessThan(845);
-  await page.getByRole("button", { name: "End tour", exact: true }).click();
-  await expect(tour).toHaveCount(0);
 });

@@ -95,11 +95,10 @@ The initial MCP surface exposes `search_models`, `get_model`, `compare_models`, 
 The GPU museum is available at `/pc` and `/pc/`. It includes a first-person
 scanner view (WASD, mouse look, click or E to inspect, Shift to walk slowly,
 Esc to release the mouse), direct drag/click controls and touch movement controls.
-Ari offers an optional, manually paced tour at the entrance. Its chapters cover
-GPU fundamentals, selected historical milestones, eight display bays and all
-47 catalog models; narration is optional and uses the device's speech voices.
-Inspection uses a separate display stage. Inside and Real photos modes are
-currently removed; manufacturer links and the design archive remain available.
+The guided tour and entrance host are deferred. Selecting a model still opens
+its explanation and specifications on a separate display stage. Inside and Real
+photos modes are currently removed; manufacturer links and the design archive
+remain available.
 Run `npm run test:e2e -- tests/e2e/gpu.spec.js` for museum coverage.
 
 The PC foundations and assembly guide is available at `/pc/guide`. Run
