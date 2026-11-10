@@ -415,6 +415,12 @@ test("first-person mode aims from the crosshair, inspects with E and releases mo
       "data-pointer-locked",
       "false",
     );
+    await expect(
+      page.getByRole("button", { name: "Resume exploring", exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Enter museum", exact: true }),
+    ).toHaveCount(0);
   } else {
     await expect(page.locator(".gpu-quiet-hint")).toContainText("Drag to look");
   }
@@ -504,4 +510,33 @@ test("look sensitivity changes actual mouse movement, persists and resets", asyn
     .click();
   await expect(slider).toHaveValue("1");
   await page.screenshot({ path: "test-results/pc-museum-sensitivity.png" });
+});
+
+test("returning from an exhibit resumes the museum instead of asking to enter again", async ({
+  page,
+}) => {
+  await page.goto("/pc");
+  await expect(
+    page.getByRole("button", { name: "Enter museum", exact: true }),
+  ).toBeVisible({ timeout: 30_000 });
+  await openMenuItem(page, "Model index 47");
+  await page
+    .getByLabel("Search GPU models", { exact: true })
+    .fill("RTX 5060 Ti 16GB");
+  await page.locator(".gpu-model-pick").click();
+  await expect(page.locator(".gpu-inspector h1")).toHaveText(
+    "RTX 5060 Ti 16GB",
+  );
+  await page.keyboard.press("Escape");
+  await expect(
+    page.getByRole("button", { name: "Resume exploring", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Enter museum", exact: true }),
+  ).toHaveCount(0);
+  await expect(page.locator(".gpu-page")).toHaveAttribute(
+    "data-player-z",
+    "16.00",
+  );
+  await page.screenshot({ path: "test-results/pc-museum-resume.png" });
 });

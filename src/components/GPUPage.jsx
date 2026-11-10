@@ -286,6 +286,7 @@ export default function GPUPage() {
     [status, setStatus] = useState("loading"),
     [locked, setLocked] = useState(false),
     [showEntry, setShowEntry] = useState(true),
+    [hasEntered, setHasEntered] = useState(false),
     [captureFailed, setCaptureFailed] = useState(false),
     [compare, setCompare] = useState([]),
     [moveOpen, setMoveOpen] = useState(false),
@@ -317,6 +318,7 @@ export default function GPUPage() {
     scene = useRef(null),
     selectRef = useRef(null);
   const chooseDesign = (d) => {
+    setHasEntered(true);
     const g = gpus.find((g) => g.id === d.gpu);
     setSelected(g);
     setDesign(d);
@@ -325,6 +327,7 @@ export default function GPUPage() {
     setPanel(null);
   };
   selectRef.current = (exhibit) => {
+    setHasEntered(true);
     if (exhibit.gpu) {
       setSelected(exhibit.gpu);
       setDesign(exhibit.design);
@@ -344,13 +347,23 @@ export default function GPUPage() {
       onPointerLock: (active) => {
         setLocked(active);
         setShowEntry(!active);
+        if (active) setHasEntered(true);
       },
       onCaptureError: () => {
         setCaptureFailed(true);
         setShowEntry(false);
       },
       onHover: setHovered,
-      onPosition: setPlayer,
+      onPosition: (position) => {
+        setPlayer(position);
+        if (
+          Math.abs(position.x) > 0.05 ||
+          Math.abs(position.z - 16) > 0.05 ||
+          Math.abs(position.yaw) > 0.05 ||
+          Math.abs(position.pitch - 0.08) > 0.05
+        )
+          setHasEntered(true);
+      },
       reducedMotion: reduced,
     });
     scene.current = s;
@@ -386,6 +399,7 @@ export default function GPUPage() {
     return () => window.removeEventListener("keydown", handler);
   }, [mode, panel, locked]);
   const chooseGpu = (g) => {
+    setHasEntered(true);
     setSelected(g);
     setDesign(defaultDesign(g));
     setMoveOpen(false);
@@ -411,6 +425,7 @@ export default function GPUPage() {
   };
   const closePanel = useCallback(() => setPanel(null), []);
   const visitRack = (id) => {
+    setHasEntered(true);
     setMoveOpen(false);
     setMode("vault");
     setPanel(null);
@@ -578,12 +593,13 @@ export default function GPUPage() {
             <button
               className="museum-enter-button"
               onClick={() => {
+                setHasEntered(true);
                 setShowEntry(false);
                 setMoveOpen(false);
                 scene.current?.enterFirstPerson();
               }}
             >
-              Enter museum <Arrow />
+              {hasEntered ? "Resume exploring" : "Enter museum"} <Arrow />
             </button>
           )}
           {
@@ -676,7 +692,9 @@ export default function GPUPage() {
             ? locked
               ? "WASD move · Shift walk · aim + click inspect · Esc release mouse"
               : showEntry
-                ? "Enter museum to start · WASD move · Esc release mouse"
+                ? hasEntered
+                  ? "Resume exploring · WASD move · Esc release mouse"
+                  : "Enter museum to start · WASD move · Esc release mouse"
                 : captureFailed
                   ? "Drag to look · WASD move · aim + click or E to inspect"
                   : "WASD move · aim + click inspect · click empty space for mouse look"

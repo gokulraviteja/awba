@@ -93,7 +93,8 @@ The initial MCP surface exposes `search_models`, `get_model`, `compare_models`, 
 ## Verification
 
 The GPU museum opens in first-person view at `/pc` and `/pc/`. The Enter museum
-button enables mouse control. Click an aimed-at card to inspect it; click empty
+button enables mouse control. After entering, Esc releases the mouse and the
+button changes to Resume exploring. Click an aimed-at card to inspect it; click empty
 space to request mouse capture. It includes a first-person
 scanner view (WASD, mouse look, click or E to inspect, Shift to walk slowly,
 Esc to release the mouse), direct drag/click controls and touch movement controls.
