@@ -5,6 +5,7 @@ Awba is a developer-stack platform in progress. Its first module is a normalized
 This repository contains the Awba web application and MCP protocol adapter:
 
 - A React/Vite product UI for latest models, provider discovery, provider drill-down, model details, and comparison
+- An interactive PC field guide at `/pc`, with an original Three.js computer, eight explorable component systems, a ten-step assembly walkthrough, compatibility lab, frame-time explorer, quote calculator, glossary and knowledge check
 - A typed client for the separate Go HTTP API
 - A representative offline snapshot for graceful frontend fallback
 - A read-only TypeScript MCP server that delegates to the Go API
@@ -90,6 +91,13 @@ GET /v1/platform/freshness
 The initial MCP surface exposes `search_models`, `get_model`, `compare_models`, `get_model_pricing`, `get_benchmark_results`, and `get_catalog_freshness`. All tools are read-only. Private account and diagnostic tools remain a later authenticated phase.
 
 ## Verification
+
+The PC field guide is available at `/pc` and `/pc/`. Run `npm run dev` and open
+that route to preview it without the backend. `npm run test:e2e -- tests/e2e/pc.spec.js`
+covers the component explorer, assembly flow, compatibility rules, frame-time arithmetic,
+locally saved quote totals, mobile layout, reduced motion and WebGL fallback.
+The 3D model is schematic, not retail-product CAD. Prices are entered by the visitor;
+the page does not imply live retail prices or promise a particular FPS result.
 
 ```bash
 npm run check

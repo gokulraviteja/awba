@@ -1,5 +1,7 @@
 {
   "rewrites": [
+    { "source": "/pc", "destination": "/index.html" },
+    { "source": "/pc/", "destination": "/index.html" },
     {
       "source": "/diwali",
       "destination": "/index.html"
