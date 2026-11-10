@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { GuidePortrait } from "./MuseumTour.jsx";
 import { answerGpuQuestion, explainGpu, guideQuestions } from "./gpuGuide.js";
 function useGuideVoice(identity) {
   const [speaking, setSpeaking] = useState(false);
@@ -45,10 +46,10 @@ export function GPUAssistant({ gpu, design, onAsk }) {
     >
       <header>
         <span className="gpu-guide-mark" aria-hidden="true">
-          ✳
+          <GuidePortrait />
         </span>
         <div>
-          <strong>Museum guide</strong>
+          <strong>Ari · Museum guide</strong>
           <small>YOUR CARD, IN PLAIN ENGLISH</small>
         </div>
         {voice.supported && (
@@ -92,7 +93,7 @@ export function GPUGuideChat({ gpu, design }) {
       </p>
       <div className="gpu-guide-summary">
         <span className="gpu-guide-mark" aria-hidden="true">
-          ✳
+          <GuidePortrait />
         </span>
         <p>{summary}</p>
       </div>

@@ -1,4 +1,5 @@
 import * as T from "three";
+import { createMuseumGuide, createScanner } from "./museumCharacters.js";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
@@ -403,6 +404,9 @@ export function createGpuScene(
     onDepth,
     onPosition = () => {},
     onHover = () => {},
+    onGuide = () => {},
+    onPointerLock = () => {},
+    onCaptureError = () => {},
     reducedMotion = false,
   },
 ) {
@@ -423,6 +427,8 @@ export function createGpuScene(
       move() {},
       turn() {},
       travel() {},
+      enterFirstPerson() {},
+      entrance() {},
     };
   }
   const scene = new T.Scene();
@@ -432,6 +438,11 @@ export function createGpuScene(
   renderer.outputColorSpace = T.SRGBColorSpace;
   renderer.toneMapping = T.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.25;
+  renderer.domElement.tabIndex = 0;
+  renderer.domElement.setAttribute(
+    "aria-label",
+    "Museum view: WASD to move, E to inspect the aimed exhibit",
+  );
   host.appendChild(renderer.domElement);
   const camera = new T.PerspectiveCamera(44, 1, 0.1, 190);
   const pmrem = new T.PMREMGenerator(renderer),
@@ -451,6 +462,8 @@ export function createGpuScene(
   const warm = new T.DirectionalLight("#e9dfd8", 1.5);
   warm.position.set(-8, 3, 1);
   scene.add(warm);
+  const museum = new T.Group();
+  scene.add(museum);
   const steel = metal("#aea6a6", 0.32, 0.6),
     deck = metal("#2f2b2a", 0.43, 0.52),
     lightmat = new T.MeshBasicMaterial({ color: "#e26665" }),
@@ -461,18 +474,18 @@ export function createGpuScene(
   );
   floor.rotation.x = -Math.PI / 2;
   floor.position.set(0, -0.15, -45);
-  scene.add(floor);
+  museum.add(floor);
   const violet = new T.MeshBasicMaterial({ color: "#b84240" });
   const cyan = new T.MeshBasicMaterial({ color: "#a59b97" });
   const shell = metal("#615958", 0.4, 0.55);
   const carbon = metal("#211e1e", 0.64, 0.25);
   // The room is an oversized PC chassis: broad panels and circuit-board paths.
-  block(scene, 0.35, 9.5, 65, carbon, -9.2, 4.5, -14, 0.12);
-  block(scene, 0.35, 9.5, 65, carbon, 9.2, 4.5, -14, 0.12);
+  block(museum, 0.35, 9.5, 65, carbon, -9.2, 4.5, -14, 0.12);
+  block(museum, 0.35, 9.5, 65, carbon, 9.2, 4.5, -14, 0.12);
   for (let bay = 0; bay < 4; bay++) {
     const z = 3 - bay * 13;
     block(
-      scene,
+      museum,
       10,
       0.06,
       8.8,
@@ -485,18 +498,18 @@ export function createGpuScene(
     // Paired, angular PCB traces replace the warehouse floor grid.
     for (const side of [-1, 1]) {
       const m = side < 0 ? cyan : violet;
-      block(scene, 0.055, 0.015, 7, m, side * 4, -0.07, z);
-      block(scene, 1.2, 0.015, 0.055, m, side * 3.4, -0.07, z - 3.5);
-      block(scene, 0.055, 0.015, 4, m, side * 2.8, -0.07, z - 5.5);
+      block(museum, 0.055, 0.015, 7, m, side * 4, -0.07, z);
+      block(museum, 1.2, 0.015, 0.055, m, side * 3.4, -0.07, z - 3.5);
+      block(museum, 0.055, 0.015, 4, m, side * 2.8, -0.07, z - 5.5);
       const pad = new T.Mesh(new T.RingGeometry(0.13, 0.19, 24), m);
       pad.rotation.x = -Math.PI / 2;
       pad.position.set(side * 2.8, -0.055, z - 7.5);
-      scene.add(pad);
+      museum.add(pad);
     }
   }
   const clickable = [],
     racks = new T.Group();
-  scene.add(racks);
+  museum.add(racks);
   for (const rack of museumRacks) {
     const { side, bay, generation, maker } = rack;
     const group = new T.Group();
@@ -587,19 +600,15 @@ export function createGpuScene(
     title.position.set(0, 7.5, 1.23);
     title.scale.setScalar(1.6);
     group.add(title);
-    const bayLabel = label("GPU / " + generation, "#d9d7d7", 600);
-    bayLabel.position.set(side * 5.5, 4.15, 8.7 - bay * 13);
-    bayLabel.scale.setScalar(0.9);
-    scene.add(bayLabel);
   }
 
   // Four chamfered gateways suggest a premium gaming case skeleton.
   for (let bay = 0; bay < 5; bay++) {
     const z = 12 - bay * 13;
     for (const side of [-1, 1]) {
-      block(scene, 0.28, 6.6, 0.38, shell, side * 7.5, 3.15, z, 0.06);
+      block(museum, 0.28, 6.6, 0.38, shell, side * 7.5, 3.15, z, 0.06);
       const shoulder = block(
-        scene,
+        museum,
         0.28,
         2.8,
         0.38,
@@ -611,7 +620,7 @@ export function createGpuScene(
       );
       shoulder.rotation.z = side * 0.76;
       block(
-        scene,
+        museum,
         0.055,
         6.3,
         0.08,
@@ -621,7 +630,7 @@ export function createGpuScene(
         z + 0.22,
       );
       const light = block(
-        scene,
+        museum,
         0.055,
         2.8,
         0.08,
@@ -632,8 +641,17 @@ export function createGpuScene(
       );
       light.rotation.z = side * 0.76;
     }
-    block(scene, 11.1, 0.28, 0.38, shell, 0, 8.45, z, 0.06);
-    block(scene, 10.8, 0.045, 0.08, bay % 2 ? cyan : violet, 0, 8.23, z + 0.22);
+    block(museum, 11.1, 0.28, 0.38, shell, 0, 8.45, z, 0.06);
+    block(
+      museum,
+      10.8,
+      0.045,
+      0.08,
+      bay % 2 ? cyan : violet,
+      0,
+      8.23,
+      z + 0.22,
+    );
   }
   const endPanel = new T.Group();
   endPanel.position.set(0, 4.2, -48);
@@ -642,28 +660,77 @@ export function createGpuScene(
   signature.position.set(0, 0, 0.25);
   signature.scale.setScalar(2);
   endPanel.add(signature);
-  scene.add(endPanel);
+  museum.add(endPanel);
   for (let i = 0; i < 4; i++) {
     const t = label("0" + (i + 1) + " / GPU BAY", "#b1aaa9", 500);
     t.rotation.x = -Math.PI / 2;
     t.position.set(0, -0.055, 8 - i * 13);
-    scene.add(t);
+    museum.add(t);
   }
+  // A separate, quiet exhibition stage keeps the selected card readable.
+  const stage = new T.Group();
+  scene.add(stage);
+  const stageFloor = new T.Mesh(
+    new T.PlaneGeometry(160, 160),
+    metal("#171719", 0.85, 0.08),
+  );
+  stageFloor.rotation.x = -Math.PI / 2;
+  stage.add(stageFloor);
   const pedestal = new T.Group();
-  block(pedestal, 6.6, 0.12, 3.2, deck, 0, 0.05, 0, 0.08);
-  block(pedestal, 4.5, 1.1, 2, carbon, 0, -0.55, 0, 0.12);
-  for (const x of [-3.1, 3.1])
-    block(pedestal, 0.035, 0.04, 2.9, x < 0 ? cyan : violet, x, 0.13, 0);
-  block(pedestal, 6.2, 0.025, 0.035, orange, 0, 0.13, 1.45);
-  pedestal.position.set(2, 0.5, 1);
-  scene.add(pedestal);
+  block(
+    pedestal,
+    7.6,
+    1.75,
+    2.8,
+    metal("#242427", 0.58, 0.35),
+    0,
+    0.875,
+    0,
+    0.16,
+  );
+  block(
+    pedestal,
+    7.3,
+    0.035,
+    2.65,
+    metal("#514847", 0.5, 0.3),
+    0,
+    1.76,
+    0,
+    0.02,
+  );
+  block(pedestal, 6.9, 0.025, 0.025, orange, 0, 1.79, 1.24);
+  for (const x of [-2.3, 2.3])
+    block(pedestal, 0.18, 0.35, 0.45, deck, x, 1.93, 0, 0.04);
+  pedestal.position.set(2.15, 0, 0);
+  stage.add(pedestal);
+  const guide = createMuseumGuide();
+  guide.position.set(2.2, 0, 10.5);
+  scene.add(guide);
+  const guideHit = new T.Mesh(
+    new T.BoxGeometry(0.95, 2.7, 0.8),
+    new T.MeshBasicMaterial({ visible: false }),
+  );
+  guideHit.position.y = 1.35;
+  guideHit.userData.guide = true;
+  guide.add(guideHit);
+  clickable.push(guideHit);
+  const guideName = label("ARI / MUSEUM GUIDE", "#e9d4cf", 650);
+  guideName.position.set(0, 2.8, 0);
+  guideName.scale.setScalar(0.45);
+  guide.add(guideName);
+  const scanner = createScanner();
+  camera.add(scanner);
+  scene.add(camera);
   let hero = makeCard(designs[0]);
   scene.add(hero);
   let state = {
       mode: "vault",
       design: designs[0],
       part: "chip",
-      spin: !reducedMotion,
+      spin: false,
+      firstPerson: false,
+      tourActive: false,
       reducedMotion,
     },
     depth = 0,
@@ -673,7 +740,10 @@ export function createGpuScene(
     targetRY = rotationY,
     disposed = false,
     frame = 0,
-    last = performance.now();
+    last = performance.now(),
+    snapCamera = true,
+    skipLockClick = false,
+    lockUnavailable = false;
   const walk = { x: 0, z: 16, yaw: 0, pitch: 0.08 };
   const keys = new Set(),
     held = new Set();
@@ -689,12 +759,28 @@ export function createGpuScene(
     pointer = new T.Vector2();
   let down = null,
     drag = false;
-  function pick(e) {
+  function pick(e, centered = false) {
+    // Navigation can be followed by an input before the next animation frame.
+    // Commit that pose before casting so inspection uses the new destination.
+    if (snapCamera && state.mode === "vault") {
+      camera.position.set(walk.x, 2.5, walk.z);
+      look.set(
+        walk.x + Math.sin(walk.yaw) * 15,
+        2.5 + Math.sin(walk.pitch) * 15,
+        walk.z - Math.cos(walk.yaw) * 15,
+      );
+      camera.fov = 62;
+      camera.updateProjectionMatrix();
+      camera.lookAt(look);
+      camera.updateMatrixWorld();
+      snapCamera = false;
+    }
     const rect = renderer.domElement.getBoundingClientRect();
     pointer.set(
       ((e.clientX - rect.left) / rect.width) * 2 - 1,
       (-(e.clientY - rect.top) / rect.height) * 2 + 1,
     );
+    if (centered) pointer.set(0, 0);
     ray.setFromCamera(pointer, camera);
     return ray.intersectObjects(clickable, false)[0];
   }
@@ -726,7 +812,65 @@ export function createGpuScene(
       ),
     );
   }
+  const lockError = () => {
+    lockUnavailable = true;
+    onPointerLock(false);
+    onCaptureError();
+  };
+  function lockMouse() {
+    renderer.domElement.focus({ preventScroll: true });
+    if (
+      !renderer.domElement.requestPointerLock ||
+      matchMedia("(pointer: coarse)").matches
+    ) {
+      lockError();
+      return;
+    }
+    try {
+      const request = renderer.domElement.requestPointerLock();
+      request?.catch(lockError);
+    } catch {
+      lockError();
+    }
+  }
+  const isLocked = () => document.pointerLockElement === renderer.domElement;
+  function inspectHit(hit) {
+    if (!hit) return;
+    if (isLocked()) document.exitPointerLock();
+    if (hit.object.userData.guide) onGuide();
+    else onSelect(hit.object.userData.exhibit);
+  }
+  const lockChange = () => {
+    blur();
+    onPointerLock(isLocked());
+  };
+  const mouseLook = (e) => {
+    if (
+      !isLocked() ||
+      state.mode !== "vault" ||
+      state.paused ||
+      state.tourActive
+    )
+      return;
+    walk.yaw -= e.movementX * 0.0025;
+    walk.pitch = Math.max(
+      -0.75,
+      Math.min(0.85, walk.pitch - e.movementY * 0.0025),
+    );
+  };
   const onDown = (e) => {
+    if (state.paused || state.tourActive || e.button !== 0) return;
+    skipLockClick =
+      !lockUnavailable &&
+      state.firstPerson &&
+      state.mode === "vault" &&
+      !isLocked() &&
+      !matchMedia("(pointer: coarse)").matches;
+    if (skipLockClick) {
+      lockMouse();
+      return;
+    }
+    if (isLocked()) return;
     down = {
       x: e.clientX,
       y: e.clientY,
@@ -739,6 +883,7 @@ export function createGpuScene(
     renderer.domElement.setPointerCapture(e.pointerId);
   };
   const onMove = (e) => {
+    if (state.paused || state.tourActive || isLocked()) return;
     if (down) {
       const dx = e.clientX - down.x,
         dy = e.clientY - down.y;
@@ -753,17 +898,23 @@ export function createGpuScene(
     } else if (state.mode === "vault") {
       const p = pick(e);
       renderer.domElement.style.cursor = p ? "pointer" : "grab";
-      const exhibit = p?.object.userData.exhibit || null;
-      if (exhibit?.gpu.id !== hovered?.gpu.id) {
-        hovered = exhibit;
-        onHover(exhibit?.gpu.name || null);
+      const name = p?.object.userData.guide
+        ? "Ari · Museum guide"
+        : p?.object.userData.exhibit?.gpu.name || null;
+      if (name !== hovered) {
+        hovered = name;
+        onHover(name);
       }
     }
   };
   const onUp = (e) => {
+    if (state.paused || state.tourActive) {
+      down = null;
+      return;
+    }
     if (!drag && state.mode === "vault") {
-      const p = pick(e);
-      if (p) onSelect(p.object.userData.exhibit);
+      const p = pick(e, state.firstPerson);
+      if (!skipLockClick) inspectHit(p);
     }
     down = null;
   };
@@ -771,7 +922,7 @@ export function createGpuScene(
     down = null;
   };
   const wheel = (e) => {
-    if (state.mode !== "vault" || state.paused) return;
+    if (state.mode !== "vault" || state.paused || state.tourActive) return;
     e.preventDefault();
     move(e.deltaY * 0.003, 0, 1);
     reportPosition();
@@ -780,14 +931,22 @@ export function createGpuScene(
     if (
       state.mode !== "vault" ||
       state.paused ||
+      state.tourActive ||
       ["INPUT", "SELECT", "TEXTAREA"].includes(e.target.tagName) ||
       e.metaKey ||
       e.ctrlKey ||
       e.altKey
     )
       return;
+    if (e.code === "KeyE") {
+      e.preventDefault();
+      inspectHit(pick({ clientX: 0, clientY: 0 }, true));
+      return;
+    }
     if (
       [
+        "ShiftLeft",
+        "ShiftRight",
         "KeyW",
         "KeyA",
         "KeyS",
@@ -808,6 +967,9 @@ export function createGpuScene(
     held.clear();
     down = null;
   };
+  document.addEventListener("pointerlockerror", lockError);
+  document.addEventListener("pointerlockchange", lockChange);
+  document.addEventListener("mousemove", mouseLook);
   window.addEventListener("keydown", keyDown);
   window.addEventListener("keyup", keyUp);
   window.addEventListener("blur", blur);
@@ -866,13 +1028,15 @@ export function createGpuScene(
       const right =
         (keys.has("KeyD") || held.has("right") ? 1 : 0) -
         (keys.has("KeyA") || held.has("left") ? 1 : 0);
-      if (!state.paused) {
+      if (!state.paused && !state.tourActive) {
         walk.yaw +=
           ((keys.has("ArrowRight") || held.has("turnRight") ? 1 : 0) -
             (keys.has("ArrowLeft") || held.has("turnLeft") ? 1 : 0)) *
           dt *
           1.25;
-        move(forward, right, dt * 4.2);
+        const diagonal = forward && right ? Math.SQRT1_2 : 1;
+        const speed = keys.has("ShiftLeft") || keys.has("ShiftRight") ? 2 : 4.2;
+        move(forward * diagonal, right * diagonal, dt * speed);
       }
       cameraTarget.set(walk.x, 2.5, walk.z);
       lookTarget.set(
@@ -885,12 +1049,8 @@ export function createGpuScene(
         positionTick = now;
       }
     } else {
-      cameraTarget.set(
-        mobile ? 1.7 : 0,
-        mobile ? 4.6 : 4.9,
-        mobile ? 22.5 : 17.5,
-      );
-      lookTarget.set(mobile ? 1.7 : 0, 4.1, -3);
+      cameraTarget.set(mobile ? 2.15 : 0, mobile ? 3.9 : 4.1, mobile ? 19 : 15);
+      lookTarget.set(mobile ? 2.15 : 0.1, mobile ? -1.2 : 2.9, -1);
     }
     const nextFov = vault ? 62 : 44;
     if (camera.fov !== nextFov) {
@@ -898,22 +1058,43 @@ export function createGpuScene(
       camera.updateProjectionMatrix();
     }
     const ease = state.reducedMotion ? 1 : 1 - Math.exp(-dt * (vault ? 14 : 4));
+    if (snapCamera) {
+      camera.position.copy(cameraTarget);
+      look.copy(lookTarget);
+      snapCamera = false;
+    }
     camera.position.lerp(cameraTarget, ease);
     look.lerp(lookTarget, ease);
     camera.lookAt(look);
     hero.visible = !vault;
-    pedestal.visible = !vault;
-    hero.position.set(
-      mobile ? 1.7 : 2.15,
-      mobile ? (inside ? 2.5 : 1.55) : 4.25,
-      0.5,
-    );
-    hero.scale.setScalar(mobile ? (inside ? 0.67 : 0.9) : inside ? 0.88 : 1.08);
+    museum.visible = vault;
+    stage.visible = !vault;
+    scanner.visible = vault && state.firstPerson && !state.tourActive;
+    scanner.position.y =
+      -0.29 +
+      (!state.reducedMotion && (keys.size || held.size)
+        ? Math.sin(now * 0.009) * 0.012
+        : 0);
+    guide.visible = vault;
+    if (!state.tourActive || !state.guideRack)
+      guide.position.x = mobile ? 0.65 : 2.2;
+    if (vault && !state.tourActive) {
+      const p = pick({ clientX: 0, clientY: 0 }, true);
+      const name = p?.object.userData.guide
+        ? "Ari · Museum guide"
+        : p?.object.userData.exhibit?.gpu.name || null;
+      if (name !== hovered) {
+        hovered = name;
+        onHover(name);
+      }
+    }
+    hero.position.set(2.15, 3.32, 0);
+    hero.scale.setScalar(0.88);
     if (state.spin && !down && !state.reducedMotion && !inside)
       targetRY = -0.22 + Math.sin(now * 0.00022) * 0.6;
     rotationX += (targetRX - rotationX) * ease;
     rotationY += (targetRY - rotationY) * ease;
-    hero.rotation.set(rotationX, rotationY, -0.08);
+    hero.rotation.set(rotationX, rotationY, 0);
     if (inside) {
       hero.rotation.x += (-0.43 - hero.rotation.x) * ease;
       hero.rotation.y += (-0.3 - hero.rotation.y) * ease;
@@ -966,11 +1147,44 @@ export function createGpuScene(
         targetRX = -0.12;
         targetRY = -0.35;
       }
+      if (
+        next.paused ||
+        (next.mode && next.mode !== "vault") ||
+        next.tourActive
+      ) {
+        if (isLocked()) document.exitPointerLock();
+        keys.clear();
+        held.clear();
+        down = null;
+      }
       if (next.mode && next.mode !== state.mode) {
+        snapCamera = true;
+        onHover(null);
         keys.clear();
         held.clear();
       }
       state = { ...state, ...next };
+      if (next.tourActive !== undefined || next.guideRack !== undefined) {
+        const r =
+          state.tourActive && museumRacks.find((r) => r.id === state.guideRack);
+        guide.position.set(
+          r ? r.side * 4.2 : 2.2,
+          0,
+          r ? 5.2 - r.bay * 13 : 10.5,
+        );
+        guide.rotation.y = r ? (-r.side * Math.PI) / 2 : 0;
+      }
+    },
+    enterFirstPerson() {
+      renderer.domElement.focus({ preventScroll: true });
+      requestAnimationFrame(() => {
+        if (!disposed) lockMouse();
+      });
+    },
+    entrance() {
+      Object.assign(walk, { x: 0, z: 16, yaw: 0, pitch: 0.08 });
+      snapCamera = true;
+      reportPosition();
     },
     reset() {
       targetRX = -0.12;
@@ -987,6 +1201,7 @@ export function createGpuScene(
     navigate(id) {
       const r = museumRacks.find((r) => r.id === id);
       if (!r) return;
+      snapCamera = true;
       walk.x = r.side * 2.6;
       walk.z = 3 - r.bay * 13;
       walk.yaw = (r.side * Math.PI) / 2;
@@ -1015,6 +1230,10 @@ export function createGpuScene(
     dispose() {
       disposed = true;
       cancelAnimationFrame(frame);
+      if (isLocked()) document.exitPointerLock();
+      document.removeEventListener("pointerlockerror", lockError);
+      document.removeEventListener("pointerlockchange", lockChange);
+      document.removeEventListener("mousemove", mouseLook);
       window.removeEventListener("keydown", keyDown);
       window.removeEventListener("keyup", keyUp);
       window.removeEventListener("blur", blur);

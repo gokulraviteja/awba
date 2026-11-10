@@ -92,8 +92,18 @@ The initial MCP surface exposes `search_models`, `get_model`, `compare_models`, 
 
 ## Verification
 
-The PC field guide is available at `/pc` and `/pc/`. Run `npm run dev` and open
-that route to preview it without the backend. `npm run test:e2e -- tests/e2e/pc.spec.js`
+The GPU museum is available at `/pc` and `/pc/`. It includes a first-person
+scanner view (WASD, mouse look, click or E to inspect, Shift to walk slowly,
+Esc to release the mouse), direct drag/click controls and touch movement controls.
+Ari offers an optional, manually paced tour at the entrance. Its chapters cover
+GPU fundamentals, selected historical milestones, eight display bays and all
+47 catalog models; narration is optional and uses the device's speech voices.
+Inspection uses a separate display stage. Inside and Real photos modes are
+currently removed; manufacturer links and the design archive remain available.
+Run `npm run test:e2e -- tests/e2e/gpu.spec.js` for museum coverage.
+
+The PC foundations and assembly guide is available at `/pc/guide`. Run
+`npm run dev` and open either route to preview it without the backend. `npm run test:e2e -- tests/e2e/pc.spec.js`
 covers the component explorer, assembly flow, compatibility rules, frame-time arithmetic,
 locally saved quote totals, mobile layout, reduced motion and WebGL fallback.
 The 3D model is schematic, not retail-product CAD. Prices are entered by the visitor;

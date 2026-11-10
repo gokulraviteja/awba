@@ -228,7 +228,7 @@
 }
 .gpu-intro h1 {
   font:
-    500 clamp(68px, 7.1vw, 116px)/0.97 "Space Grotesk",
+    500 clamp(68px, 7.1vw, 116px) / 0.97 "Space Grotesk",
     sans-serif;
   letter-spacing: -0.075em;
   margin: 0 0 28px;
@@ -2922,7 +2922,7 @@
   background: #e26665;
 }
 .gpu-museum-title.is-welcome h1 {
-  font: 700 clamp(48px, 5.2vw, 80px)/0.98 "Space Grotesk";
+  font: 700 clamp(48px, 5.2vw, 80px) / 0.98 "Space Grotesk";
   letter-spacing: -0.065em;
   text-transform: uppercase;
   margin: 23px 0;
@@ -4255,4 +4255,488 @@
   .gpu-quiet-hint {
     bottom: 20px;
   }
+}
+
+/* First-person museum: the collection is the canvas; controls stay contextual. */
+.museum-invitation {
+  position: absolute;
+  z-index: 4;
+  left: 6.2%;
+  top: 25%;
+  width: min(420px, 40vw);
+  color: #f4efec;
+  pointer-events: auto;
+}
+.museum-invitation-host {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #c6b5ae;
+  font: 9px monospace;
+  letter-spacing: 0.11em;
+}
+.museum-guide-portrait {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+}
+.museum-invitation h1 {
+  font-size: clamp(32px, 3.2vw, 58px);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 1.08;
+  margin: 24px 0 20px;
+}
+.museum-invitation p {
+  max-width: 370px;
+  color: #c2b8b4;
+  font-size: 14px;
+  line-height: 1.85;
+}
+.museum-invitation .gpu-primary {
+  margin-top: 24px;
+  font-size: 13px;
+  padding: 15px 23px !important;
+  gap: 35px;
+}
+.museum-explore {
+  display: block;
+  padding: 14px 0 !important;
+  margin-top: 7px;
+  font-size: 12px;
+  color: #c6b8b2;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+.museum-crosshair {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 24px;
+  height: 24px;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  pointer-events: none;
+  color: #f2ebe4;
+  filter: drop-shadow(0 1px 2px #000);
+}
+.museum-crosshair i,
+.museum-crosshair b {
+  position: absolute;
+  display: block;
+  background: currentColor;
+}
+.museum-crosshair i:nth-child(1) {
+  width: 2px;
+  height: 6px;
+  left: 11px;
+  top: 1px;
+}
+.museum-crosshair i:nth-child(2) {
+  width: 2px;
+  height: 6px;
+  left: 11px;
+  bottom: 1px;
+}
+.museum-crosshair i:nth-child(3) {
+  height: 2px;
+  width: 6px;
+  top: 11px;
+  left: 1px;
+}
+.museum-crosshair i:nth-child(4) {
+  height: 2px;
+  width: 6px;
+  top: 11px;
+  right: 1px;
+}
+.museum-crosshair b {
+  width: 2px;
+  height: 2px;
+  left: 11px;
+  top: 11px;
+}
+.museum-crosshair.has-target {
+  color: #ff7870;
+}
+.museum-fps-enter {
+  position: absolute;
+  z-index: 4;
+  right: 95px;
+  bottom: 27px;
+  border: 1px solid #65504b66;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 10px;
+  background: #161314c9;
+  color: #d9c5c0;
+  cursor: pointer;
+}
+.gpu-exhibit-hint {
+  left: 50%;
+  top: calc(50% + 32px);
+  bottom: auto;
+  transform: translateX(-50%);
+  background: #161314e8;
+  padding: 10px 15px;
+  border: 1px solid #e16a6333;
+  border-radius: 6px;
+  text-align: center;
+  pointer-events: none;
+}
+.gpu-exhibit-hint strong {
+  font-size: 12px;
+}
+.gpu-exhibit-hint span {
+  font-size: 9px;
+  margin-top: 5px;
+}
+.gpu-mode-inspect .gpu-vignette {
+  background:
+    linear-gradient(90deg, #111114eb 0%, #111114b3 22%, transparent 56%),
+    linear-gradient(0deg, #111114a6, transparent 22%);
+}
+.gpu-mode-inspect .gpu-inspector {
+  top: 19%;
+  width: min(330px, 28vw);
+  max-height: 71%;
+}
+.gpu-mode-inspect .gpu-inspector h1 {
+  font-size: clamp(33px, 3.6vw, 61px);
+  margin-bottom: 12px;
+}
+.gpu-inspector .gpu-assistant {
+  border-top: 1px solid #bdb1aa22;
+  margin-top: 28px;
+  padding-top: 22px;
+}
+.gpu-inspector .gpu-assistant > p {
+  display: block;
+  -webkit-line-clamp: unset;
+  font-size: 13px;
+  line-height: 1.85;
+  color: #bfb8b4;
+}
+.gpu-inspector .gpu-card-details {
+  margin-top: 21px;
+}
+.gpu-inspector .gpu-card-details summary {
+  color: #b3aaa5;
+  font-size: 11px;
+}
+.gpu-card-details .gpu-specs {
+  margin: 22px 0;
+}
+.gpu-card-details .gpu-specs strong {
+  font-size: 31px;
+}
+.gpu-card-details .gpu-specs span {
+  font-size: 7px;
+}
+.gpu-guide-mark {
+  overflow: hidden;
+}
+.gpu-guide-mark .museum-guide-portrait {
+  width: 32px;
+  height: 32px;
+}
+.museum-tour {
+  position: absolute;
+  z-index: 7;
+  left: 4.5%;
+  bottom: 8%;
+  width: min(410px, 35vw);
+  border: 1px solid #9a777044;
+  border-radius: 14px;
+  background: #161516f2;
+  padding: 22px;
+  color: #eee8e3;
+  box-shadow: 0 20px 70px #0005;
+  pointer-events: auto;
+  max-height: calc(100dvh - 140px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.museum-tour > header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.museum-tour header strong {
+  display: block;
+  font-weight: 500;
+  font-size: 14px;
+}
+.museum-tour header strong span {
+  font: 7px monospace;
+  color: #a99891;
+  letter-spacing: 0.06em;
+  margin-left: 8px;
+}
+.museum-tour header small {
+  display: block;
+  font-size: 10px;
+  color: #a49c97;
+  margin-top: 5px;
+}
+.museum-tour header > button {
+  margin-left: auto;
+  border: 0;
+  background: transparent;
+  font-size: 25px;
+  color: #a49c97;
+  cursor: pointer;
+}
+.museum-tour-story h1 {
+  font-size: 27px;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  margin: 0 0 15px;
+}
+.museum-tour-story p {
+  color: #c6bdb6;
+  font-size: 13px;
+  line-height: 1.85;
+  margin: 0;
+}
+.museum-tour-story a {
+  display: inline-block;
+  margin-top: 13px;
+  font-size: 9px;
+  color: #d68c83;
+  text-decoration: none;
+}
+.museum-tour-year {
+  display: block;
+  color: #e3776e;
+  font: 35px monospace;
+  letter-spacing: -0.05em;
+  margin-bottom: 10px;
+}
+.museum-tour footer {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+}
+.museum-tour footer button {
+  border: 1px solid #a58a8033;
+  background: #262022;
+  color: #e4d4cd;
+  border-radius: 5px;
+  padding: 10px 13px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.museum-tour footer button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.museum-tour footer .museum-tour-next {
+  background: #d96159;
+  color: #fff5f0;
+  flex: 1;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.museum-tour footer .museum-tour-voice {
+  font-size: 10px;
+  background: transparent;
+}
+.museum-tour-jump {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 17px;
+  padding-top: 14px;
+  border-top: 1px solid #a58a8022;
+}
+.museum-tour-jump > span {
+  color: #a49c97;
+  font-size: 10px;
+  white-space: nowrap;
+}
+.museum-tour select {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  font-size: 11px;
+  color: #ddd0c9;
+  background: #211c1d;
+  border: 1px solid #a58a8022;
+  padding: 8px;
+  border-radius: 4px;
+}
+.museum-tour > small {
+  display: block;
+  margin-top: 12px;
+  color: #d7bdb4;
+  font-size: 10px;
+}
+.gpu-page[data-tour-active="true"] .gpu-webgl-fallback {
+  display: none;
+}
+@media (max-width: 800px) {
+  .museum-invitation {
+    left: 25px;
+    top: auto;
+    bottom: 95px;
+    width: calc(100% - 50px);
+    max-width: 360px;
+    padding: 20px;
+    box-sizing: border-box;
+    border: 1px solid #8c6f6744;
+    border-radius: 12px;
+    background: #161416eb;
+  }
+  .museum-invitation h1 {
+    font-size: 33px;
+    margin: 18px 0 14px;
+  }
+  .museum-invitation p {
+    font-size: 12px;
+    line-height: 1.75;
+  }
+  .museum-invitation .gpu-primary {
+    margin-top: 16px;
+    padding: 12px 17px !important;
+    font-size: 12px;
+  }
+  .museum-invitation-host {
+    font-size: 8px;
+    gap: 9px;
+  }
+  .museum-invitation .museum-guide-portrait {
+    width: 33px;
+    height: 33px;
+  }
+  .museum-explore {
+    font-size: 11px;
+    padding-bottom: 0 !important;
+  }
+  .museum-fps-enter {
+    display: none;
+  }
+  .gpu-mode-inspect .gpu-inspector {
+    top: auto;
+    bottom: 60px;
+    left: 20px;
+    right: 20px;
+    width: auto;
+    max-height: 43dvh;
+    padding: 18px;
+    box-sizing: border-box;
+    border: 1px solid #99807744;
+    border-radius: 12px;
+    background: #161516f2;
+  }
+  .gpu-mode-inspect .gpu-inspector h1 {
+    font-size: 30px;
+    margin: 7px 0;
+  }
+  .gpu-inspector .gpu-back {
+    margin-bottom: 15px;
+  }
+  .gpu-inspector .gpu-design-name {
+    font-size: 11px;
+  }
+  .gpu-inspector .gpu-assistant {
+    padding: 15px 0 0;
+    margin-top: 16px;
+    background: transparent;
+  }
+  .gpu-inspector .gpu-assistant > p {
+    font-size: 12px;
+    line-height: 1.75;
+  }
+  .gpu-mode-inspect .gpu-vignette {
+    background: linear-gradient(0deg, #111114 0%, transparent 55%);
+  }
+  .museum-tour {
+    left: 16px;
+    bottom: 24px;
+    width: calc(100% - 32px);
+    padding: 18px;
+    box-sizing: border-box;
+    max-height: 47dvh;
+  }
+  .museum-tour > header {
+    margin-bottom: 17px;
+    gap: 10px;
+  }
+  .museum-tour-story h1 {
+    font-size: 24px;
+  }
+  .museum-tour-story p {
+    font-size: 12px;
+    line-height: 1.75;
+  }
+  .museum-tour footer {
+    margin-top: 18px;
+  }
+  .museum-tour-jump {
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+  .gpu-exhibit-hint {
+    width: max-content;
+    max-width: 250px;
+  }
+}
+@media (max-height: 650px) and (min-width: 801px) {
+  .museum-invitation {
+    top: 22%;
+  }
+  .museum-invitation h1 {
+    font-size: 36px;
+    margin: 16px 0;
+  }
+  .museum-invitation p {
+    font-size: 12px;
+  }
+  .museum-tour {
+    bottom: 25px;
+    max-height: calc(100dvh - 105px);
+    padding: 18px;
+  }
+  .museum-tour header {
+    margin-bottom: 15px;
+  }
+  .museum-tour-story p {
+    font-size: 12px;
+    line-height: 1.7;
+  }
+}
+.gpu-page svg.museum-guide-portrait {
+  width: 42px;
+  height: 42px;
+}
+.gpu-guide-mark svg.museum-guide-portrait {
+  width: 32px;
+  height: 32px;
+}
+.museum-tour > footer {
+  padding: 0;
+  border: 0;
+  height: auto;
+  width: auto;
+  position: static;
+  margin: 22px 0 0;
+}
+@media (max-width: 800px) {
+  .museum-invitation svg.museum-guide-portrait {
+    width: 33px;
+    height: 33px;
+  }
+  .museum-tour > footer {
+    margin-top: 18px;
+  }
+}
+.gpu-scene canvas:focus-visible {
+  outline: 1px solid #e16a6355;
+  outline-offset: -2px;
 }

@@ -25,7 +25,9 @@ test("GPU vault loads a live scene and switches between distinct real designs", 
   await page.goto("/pc");
   await expect(page).toHaveTitle(/PC Museum/, { timeout: 15_000 });
   await expect(
-    page.getByRole("heading", { name: "Graphics, up close." }),
+    page.getByRole("heading", {
+      name: "Every great build starts with curiosity.",
+    }),
   ).toBeVisible();
   await expect(page.locator(".gpu-scene")).toHaveAttribute(
     "data-scene-status",
@@ -47,25 +49,16 @@ test("GPU vault loads a live scene and switches between distinct real designs", 
   await expect(page.locator(".gpu-dimensions")).toContainText("357.6");
   await selectDesign(page, /Sapphire.*NITRO\+\ OC/i);
   await expect(page.locator(".gpu-inspector h1")).toHaveText("RX 9070 XT");
+  await expect(page.getByRole("group", { name: "Card view" })).toHaveCount(0);
+  await expect(page.locator(".gpu-photo-view")).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: "02 Inside", exact: true }),
+  ).toHaveCount(0);
   await page
-    .getByRole("button", { name: "03 Real photos", exact: true })
+    .getByText("Specifications & card details", { exact: true })
     .click();
-  const photo = page.locator(".gpu-photo-view>img");
-  await expect(photo).toBeVisible();
-  await expect(photo).toHaveAttribute("src", "/gpu/nitro-front.jpg");
-  await expect
-    .poll(() => photo.evaluate((img) => img.complete && img.naturalWidth > 0))
-    .toBe(true);
-  await page
-    .getByRole("button", { name: "Next product photo", exact: true })
-    .click();
-  await expect(photo).toHaveAttribute("src", "/gpu/nitro-back.jpg");
-  await page.getByRole("button", { name: "02 Inside", exact: true }).click();
-  await page.getByRole("button", { name: "Explore VRAM", exact: true }).click();
-  await expect(page.locator(".gpu-anatomy-copy h2")).toHaveText("VRAM");
-  await expect(page.locator(".gpu-anatomy-copy")).toContainText(
-    "16GB does not automatically",
-  );
+  await expect(page.locator(".gpu-specs")).toBeVisible();
+  await page.screenshot({ path: "test-results/pc-museum-inspection.png" });
   expect(errors).toEqual([]);
 });
 
@@ -123,13 +116,10 @@ test("museum supports walking, turning, named racks and direct exhibit selection
     "ready",
   );
   await page
-    .getByRole("button", { name: "Start exploring", exact: true })
-    .click();
-  await expect(page.locator(".gpu-museum-title")).toHaveCount(0);
-  await page.screenshot({ path: "test-results/pc-museum-cleared.png" });
-  await page
     .getByRole("button", { name: "Show movement controls", exact: true })
     .click();
+  await expect(page.locator(".museum-invitation")).toHaveCount(0);
+  await page.screenshot({ path: "test-results/pc-museum-cleared.png" });
   await page
     .getByRole("button", { name: "Walk forward", exact: true })
     .click({ delay: 300 });
@@ -170,7 +160,7 @@ test("museum supports walking, turning, named racks and direct exhibit selection
     "data-player-z",
     "3.00",
   );
-  await expect(page.locator(".gpu-museum-title")).toHaveCount(0);
+  await expect(page.locator(".museum-invitation")).toHaveCount(0);
   await page.screenshot({ path: "test-results/pc-museum-nameplates.png" });
   // The card at the centre of this human-height rack view is the labelled 5060 Ti.
   await expect
@@ -196,7 +186,7 @@ test("museum supports walking, turning, named racks and direct exhibit selection
   await expect(page.getByRole("dialog")).toHaveCount(0);
 });
 
-test("mobile supports still mode, browsing, photos and the design archive without overflow", async ({
+test("mobile supports still mode, browsing and the design archive without overflow", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -225,13 +215,7 @@ test("mobile supports still mode, browsing, photos and the design archive withou
   await page.getByRole("button", { name: "Close panel", exact: true }).click();
   await selectDesign(page, /Sapphire.*PURE/i);
   await expect(page.locator(".gpu-inspector h1")).toHaveText("RX 9070 XT");
-  await page
-    .getByRole("button", { name: "03 Real photos", exact: true })
-    .click();
-  await expect(page.locator(".gpu-photo-view>img")).toHaveAttribute(
-    "src",
-    "/gpu/pure-front.jpg",
-  );
+  await expect(page.locator(".gpu-photo-view")).toHaveCount(0);
   await page.locator(".gpu-design-name").click();
   await expect(page.locator(".gpu-design-grid>button")).toHaveCount(6);
   await page
@@ -249,7 +233,7 @@ test("mobile supports still mode, browsing, photos and the design archive withou
   ).toBe(true);
 });
 
-test("catalog and official photos remain available when WebGL is unavailable", async ({
+test("catalog and guided learning remain available when WebGL is unavailable", async ({
   page,
 }) => {
   await page.addInitScript(() => {
@@ -266,15 +250,17 @@ test("catalog and official photos remain available when WebGL is unavailable", a
     "fallback",
   );
   await page
-    .getByRole("button", { name: "Explore product photos", exact: true })
+    .getByRole("button", { name: "Browse GPU models", exact: true })
     .click();
-  await expect(page.locator(".gpu-photo-view>img")).toHaveAttribute(
-    "src",
-    "/gpu/fe-front.jpg",
-  );
-  await openMenuItem(page, "Model index 47");
   await page.getByLabel("Search GPU models", { exact: true }).fill("RX 9070");
   await expect(page.locator(".gpu-model-list article")).toHaveCount(2);
+  await page.getByRole("button", { name: "Close panel", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Take the tour", exact: true })
+    .click();
+  await expect(
+    page.getByRole("region", { name: "Guided museum tour" }),
+  ).toContainText("Hi, I’m Ari");
 });
 
 test("museum guide explains the selected GPU and answers contextual follow-ups", async ({
@@ -325,4 +311,162 @@ test("museum guide explains the selected GPU and answers contextual follow-ups",
   await expect(guide).toContainText("12GB");
   await expect(guide).toContainText("ASRock");
   await page.screenshot({ path: "test-results/pc-museum-guide.png" });
+});
+
+test("optional guide covers history, every catalog model and resumable chapters", async ({
+  page,
+}) => {
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await page.goto("/pc");
+  const tour = page.getByRole("region", { name: "Guided museum tour" });
+  await expect(tour).toHaveCount(0);
+  await page
+    .getByRole("button", { name: "Take the tour", exact: true })
+    .click();
+  await expect(tour).toContainText("Hi, I’m Ari");
+  await expect(
+    page.getByRole("button", { name: "Previous tour stop" }),
+  ).toBeDisabled();
+  await page.getByRole("button", { name: "Continue →", exact: true }).click();
+  await expect(tour).toContainText("A GPU turns a scene into pixels.");
+  const jump = page.getByLabel("Tour chapter or model", { exact: true });
+  await expect(jump.locator('option[value^="model-"]')).toHaveCount(47);
+  await jump.selectOption("history-1999");
+  await expect(tour).toContainText("GeForce 256");
+  await expect(tour.locator(".museum-tour-year")).toHaveText("1999");
+  await jump.selectOption("model-rtx-5060-ti-16gb");
+  await expect(tour).toContainText("16GB of GDDR7");
+  await expect(tour).toContainText("separate 8GB version");
+  await expect(page.locator(".gpu-inspector")).toHaveCount(0);
+  await expect(page.locator(".gpu-page")).toHaveClass(/gpu-mode-inspect/);
+  await page.getByRole("button", { name: "Continue →", exact: true }).click();
+  await expect(tour).toContainText("8GB of GDDR7");
+  await jump.selectOption("model-rx-9070-xt");
+  await expect(tour).toContainText("RDNA 4");
+  await jump.selectOption("model-arc-b580");
+  await expect(tour).toContainText("12GB of GDDR6");
+  await expect(tour).toContainText("190W");
+  await page.getByRole("button", { name: "End tour", exact: true }).click();
+  await expect(tour).toHaveCount(0);
+  await expect(page.locator(".gpu-page")).toHaveClass(/gpu-mode-vault/);
+  await openMenuItem(page, "Resume guided tour ↗");
+  await expect(tour).toContainText("Arc B580");
+  await jump.selectOption("your-cs2-pc");
+  await page
+    .getByRole("button", { name: "Finish tour →", exact: true })
+    .click();
+  await expect(tour).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+test("first-person mode aims from the crosshair, inspects with E and releases mouse for panels", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/pc");
+  await expect(page.locator(".gpu-scene")).toHaveAttribute(
+    "data-scene-status",
+    "ready",
+  );
+  await page
+    .getByRole("button", { name: "Explore on my own ↗", exact: true })
+    .click();
+  await expect(page.locator(".gpu-page")).toHaveAttribute(
+    "data-first-person",
+    "true",
+  );
+  await expect(page.locator(".museum-crosshair")).toBeVisible();
+  await expect
+    .poll(async () => {
+      const museum = page.locator(".gpu-page");
+      return (
+        (await museum.getAttribute("data-pointer-locked")) === "true" ||
+        (await museum.getAttribute("data-capture-unavailable")) === "true"
+      );
+    })
+    .toBe(true);
+  const captured =
+    (await page.locator(".gpu-page").getAttribute("data-pointer-locked")) ===
+    "true";
+  if (captured) {
+    await page.mouse.move(700, 360);
+    await expect
+      .poll(async () =>
+        Number(await page.locator(".gpu-page").getAttribute("data-player-yaw")),
+      )
+      .not.toBe(0);
+    await page.keyboard.press("Escape");
+  } else {
+    await expect(page.locator(".gpu-quiet-hint")).toContainText("Drag to look");
+  }
+  await visitRack(page, "Visit NVIDIA RTX 50 rack");
+  await expect(page.locator(".gpu-page")).toHaveAttribute(
+    "data-player-yaw",
+    "-1.57",
+  );
+  await expect(page.locator(".gpu-exhibit-hint strong")).toHaveText(
+    "RTX 5060 Ti 16GB",
+  );
+  await page.locator(".gpu-scene canvas").focus();
+  await page.keyboard.press("e");
+  await expect(page.locator(".gpu-inspector h1")).toHaveText(
+    "RTX 5060 Ti 16GB",
+  );
+  await expect(page.locator(".gpu-page")).toHaveAttribute(
+    "data-pointer-locked",
+    "false",
+  );
+  await expect(page.locator(".museum-crosshair")).toHaveCount(0);
+  await page.screenshot({
+    path: "test-results/pc-museum-first-person-inspect.png",
+  });
+  await page
+    .getByRole("button", { name: "Back to museum", exact: true })
+    .click();
+  await expect(page.locator(".gpu-exhibit-hint strong")).toHaveText(
+    "RTX 5060 Ti 16GB",
+  );
+  const canvas = page.locator(".gpu-scene canvas");
+  await canvas.click({ position: { x: 640, y: 360 } });
+  if (captured) {
+    await expect(page.locator(".gpu-page")).toHaveAttribute(
+      "data-pointer-locked",
+      "true",
+    );
+    await page.mouse.click(640, 360);
+  }
+  await expect(page.locator(".gpu-inspector h1")).toHaveText(
+    "RTX 5060 Ti 16GB",
+  );
+  await expect(page.locator(".gpu-page")).toHaveAttribute(
+    "data-pointer-locked",
+    "false",
+  );
+});
+
+test("mobile guided tour is readable and can jump to an individual model", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/pc");
+  await page
+    .getByRole("button", { name: "Take the tour", exact: true })
+    .click();
+  await page
+    .getByLabel("Tour chapter or model", { exact: true })
+    .selectOption("model-rx-9070-xt");
+  const tour = page.getByRole("region", { name: "Guided museum tour" });
+  await expect(tour).toContainText("RX 9070 XT");
+  await page.screenshot({ path: "test-results/pc-museum-mobile-tour.png" });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  const bounds = await tour.boundingBox();
+  expect(bounds.y).toBeGreaterThan(60);
+  expect(bounds.y + bounds.height).toBeLessThan(845);
+  await page.getByRole("button", { name: "End tour", exact: true }).click();
+  await expect(tour).toHaveCount(0);
 });
