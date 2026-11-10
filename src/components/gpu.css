@@ -2512,3 +2512,302 @@
     bottom: 70px;
   }
 }
+.gpu-assistant {
+  margin-top: 5px;
+  padding: 18px 0 0;
+  border-top: 1px solid #395461;
+}
+.gpu-assistant > header {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.gpu-guide-mark {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 29px;
+  height: 29px;
+  border: 1px solid #6fbdc677;
+  border-radius: 50%;
+  color: #93e3df;
+  background: #1c444b66;
+  font-size: 22px;
+}
+.gpu-assistant header > div {
+  flex: 1;
+}
+.gpu-assistant strong {
+  font: 500 12px "Space Grotesk";
+  color: #d8e7ec;
+}
+.gpu-assistant header small {
+  display: block;
+  font: 5px var(--mono);
+  color: #7199ab;
+  letter-spacing: 0.06em;
+  margin-top: 5px;
+}
+.gpu-assistant header > button {
+  font: 8px var(--mono);
+  color: #99d5d5;
+  padding: 7px 0;
+}
+.gpu-assistant > p {
+  font-size: 12px;
+  line-height: 1.8;
+  color: #bacdd7;
+  margin: 15px 0;
+}
+.gpu-guide-ask {
+  font-size: 10px !important;
+  color: var(--orange) !important;
+  padding: 0 !important;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.gpu-card-details {
+  margin-top: 20px;
+  font-size: 10px;
+  color: #849eae;
+  max-height: 180px;
+  overflow: auto;
+  scrollbar-width: thin;
+}
+.gpu-card-details > summary {
+  cursor: pointer;
+  font-size: 9px;
+  letter-spacing: 0.03em;
+  color: #7e9eaf;
+}
+.gpu-card-details .gpu-design-note {
+  font-size: 11px;
+  line-height: 1.8;
+}
+.gpu-guide-summary {
+  display: flex;
+  gap: 17px;
+  padding: 22px;
+  background: #102732;
+  border: 1px solid #2e505f;
+}
+.gpu-guide-summary > p {
+  font-size: 13px;
+  line-height: 1.9;
+  color: #c2d8e3;
+  margin: 0;
+}
+.gpu-guide-suggestions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 24px 0;
+}
+.gpu-guide-suggestions button {
+  padding: 10px 12px;
+  border: 1px solid #345363;
+  font-size: 11px;
+  color: #9ac2d4;
+  background: #10212d;
+}
+.gpu-guide-suggestions button:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+.gpu-guide-exchange {
+  padding: 22px 0;
+  border-top: 1px solid #36505f;
+}
+.gpu-guide-exchange h3 {
+  font: 400 25px "Space Grotesk";
+  letter-spacing: -0.04em;
+  margin: 0 0 18px;
+}
+.gpu-guide-exchange p {
+  font-size: 14px;
+  line-height: 1.9;
+  color: #c0d5df;
+  white-space: pre-wrap;
+}
+.gpu-guide-form {
+  margin-top: 25px;
+}
+.gpu-guide-form label {
+  display: block;
+  font: 8px var(--mono);
+  color: #87aabb;
+  margin-bottom: 13px;
+}
+.gpu-guide-form > div {
+  display: flex;
+  gap: 9px;
+}
+.gpu-guide-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 15px;
+  background: #112735;
+  border: 1px solid #3b5c6e;
+  color: #e2edef;
+  font-size: 12px;
+}
+.gpu-guide-form input::placeholder {
+  color: #6e92a6;
+}
+.gpu-guide-form button {
+  width: 46px;
+  background: var(--orange);
+  color: #10212b;
+  font-size: 22px;
+}
+.gpu-guide-sources {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 26px;
+  font-size: 10px;
+}
+.gpu-guide-sources button {
+  color: #8fd1d5;
+  padding: 0;
+}
+.gpu-guide-sources a {
+  color: var(--orange);
+}
+@media (max-height: 800px) and (min-width: 801px) {
+  .gpu-assistant {
+    padding-top: 12px;
+  }
+  .gpu-assistant > p {
+    font-size: 11px;
+    line-height: 1.7;
+    margin: 12px 0;
+  }
+  .gpu-card-details {
+    margin-top: 14px;
+    max-height: 100px;
+  }
+}
+@media (max-width: 800px) {
+  .gpu-assistant {
+    padding-top: 13px;
+  }
+  .gpu-assistant > header {
+    gap: 7px;
+  }
+  .gpu-guide-mark {
+    width: 24px;
+    height: 24px;
+    font-size: 18px;
+  }
+  .gpu-assistant strong {
+    font-size: 11px;
+  }
+  .gpu-assistant header small {
+    font-size: 4px;
+  }
+  .gpu-assistant header > button {
+    font-size: 7px;
+  }
+  .gpu-assistant > p {
+    font-size: 11px;
+    line-height: 1.75;
+    margin: 12px 0;
+    max-width: 235px;
+  }
+  .gpu-guide-ask {
+    font-size: 9px !important;
+  }
+  .gpu-card-details {
+    margin-top: 15px;
+    max-height: 100px;
+  }
+  .gpu-card-details > summary {
+    font-size: 8px;
+  }
+  .gpu-mode-photos .gpu-assistant,
+  .gpu-mode-photos .gpu-card-details {
+    display: none;
+  }
+  .gpu-guide-summary {
+    padding: 18px;
+    gap: 11px;
+  }
+  .gpu-guide-summary > p {
+    font-size: 12px;
+  }
+  .gpu-guide-suggestions {
+    gap: 7px;
+  }
+  .gpu-guide-suggestions button {
+    font-size: 10px;
+    padding: 9px 10px;
+  }
+  .gpu-guide-exchange h3 {
+    font-size: 23px;
+  }
+  .gpu-guide-exchange p {
+    font-size: 12px;
+  }
+  .gpu-guide-form input {
+    font-size: 11px;
+    padding: 13px;
+  }
+  .gpu-guide-sources {
+    font-size: 8px;
+    gap: 12px;
+  }
+  .gpu-floor-map {
+    width: 170px;
+  }
+  .gpu-floor-plan > button {
+    font-size: 9px !important;
+    min-height: 36px;
+  }
+  .gpu-floor-plan small {
+    font-size: 5px;
+  }
+  .gpu-walk-controls {
+    width: 148px;
+  }
+  .gpu-walk-pad {
+    grid-template-columns: repeat(3, 42px);
+    grid-template-rows: repeat(2, 42px);
+  }
+  .gpu-turn-pad button {
+    width: 42px;
+    height: 35px;
+  }
+}
+/* Keep exhibit lettering behind the guide from competing with the explanation. */
+.gpu-mode-inspect .gpu-vignette,
+.gpu-mode-inside .gpu-vignette,
+.gpu-mode-photos .gpu-vignette {
+  background:
+    linear-gradient(90deg, #03080cf5, #03080ce8 25%, transparent 48%),
+    linear-gradient(0deg, #050b10, transparent 26%, transparent 75%, #03080c73);
+}
+@media (max-width: 800px) {
+  .gpu-assistant {
+    background: #07131df5;
+    border: 1px solid #2b485a;
+    padding: 12px;
+    margin-left: -1px;
+  }
+  .gpu-assistant > p {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .gpu-card-details {
+    display: none;
+  }
+  .gpu-mode-inspect .gpu-vignette {
+    background:
+      linear-gradient(90deg, #03080c9c, transparent 90%),
+      linear-gradient(0deg, #050b10, transparent 45%);
+  }
+}

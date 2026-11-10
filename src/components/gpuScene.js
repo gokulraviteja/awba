@@ -25,14 +25,17 @@ function block(parent, w, h, d, mat, x = 0, y = 0, z = 0, round = 0) {
 }
 function label(text, color = "#a9c5d5", width = 512) {
   const c = document.createElement("canvas");
-  c.width = width;
-  c.height = 64;
+  c.width = width * 3;
+  c.height = 64 * 3;
   const ctx = c.getContext("2d");
+  ctx.scale(3, 3);
   ctx.fillStyle = color;
-  ctx.font = "24px monospace";
-  ctx.fillText(text, 12, 41);
+  ctx.font = "600 30px monospace";
+  ctx.textAlign = "center";
+  ctx.fillText(text, width / 2, 43);
   const tex = new T.CanvasTexture(c);
   tex.colorSpace = T.SRGBColorSpace;
+  tex.anisotropy = 8;
   const m = new T.Mesh(
     new T.PlaneGeometry(width / 180, 64 / 180),
     new T.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false }),
@@ -497,9 +500,19 @@ export function createGpuScene(
         hit.userData.exhibit = { gpu, design };
         group.add(hit);
         clickable.push(hit);
-        const name = label(gpu.name, accent, 420);
-        name.scale.setScalar(0.65);
-        name.position.set(x, y + 0.15, 1.28);
+        block(
+          group,
+          2.56,
+          0.37,
+          0.055,
+          new T.MeshBasicMaterial({ color: "#07131e" }),
+          x,
+          y,
+          1.29,
+        );
+        const name = label(gpu.name, "#edf4f5", 500);
+        name.scale.setScalar(0.88);
+        name.position.set(x, y, 1.326);
         group.add(name);
       }
     }
@@ -508,14 +521,6 @@ export function createGpuScene(
     title.position.set(0, 7.5, 1.23);
     title.scale.setScalar(1.6);
     group.add(title);
-    // A lower plaque can be read from human eye height.
-    const plaque = label(
-      generation + "  /  " + models.length + " MODELS",
-      accent,
-      500,
-    );
-    plaque.position.set(0, 2.35, 1.3);
-    group.add(plaque);
     const aisle = label(maker.toUpperCase() + "  " + generation, accent, 600);
     aisle.position.set(side * 4.5, 4.35, 8.7 - bay * 13);
     aisle.scale.setScalar(1.3);

@@ -9,6 +9,7 @@ import {
 } from "./gpuData.js";
 import { createGpuScene } from "./gpuScene.js";
 import "./gpu.css";
+import { GPUAssistant, GPUGuideChat } from "./GPUAssistant.jsx";
 
 const Arrow = ({ direction = "right" }) => (
   <svg
@@ -545,22 +546,31 @@ export default function GPUPage() {
             </div>
           ) : (
             <>
-              <p className="gpu-design-note">{design.note}</p>
-              {design.length && (
-                <span className="gpu-dimensions gpu-mono">
-                  {design.length} MM LONG · {design.slots} SLOTS
-                </span>
-              )}
-              <div className="gpu-inspector-links">
-                <button onClick={() => toggleCompare(selected.id)}>
-                  {compare.includes(selected.id)
-                    ? "✓ Added to compare"
-                    : "+ Add to compare"}
-                </button>
-                <a href={design.url} target="_blank" rel="noreferrer">
-                  Official product ↗
-                </a>
-              </div>
+              <GPUAssistant
+                key={selected.id + design.id}
+                gpu={selected}
+                design={design}
+                onAsk={() => setPanel("guide")}
+              />
+              <details className="gpu-card-details">
+                <summary>About this card design</summary>
+                <p className="gpu-design-note">{design.note}</p>
+                {design.length && (
+                  <span className="gpu-dimensions gpu-mono">
+                    {design.length} MM LONG · {design.slots} SLOTS
+                  </span>
+                )}
+                <div className="gpu-inspector-links">
+                  <button onClick={() => toggleCompare(selected.id)}>
+                    {compare.includes(selected.id)
+                      ? "✓ Added to compare"
+                      : "+ Add to compare"}
+                  </button>
+                  <a href={design.url} target="_blank" rel="noreferrer">
+                    Official product ↗
+                  </a>
+                </div>
+              </details>
             </>
           )}
         </section>
@@ -921,26 +931,37 @@ export default function GPUPage() {
       {panel && (
         <Dialog
           title={
-            panel === "catalog"
-              ? "Find your silicon."
-              : panel === "designs"
-                ? "Same chip. Different character."
-                : panel === "basics"
-                  ? "Start with the small chip."
-                  : "Put them side by side."
+            panel === "guide"
+              ? `Meet ${selected.name}.`
+              : panel === "catalog"
+                ? "Find your silicon."
+                : panel === "designs"
+                  ? "Same chip. Different character."
+                  : panel === "basics"
+                    ? "Start with the small chip."
+                    : "Put them side by side."
           }
           kicker={
-            panel === "catalog"
-              ? "THE MODEL INDEX"
-              : panel === "designs"
-                ? "THE DESIGN ARCHIVE"
-                : panel === "basics"
-                  ? "GRAPHICS CARD / FIELD NOTES"
-                  : "COMPARE / UP TO THREE"
+            panel === "guide"
+              ? "YOUR MUSEUM GUIDE"
+              : panel === "catalog"
+                ? "THE MODEL INDEX"
+                : panel === "designs"
+                  ? "THE DESIGN ARCHIVE"
+                  : panel === "basics"
+                    ? "GRAPHICS CARD / FIELD NOTES"
+                    : "COMPARE / UP TO THREE"
           }
           onClose={closePanel}
           wide={panel === "designs" || panel === "compare"}
         >
+          {panel === "guide" && (
+            <GPUGuideChat
+              key={selected.id + design.id}
+              gpu={selected}
+              design={design}
+            />
+          )}
           {panel === "catalog" && (
             <Catalog
               onSelect={chooseGpu}

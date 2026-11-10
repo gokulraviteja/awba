@@ -158,6 +158,7 @@ test("museum supports walking, turning, named racks and direct exhibit selection
   await expect(page.locator(".gpu-museum-title h1")).toHaveText(
     "NVIDIA / RTX 50",
   );
+  await page.screenshot({ path: "test-results/pc-museum-nameplates.png" });
   // The card at the centre of this human-height rack view is the labelled 5060 Ti.
   await expect
     .poll(() => page.locator(".gpu-page").getAttribute("data-player-yaw"))
@@ -263,4 +264,61 @@ test("catalog and official photos remain available when WebGL is unavailable", a
     .click();
   await page.getByLabel("Search GPU models", { exact: true }).fill("RX 9070");
   await expect(page.locator(".gpu-model-list article")).toHaveCount(2);
+});
+
+test("museum guide explains the selected GPU and answers contextual follow-ups", async ({
+  page,
+}) => {
+  await page.goto("/pc");
+  await page
+    .getByRole("button", { name: "Model index 47", exact: true })
+    .click();
+  await page
+    .getByLabel("Search GPU models", { exact: true })
+    .fill("RTX 5060 Ti 16GB");
+  await page.locator(".gpu-model-pick").click();
+  const guide = page.getByRole("region", { name: "Museum guide", exact: true });
+  await expect(guide).toContainText("16GB");
+  await expect(guide).toContainText("NVIDIA");
+  await expect(guide).toContainText("Blackwell");
+  await page
+    .getByRole("button", { name: "Ask about this GPU", exact: false })
+    .click();
+  const dialog = page.getByRole("dialog");
+  await expect(
+    dialog.getByRole("heading", { name: "Meet RTX 5060 Ti 16GB." }),
+  ).toBeVisible();
+  await dialog
+    .getByRole("button", { name: "Will it help my CS2 FPS? ↗", exact: true })
+    .click();
+  await expect(page.locator(".gpu-guide-exchange")).toContainText(
+    "cannot guarantee 400 FPS",
+  );
+  await page
+    .getByLabel("Ask the museum guide", { exact: true })
+    .fill("What power supply and case fit do I need?");
+  await page
+    .getByRole("button", { name: "Ask guide question", exact: true })
+    .click();
+  await expect(page.locator(".gpu-guide-exchange")).toContainText("180W");
+  await page
+    .getByLabel("Ask the museum guide", { exact: true })
+    .fill("How much does it cost in India?");
+  await page
+    .getByRole("button", { name: "Ask guide question", exact: true })
+    .click();
+  await expect(page.locator(".gpu-guide-exchange")).toContainText(
+    "don’t have live Indian prices",
+  );
+  await page.getByRole("button", { name: "Close panel", exact: true }).click();
+  await page
+    .getByRole("button", {
+      name: "Inspect ASRock Steel Legend OC",
+      exact: true,
+    })
+    .click();
+  await expect(guide).toContainText("Intel");
+  await expect(guide).toContainText("12GB");
+  await expect(guide).toContainText("ASRock");
+  await page.screenshot({ path: "test-results/pc-museum-guide.png" });
 });
