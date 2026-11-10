@@ -1,5 +1,10 @@
 import { expect, test } from "@playwright/test";
 
+// These checks validate controls and content, not animation timing.
+test.beforeEach(async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+});
+
 test("PC guide loads directly and exposes every component and its types", async ({
   page,
 }) => {

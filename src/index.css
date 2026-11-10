@@ -320,3 +320,7 @@ footer > span { justify-self: end; }
   .comparison-scroll { margin-right: -14px; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .hero-canvas { display: none; } *,*::before,*::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
