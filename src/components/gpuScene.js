@@ -426,8 +426,8 @@ export function createGpuScene(
     };
   }
   const scene = new T.Scene();
-  scene.background = new T.Color("#04090d");
-  scene.fog = new T.FogExp2("#040a10", 0.023);
+  scene.background = new T.Color("#0b081a");
+  scene.fog = new T.FogExp2("#17102d", 0.014);
   renderer.setPixelRatio(Math.min(devicePixelRatio, 1.6));
   renderer.outputColorSpace = T.SRGBColorSpace;
   renderer.toneMapping = T.ACESFilmicToneMapping;
@@ -438,33 +438,62 @@ export function createGpuScene(
     environment = new RoomEnvironment();
   const env = pmrem.fromScene(environment, 0.04);
   scene.environment = env.texture;
-  scene.environmentIntensity = 0.35;
+  scene.environmentIntensity = 0.48;
   environment.dispose();
   pmrem.dispose();
-  scene.add(new T.HemisphereLight("#b6d9ee", "#0a1119", 0.6));
+  scene.add(new T.HemisphereLight("#d9d1ff", "#121024", 1.1));
   const key = new T.DirectionalLight("#d9edff", 3);
   key.position.set(-3, 9, 8);
   scene.add(key);
-  const rim = new T.DirectionalLight("#4e9dda", 2);
+  const rim = new T.DirectionalLight("#6a5bff", 3);
   rim.position.set(9, 6, -6);
   scene.add(rim);
-  const warm = new T.DirectionalLight("#ff9c6b", 1.8);
+  const warm = new T.DirectionalLight("#63eee7", 2.4);
   warm.position.set(-8, 3, 1);
   scene.add(warm);
-  const steel = metal("#122736", 0.7, 0.25),
-    deck = metal("#101b24", 0.42, 0.65),
-    lightmat = new T.MeshBasicMaterial({ color: "#6e9bb8" }),
-    orange = new T.MeshBasicMaterial({ color: "#ee7948" });
+  const steel = metal("#a0a0b4", 0.32, 0.6),
+    deck = metal("#252039", 0.43, 0.52),
+    lightmat = new T.MeshBasicMaterial({ color: "#91f5ed" }),
+    orange = new T.MeshBasicMaterial({ color: "#bb82ff" });
   const floor = new T.Mesh(
     new T.PlaneGeometry(170, 190),
-    metal("#020609", 0.85, 0.05),
+    metal("#171425", 0.44, 0.45),
   );
   floor.rotation.x = -Math.PI / 2;
   floor.position.set(0, -0.15, -45);
   scene.add(floor);
-  const grid = new T.GridHelper(160, 64, "#1b3547", "#132635");
-  grid.position.set(0, -0.13, -40);
-  scene.add(grid);
+  const violet = new T.MeshBasicMaterial({ color: "#a16bff" });
+  const cyan = new T.MeshBasicMaterial({ color: "#55f6e5" });
+  const shell = metal("#555267", 0.4, 0.55);
+  const carbon = metal("#1a1629", 0.64, 0.25);
+  // The room is an oversized PC chassis: broad panels and circuit-board paths.
+  block(scene, 0.35, 9.5, 65, carbon, -9.2, 4.5, -14, 0.12);
+  block(scene, 0.35, 9.5, 65, carbon, 9.2, 4.5, -14, 0.12);
+  for (let bay = 0; bay < 4; bay++) {
+    const z = 3 - bay * 13;
+    block(
+      scene,
+      10,
+      0.06,
+      8.8,
+      metal(bay % 2 ? "#232035" : "#1b192a", 0.5, 0.4),
+      0,
+      -0.12,
+      z,
+      0.12,
+    );
+    // Paired, angular PCB traces replace the warehouse floor grid.
+    for (const side of [-1, 1]) {
+      const m = side < 0 ? cyan : violet;
+      block(scene, 0.055, 0.015, 7, m, side * 4, -0.07, z);
+      block(scene, 1.2, 0.015, 0.055, m, side * 3.4, -0.07, z - 3.5);
+      block(scene, 0.055, 0.015, 4, m, side * 2.8, -0.07, z - 5.5);
+      const pad = new T.Mesh(new T.RingGeometry(0.13, 0.19, 24), m);
+      pad.rotation.x = -Math.PI / 2;
+      pad.position.set(side * 2.8, -0.055, z - 7.5);
+      scene.add(pad);
+    }
+  }
   const clickable = [],
     racks = new T.Group();
   scene.add(racks);
@@ -474,15 +503,52 @@ export function createGpuScene(
     group.position.set(side * 7.4, 0, 3 - bay * 13);
     group.rotation.y = side === -1 ? Math.PI / 2 : -Math.PI / 2;
     racks.add(group);
-    for (const x of [-4.15, 4.15])
-      for (const z of [-1.1, 1.1])
-        block(group, 0.11, 8.1, 0.11, steel, x, 3.95, z);
+    // Bevelled case sides, a vented rear panel and ARGB edge channels.
+    block(group, 8.7, 8.05, 0.22, carbon, 0, 3.8, -1.22, 0.14);
+    for (const x of [-4.25, 4.25]) {
+      block(group, 0.32, 8.25, 2.7, shell, x, 3.95, 0, 0.1);
+      block(
+        group,
+        0.055,
+        7.6,
+        0.07,
+        side < 0 ? cyan : violet,
+        x,
+        3.95,
+        1.4,
+        0.02,
+      );
+    }
+    block(group, 8.7, 0.4, 2.7, shell, 0, 7.95, 0, 0.12);
+    block(group, 8.7, 0.35, 2.7, shell, 0, 0.05, 0, 0.1);
+    // The tiny rear vents read as a PC enclosure rather than open server shelving.
+    for (let vent = 0; vent < 9; vent++)
+      block(
+        group,
+        6.8,
+        0.032,
+        0.025,
+        metal("#39324e", 0.6, 0.3),
+        0,
+        0.9 + vent * 0.75,
+        -1.08,
+      );
     const models = gpus.filter((g) => g.generation === generation);
     const accent = makers[maker].color;
     for (let level = 0; level < 4; level++) {
       const y = 0.5 + level * 1.8;
       block(group, 8.5, 0.12, 2.5, deck, 0, y, 0);
-      block(group, 8.1, 0.035, 0.06, lightmat, 0, y + 1.6, 1.0);
+      block(
+        group,
+        8.1,
+        0.028,
+        0.045,
+        level % 2 ? violet : cyan,
+        0,
+        y - 0.1,
+        1.4,
+      );
+      block(group, 8.1, 0.025, 0.06, lightmat, 0, y + 1.6, -0.65);
       for (let slot = 0; slot < 3; slot++) {
         const gpu = models[level * 3 + slot];
         if (!gpu) continue;
@@ -505,7 +571,7 @@ export function createGpuScene(
           2.56,
           0.37,
           0.055,
-          new T.MeshBasicMaterial({ color: "#07131e" }),
+          new T.MeshBasicMaterial({ color: "#151020" }),
           x,
           y,
           1.29,
@@ -521,55 +587,113 @@ export function createGpuScene(
     title.position.set(0, 7.5, 1.23);
     title.scale.setScalar(1.6);
     group.add(title);
-    const aisle = label(maker.toUpperCase() + "  " + generation, accent, 600);
-    aisle.position.set(side * 4.5, 4.35, 8.7 - bay * 13);
-    aisle.scale.setScalar(1.3);
-    scene.add(aisle);
+    const bayLabel = label("GPU / " + generation, "#c7c3ed", 600);
+    bayLabel.position.set(side * 5.5, 4.15, 8.7 - bay * 13);
+    bayLabel.scale.setScalar(0.9);
+    scene.add(bayLabel);
   }
-  // Wayfinding lines and a reception marker anchor the space.
-  for (const [x, color] of [
-    [-3.1, "#618754"],
-    [3.1, "#a35445"],
-  ])
-    block(
-      scene,
-      0.035,
-      0.015,
-      58,
-      new T.MeshBasicMaterial({ color }),
-      x,
-      -0.1,
-      -14,
+
+  // Four chamfered gateways suggest a premium gaming case skeleton.
+  for (let bay = 0; bay < 5; bay++) {
+    const z = 12 - bay * 13;
+    for (const side of [-1, 1]) {
+      block(scene, 0.28, 6.6, 0.38, shell, side * 7.5, 3.15, z, 0.06);
+      const shoulder = block(
+        scene,
+        0.28,
+        2.8,
+        0.38,
+        shell,
+        side * 6.55,
+        7.45,
+        z,
+        0.06,
+      );
+      shoulder.rotation.z = side * 0.76;
+      block(
+        scene,
+        0.055,
+        6.3,
+        0.08,
+        side < 0 ? cyan : violet,
+        side * 7.29,
+        3.2,
+        z + 0.22,
+      );
+      const light = block(
+        scene,
+        0.055,
+        2.8,
+        0.08,
+        side < 0 ? cyan : violet,
+        side * 6.34,
+        7.4,
+        z + 0.22,
+      );
+      light.rotation.z = side * 0.76;
+    }
+    block(scene, 11.1, 0.28, 0.38, shell, 0, 8.45, z, 0.06);
+    block(scene, 10.8, 0.045, 0.08, bay % 2 ? cyan : violet, 0, 8.23, z + 0.22);
+  }
+  // Oversized cooling fans give the lab a recognisable gaming-PC silhouette.
+  const roomFans = [];
+  for (const side of [-1, 1]) {
+    const panel = new T.Group();
+    panel.position.set(side * 6.3, 4.9, 8.6);
+    panel.rotation.y = side === -1 ? Math.PI / 2 : -Math.PI / 2;
+    block(panel, 3.6, 7.1, 0.18, carbon, 0, 0, 0, 0.2);
+    for (let i = 0; i < 2; i++) {
+      const f = fan(1.43);
+      f.position.set(0, -1.65 + i * 3.3, 0.16);
+      panel.add(f);
+      roomFans.push(f);
+      const halo = new T.Mesh(
+        new T.TorusGeometry(1.48, 0.065, 8, 72),
+        side < 0 ? cyan : violet,
+      );
+      halo.position.copy(f.position);
+      panel.add(halo);
+      const inner = new T.Mesh(
+        new T.TorusGeometry(1.33, 0.018, 6, 64),
+        side < 0 ? violet : cyan,
+      );
+      inner.position.copy(f.position);
+      inner.position.z += 0.03;
+      panel.add(inner);
+    }
+    scene.add(panel);
+  }
+  const endPanel = new T.Group();
+  endPanel.position.set(0, 4.2, -48);
+  block(endPanel, 18, 8.5, 0.35, carbon, 0, 0, 0, 0.3);
+  for (let i = 0; i < 3; i++) {
+    const f = fan(1.9);
+    f.position.set(-5 + i * 5, 0.8, 0.3);
+    endPanel.add(f);
+    roomFans.push(f);
+    const ring = new T.Mesh(
+      new T.TorusGeometry(2, 0.09, 8, 80),
+      i % 2 ? cyan : violet,
     );
-  const welcome = label("01  /  GRAPHICS WING", "#d4e2e9", 700);
-  welcome.position.set(0, 5, -47);
-  welcome.scale.setScalar(2.5);
-  scene.add(welcome);
+    ring.position.copy(f.position);
+    endPanel.add(ring);
+  }
+  const signature = label("AWBA / PLAY LAB", "#f4efff", 900);
+  signature.position.set(0, -2.8, 0.25);
+  signature.scale.setScalar(2);
+  endPanel.add(signature);
+  scene.add(endPanel);
   for (let i = 0; i < 4; i++) {
-    const t = label(
-      String(i + 1).padStart(2, "0") + "  →  EXPLORE",
-      "#597e94",
-      500,
-    );
+    const t = label("0" + (i + 1) + " / GPU BAY", "#9e8cce", 500);
     t.rotation.x = -Math.PI / 2;
-    t.position.set(0, -0.09, 9 - i * 13);
-    t.scale.setScalar(1.2);
+    t.position.set(0, -0.055, 8 - i * 13);
     scene.add(t);
   }
-  // Ceiling rails converge to the end of the vault.
-  for (let i = 0; i < 20; i++) {
-    const z = 12 - i * 5;
-    for (const x of [-3.6, 3.6])
-      block(scene, 0.1, 0.05, 2.9, lightmat, x, 10.4, z);
-    block(scene, 26, 0.12, 0.15, steel, 0, 10.65, z);
-  }
-  const end = label("AWBA  /  GRAPHICS ARCHIVE", "#6b9dbb", 700);
-  end.position.set(0, 5, -76);
-  end.scale.setScalar(3);
-  scene.add(end);
   const pedestal = new T.Group();
   block(pedestal, 6.6, 0.12, 3.2, deck, 0, 0.05, 0, 0.08);
-  block(pedestal, 4.5, 1.1, 2, deck, 0, -0.55, 0);
+  block(pedestal, 4.5, 1.1, 2, carbon, 0, -0.55, 0, 0.12);
+  for (const x of [-3.1, 3.1])
+    block(pedestal, 0.035, 0.04, 2.9, x < 0 ? cyan : violet, x, 0.13, 0);
   block(pedestal, 6.2, 0.025, 0.035, orange, 0, 0.13, 1.45);
   pedestal.position.set(2, 0.5, 1);
   scene.add(pedestal);
@@ -866,6 +990,8 @@ export function createGpuScene(
     if (!state.reducedMotion)
       for (const f of hero.userData.fans)
         f.userData.blades.rotation.z += dt * 1.7;
+    if (!state.reducedMotion)
+      for (const f of roomFans) f.userData.blades.rotation.z += dt * 0.3;
     renderer.render(scene, camera);
   }
   frame = requestAnimationFrame(render);

@@ -6,9 +6,9 @@ test("GPU vault loads a live scene and switches between distinct real designs", 
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/pc");
-  await expect(page).toHaveTitle(/PC Museum/, { timeout: 15_000 });
+  await expect(page).toHaveTitle(/PC Play Lab/, { timeout: 15_000 });
   await expect(
-    page.getByRole("heading", { name: "Come in. Look around." }),
+    page.getByRole("heading", { name: "Step inside. Power up." }),
   ).toBeVisible();
   await expect(page.locator(".gpu-scene")).toHaveAttribute(
     "data-scene-status",

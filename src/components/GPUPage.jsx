@@ -316,7 +316,7 @@ export default function GPUPage() {
     } else chooseDesign(exhibit);
   };
   useEffect(() => {
-    document.title = "PC Museum — Walk through the graphics wing | Awba";
+    document.title = "PC Play Lab — Explore gaming hardware | Awba";
     document.documentElement.dataset.theme = "dark";
     document.body.classList.add("gpu-body");
     const s = createGpuScene(host.current, {
@@ -437,21 +437,44 @@ export default function GPUPage() {
         className="gpu-scene"
         ref={host}
         data-scene-status={status}
-        aria-label="Walkable 3D PC museum"
+        aria-label="Walkable 3D gaming PC lab"
       />
       <div className="gpu-vignette" />
       <header className="gpu-header">
         <a href="/" className="gpu-brand" aria-label="Awba home">
-          <span className="gpu-brand-symbol">a</span>awba
+          <svg
+            className="gpu-brand-symbol"
+            viewBox="0 0 32 32"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path d="M6 3h18l3 3v23H6z" stroke="currentColor" strokeWidth="2" />
+            <circle
+              cx="16"
+              cy="13"
+              r="5"
+              stroke="currentColor"
+              strokeWidth="2"
+            />
+            <circle
+              cx="16"
+              cy="23"
+              r="3"
+              stroke="currentColor"
+              strokeWidth="2"
+            />
+            <path d="M23 6h1" stroke="currentColor" strokeWidth="2" />
+          </svg>
+          awba
           <span className="gpu-header-slash">/</span>
-          <span className="gpu-brand-sub">PC MUSEUM</span>
+          <span className="gpu-brand-sub">PLAY LAB</span>
         </a>
         <nav aria-label="GPU navigation">
           <button
             className={mode === "vault" ? "active" : ""}
             onClick={toVault}
           >
-            Museum <span>↗</span>
+            Explore <span>↗</span>
           </button>
           <button onClick={() => setPanel("designs")}>Design archive</button>
           <button onClick={() => setPanel("basics")}>GPU basics</button>
@@ -480,8 +503,8 @@ export default function GPUPage() {
         </span>
         <span className="gpu-topline-right">
           {mode === "vault"
-            ? "YOU ARE IN THE GRAPHICS WING"
-            : "CAM 01 · INSPECTION DESK"}
+            ? "GPU WING / PLAY LAB"
+            : "GPU BENCH / HANDS-ON MODE"}
           <em>
             {status === "ready"
               ? "LIVE 3D"
@@ -580,13 +603,15 @@ export default function GPUPage() {
           <section
             className={`gpu-museum-title ${welcome ? "is-welcome" : ""}`}
           >
-            <span className="gpu-mono">AWBA / THE PC MUSEUM</span>
+            <span className="gpu-mono">
+              GAMING PC / INTERACTIVE HARDWARE LAB
+            </span>
             <h1>
               {welcome ? (
                 <>
-                  Come in.
+                  Step inside.
                   <br />
-                  Look around.
+                  <span>Power up.</span>
                 </>
               ) : nearbyRack ? (
                 `${nearbyRack.maker} / ${nearbyRack.generation}`
@@ -597,11 +622,11 @@ export default function GPUPage() {
             {welcome ? (
               <>
                 <p>
-                  A museum you can walk through.
+                  Explore the hardware behind your game.
                   <br />
-                  Named racks. Real GPU models.
+                  Walk the lab. Pick a GPU.
                   <br />
-                  Every card has a story.
+                  Learn what powers your next frame.
                 </p>
                 <button
                   className="gpu-primary"
@@ -660,7 +685,7 @@ export default function GPUPage() {
           </div>
           <aside className="gpu-floor-map" aria-label="Museum floor map">
             <header>
-              <span className="gpu-mono">FLOOR MAP</span>
+              <span className="gpu-mono">LAB MAP</span>
               <span>CLICK A RACK TO VISIT</span>
             </header>
             <div className="gpu-floor-plan">

@@ -14,14 +14,14 @@
 }
 .gpu-body {
   overflow: hidden;
-  background: #050b10 !important;
+  background: #0b0914 !important;
   color: #e8eae7 !important;
 }
 .gpu-body::after {
   opacity: 0.025;
 }
 .gpu-page {
-  --orange: #f47745;
+  --orange: #a78bfa;
   --ink: #e9ece7;
   --dim: #8999a2;
   --line: rgba(173, 203, 219, 0.19);
@@ -31,7 +31,7 @@
   height: 100svh;
   min-height: 680px;
   overflow: hidden;
-  background: #050b10;
+  background: #0b0914;
   color: var(--ink);
 }
 .gpu-page button,
@@ -94,7 +94,7 @@
     ),
     linear-gradient(
       0deg,
-      #050b10 0%,
+      #0b0914 0%,
       transparent 26%,
       transparent 75%,
       rgba(3, 8, 12, 0.45)
@@ -199,7 +199,7 @@
   height: 5px;
   background: var(--orange);
   border-radius: 50%;
-  box-shadow: 0 0 9px #f4774566;
+  box-shadow: 0 0 9px #a78bfa66;
 }
 .gpu-topline em {
   font-style: normal;
@@ -262,7 +262,7 @@
     transform 0.2s;
 }
 .gpu-primary:hover {
-  background: #ff9367 !important;
+  background: #67ffe8 !important;
   transform: translateY(-2px);
 }
 .gpu-intro-index {
@@ -642,7 +642,7 @@
 }
 .gpu-anatomy-selector button {
   padding: 9px 12px;
-  background: #0b1720c9;
+  background: #171023c9;
   border: 1px solid var(--line);
   font-size: 9px;
 }
@@ -731,11 +731,11 @@
 }
 .gpu-mode-vault .gpu-vignette {
   background:
-    linear-gradient(90deg, #03080cc2, transparent 38%),
-    linear-gradient(0deg, #050b10, transparent 25%);
+    linear-gradient(90deg, #0b0914c2, transparent 38%),
+    linear-gradient(0deg, #0b0914, transparent 25%);
 }
 .gpu-mode-vault .gpu-bottom {
-  background: #050b10b8;
+  background: #0b0914b8;
 }
 .gpu-photo-view {
   position: absolute;
@@ -813,7 +813,7 @@
   display: grid;
   gap: 18px;
   padding: 30px;
-  background: #09131e;
+  background: #171022;
   border: 1px solid #294654;
 }
 .gpu-webgl-fallback > span {
@@ -853,7 +853,7 @@
   right: 45px;
   bottom: 72px;
   width: 310px;
-  background: #0c1922;
+  background: #1a142b;
   border: 1px solid #3c5666;
   padding: 30px;
   z-index: 7;
@@ -887,8 +887,8 @@
   width: min(640px, 100%);
   max-height: 100%;
   overflow-y: auto;
-  background: #0a141c;
-  border: 1px solid #304956;
+  background: #141021;
+  border: 1px solid #51416b;
   padding: 36px 38px;
   color: #e5ecec;
   box-shadow: -30px 0 100px #0008;
@@ -927,7 +927,7 @@
 .gpu-panel-intro {
   font-size: 13px;
   line-height: 1.8;
-  color: #9fb3be;
+  color: #beb2d0;
   max-width: 620px;
   margin: 0 0 25px;
 }
@@ -962,9 +962,9 @@
 }
 .gpu-input-row input,
 .gpu-input-row select {
-  background: #101f2a;
+  background: #211a33;
   color: #c8d8df;
-  border: 1px solid #2c4554;
+  border: 1px solid #49375f;
   padding: 12px;
   font-size: 11px;
   min-width: 0;
@@ -993,10 +993,10 @@
   transition: background 0.2s;
 }
 .gpu-model-list article:hover {
-  background: #132631;
+  background: #2a2040;
 }
 .gpu-model-list article.is-selected {
-  background: #152730;
+  background: #2b2142;
 }
 .gpu-model-pick {
   display: flex;
@@ -1082,7 +1082,7 @@
   width: 100%;
   height: 160px;
   object-fit: contain;
-  background: #101e28;
+  background: #1c1629;
   mix-blend-mode: screen;
   transition: transform 0.3s;
 }
@@ -1133,7 +1133,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 15px;
-  background: #101f2a;
+  background: #211a33;
   padding: 24px 20px;
   margin-top: 25px;
 }
@@ -1522,8 +1522,8 @@
   }
   .gpu-vignette {
     background:
-      linear-gradient(90deg, #03080cbb, transparent 90%),
-      linear-gradient(0deg, #050b10, transparent 45%);
+      linear-gradient(90deg, #0b0914bb, transparent 90%),
+      linear-gradient(0deg, #0b0914, transparent 45%);
   }
   .gpu-view-switch {
     top: 113px;
@@ -1720,7 +1720,7 @@
   .gpu-anatomy-selector button {
     font-size: 7px;
     padding: 7px 8px;
-    background: #0b1720eb;
+    background: #171023eb;
   }
   .gpu-anatomy-selector button span {
     font-size: 5px;
@@ -2054,7 +2054,7 @@
   z-index: 4;
   pointer-events: none;
   font-size: 10px;
-  color: #8da6b7;
+  color: #b4a4c9;
 }
 .gpu-exhibit-hint > .gpu-mono {
   font-size: 7px;
@@ -2117,8 +2117,8 @@
 }
 .gpu-walk-pad button,
 .gpu-turn-pad button {
-  background: #0c1b26cc;
-  border: 1px solid #3e5d71;
+  background: #20172ecc;
+  border: 1px solid #6b528a;
   color: #bad1df;
   font-size: 19px;
   touch-action: none;
@@ -2157,8 +2157,8 @@
   bottom: 60px;
   width: 218px;
   padding: 17px;
-  background: #06131cd9;
-  border: 1px solid #284454;
+  background: #100c1cd9;
+  border: 1px solid #5c447a;
   backdrop-filter: blur(10px);
 }
 .gpu-floor-map > header {
@@ -2223,7 +2223,7 @@
   border-left: 4px solid transparent;
   border-right: 4px solid transparent;
   border-bottom: 8px solid var(--orange);
-  filter: drop-shadow(0 0 4px #f4774580);
+  filter: drop-shadow(0 0 4px #a78bfa80);
   transition:
     top 0.15s,
     left 0.15s;
@@ -2544,7 +2544,7 @@
 .gpu-assistant header small {
   display: block;
   font: 5px var(--mono);
-  color: #7199ab;
+  color: #b6a0cb;
   letter-spacing: 0.06em;
   margin-top: 5px;
 }
@@ -2556,7 +2556,7 @@
 .gpu-assistant > p {
   font-size: 12px;
   line-height: 1.8;
-  color: #bacdd7;
+  color: #d5c9e1;
   margin: 15px 0;
 }
 .gpu-guide-ask {
@@ -2570,7 +2570,7 @@
 .gpu-card-details {
   margin-top: 20px;
   font-size: 10px;
-  color: #849eae;
+  color: #b8a7c9;
   max-height: 180px;
   overflow: auto;
   scrollbar-width: thin;
@@ -2595,7 +2595,7 @@
 .gpu-guide-summary > p {
   font-size: 13px;
   line-height: 1.9;
-  color: #c2d8e3;
+  color: #d9d0e7;
   margin: 0;
 }
 .gpu-guide-suggestions {
@@ -2636,7 +2636,7 @@
 .gpu-guide-form label {
   display: block;
   font: 8px var(--mono);
-  color: #87aabb;
+  color: #c4aedc;
   margin-bottom: 13px;
 }
 .gpu-guide-form > div {
@@ -2647,7 +2647,7 @@
   flex: 1;
   min-width: 0;
   padding: 15px;
-  background: #112735;
+  background: #20182f;
   border: 1px solid #3b5c6e;
   color: #e2edef;
   font-size: 12px;
@@ -2786,12 +2786,12 @@
 .gpu-mode-inside .gpu-vignette,
 .gpu-mode-photos .gpu-vignette {
   background:
-    linear-gradient(90deg, #03080cf5, #03080ce8 25%, transparent 48%),
-    linear-gradient(0deg, #050b10, transparent 26%, transparent 75%, #03080c73);
+    linear-gradient(90deg, #0b0914f5, #0b0914e8 25%, transparent 48%),
+    linear-gradient(0deg, #0b0914, transparent 26%, transparent 75%, #0b091473);
 }
 @media (max-width: 800px) {
   .gpu-assistant {
-    background: #07131df5;
+    background: #171022f5;
     border: 1px solid #2b485a;
     padding: 12px;
     margin-left: -1px;
@@ -2807,7 +2807,738 @@
   }
   .gpu-mode-inspect .gpu-vignette {
     background:
-      linear-gradient(90deg, #03080c9c, transparent 90%),
-      linear-gradient(0deg, #050b10, transparent 45%);
+      linear-gradient(90deg, #0b09149c, transparent 90%),
+      linear-gradient(0deg, #0b0914, transparent 45%);
+  }
+}
+/* Play Lab: gaming-case surfaces, violet chrome and electric cyan controls. */
+.gpu-page {
+  --orange: #a78bfa;
+  --ink: #f6f3ff;
+  --dim: #b5a7c7;
+  --line: #c4a7ff2b;
+  background: #0b0914;
+}
+.gpu-body {
+  background: #0b0914 !important;
+}
+.gpu-header {
+  top: 18px;
+  height: 68px;
+  left: 28px;
+  right: 28px;
+  padding: 0 23px;
+  border: 1px solid #bea1ff30;
+  border-radius: 15px;
+  background: #161024c9;
+  backdrop-filter: blur(18px);
+  box-shadow: 0 15px 45px #0003;
+}
+.gpu-brand {
+  font-size: 21px;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  font-weight: 700;
+  gap: 10px;
+}
+.gpu-brand-symbol {
+  font: inherit !important;
+  transform: none !important;
+  width: 29px !important;
+  height: 32px !important;
+  padding: 3px;
+  color: #71ffe7;
+  background: #4b3a6d55;
+  border-radius: 6px;
+  margin-right: 1px;
+}
+.gpu-brand-sub {
+  font: 600 10px "Space Grotesk";
+  letter-spacing: 0.16em;
+  color: #c8b4e2;
+}
+.gpu-header-slash {
+  font-size: 18px;
+  margin: 0 5px;
+  color: #836b9f;
+}
+.gpu-header nav button {
+  color: #b8a8cb;
+  font-size: 12px;
+  font-weight: 500;
+}
+.gpu-header nav button.active {
+  color: #7dffe7;
+}
+.gpu-header nav button span {
+  color: #7dffe7;
+}
+.gpu-index-button {
+  font-weight: 600 !important;
+}
+.gpu-index-button > span {
+  color: #7dffe7;
+  border-color: #64ffe444;
+  background: #37eac30d;
+  border-radius: 4px;
+  padding: 5px 6px;
+}
+.gpu-header-compare {
+  color: #bcacd1 !important;
+}
+.gpu-topline {
+  top: 109px;
+  left: 43px;
+  right: 43px;
+  font: 600 8px "Space Grotesk";
+  letter-spacing: 0.16em;
+  color: #c4b6d7;
+}
+.gpu-topline i {
+  background: #6fffe3;
+  box-shadow: 0 0 12px #6fffe3;
+}
+.gpu-topline-right em {
+  color: #6fffe3;
+}
+.gpu-museum-title {
+  left: 48px;
+  top: 172px;
+  max-width: 420px;
+}
+.gpu-museum-title > .gpu-mono {
+  font: 600 8px "Space Grotesk";
+  letter-spacing: 0.17em;
+  color: #c4acf1;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.gpu-museum-title > .gpu-mono:before {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: #6affdf;
+}
+.gpu-museum-title.is-welcome h1 {
+  font: 700 clamp(48px, 5.2vw, 80px)/0.98 "Space Grotesk";
+  letter-spacing: -0.065em;
+  text-transform: uppercase;
+  margin: 23px 0;
+}
+.gpu-museum-title h1 > span {
+  color: #79ffe3;
+  text-shadow: 0 0 40px #5bffd528;
+}
+.gpu-museum-title h1 {
+  font-weight: 600;
+}
+.gpu-museum-title p {
+  font-size: 12px;
+  line-height: 1.85;
+  color: #c3b6d4;
+  max-width: 330px;
+}
+.gpu-primary {
+  background: #77ffe1 !important;
+  border-color: #77ffe1 !important;
+  color: #0d1c1b !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em;
+  border-radius: 3px;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+  box-shadow: 0 0 25px #54f6d820;
+}
+.gpu-primary:hover {
+  background: #a4ffef !important;
+  transform: translateY(-2px);
+}
+.gpu-museum-title .gpu-primary {
+  margin-top: 24px;
+  padding: 15px 23px !important;
+  gap: 35px;
+}
+.gpu-vignette,
+.gpu-mode-vault .gpu-vignette {
+  background:
+    linear-gradient(90deg, #0b0914d9, transparent 46%),
+    linear-gradient(0deg, #0b0914ee, transparent 30%),
+    radial-gradient(ellipse at 85% 25%, #9452ff18, transparent 50%);
+}
+.gpu-mode-inspect .gpu-vignette,
+.gpu-mode-inside .gpu-vignette,
+.gpu-mode-photos .gpu-vignette {
+  background:
+    linear-gradient(90deg, #0b0914fc, #0b0914e8 25%, transparent 48%),
+    linear-gradient(0deg, #0b0914, transparent 29%);
+}
+.gpu-crosshair {
+  color: #9bffe980;
+  font-size: 18px;
+}
+.gpu-floor-map {
+  background: #191123e3;
+  border: 1px solid #ac85ff42;
+  border-radius: 12px;
+  box-shadow: 0 18px 50px #0005;
+  right: 34px;
+  bottom: 54px;
+  padding: 18px;
+}
+.gpu-floor-map > header > .gpu-mono {
+  font: 600 9px "Space Grotesk";
+  letter-spacing: 0.12em;
+  color: #e1d4f3;
+}
+.gpu-floor-map > header > span:last-child {
+  color: #b49bca;
+  font-size: 6px;
+}
+.gpu-floor-plan > button {
+  background: #2b1e3ea6 !important;
+  border-color: #73518c55 !important;
+  color: #f3eafa !important;
+  border-radius: 5px;
+  font: 500 10px "Space Grotesk" !important;
+  letter-spacing: 0;
+  min-height: 39px;
+  padding: 8px !important;
+}
+.gpu-floor-plan > button:hover {
+  background: #42305c !important;
+  box-shadow: 0 0 15px #a67bff1a;
+}
+.gpu-floor-plan small {
+  font: 600 6px "Space Grotesk";
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+.gpu-map-aisle {
+  border-color: #ad84df44;
+}
+.gpu-map-aisle > i {
+  border-bottom-color: #77ffe1;
+  filter: drop-shadow(0 0 5px #77ffe1a6);
+}
+.gpu-floor-map > footer {
+  color: #b09bc5;
+}
+.gpu-floor-map > footer i {
+  background: #77ffe1;
+}
+.gpu-floor-map > footer > button {
+  color: #dac7ed;
+}
+.gpu-walk-controls {
+  left: 48px;
+  bottom: 60px;
+}
+.gpu-walk-heading > .gpu-mono {
+  color: #d7c6ed;
+  font: 600 9px "Space Grotesk";
+  letter-spacing: 0.16em;
+}
+.gpu-walk-heading > span:last-child {
+  color: #a891c1;
+}
+.gpu-walk-pad button,
+.gpu-turn-pad button {
+  background: #281c3be6;
+  border-color: #9974c45e;
+  border-radius: 6px;
+  color: #dbcfef;
+  box-shadow: inset 0 1px #cab5e71a;
+}
+.gpu-walk-pad button:hover,
+.gpu-turn-pad button:hover {
+  border-color: #9affe2;
+  background: #3b2c50;
+}
+.gpu-walk-pad button:active,
+.gpu-turn-pad button:active {
+  background: #77ffe1;
+  color: #0c1b19;
+}
+.gpu-turn-pad span {
+  color: #b39ac8;
+}
+.gpu-entrance {
+  color: #ba9ed4 !important;
+}
+.gpu-exhibit-hint {
+  color: #c3add9;
+}
+.gpu-exhibit-hint > .gpu-mono {
+  color: #8affe4;
+}
+.gpu-utility {
+  color: #9d85b8;
+}
+.gpu-utility input:checked {
+  background: #77ffe1;
+  border-color: #77ffe1;
+}
+.gpu-utility label {
+  color: #c3afd8;
+}
+.gpu-utility button {
+  border-color: #9673b86b;
+  color: #d5bdeb;
+  border-radius: 4px;
+}
+.gpu-inspector .gpu-kicker {
+  font: 600 9px "Space Grotesk";
+  letter-spacing: 0.12em;
+}
+.gpu-inspector h1 {
+  font-weight: 700;
+  letter-spacing: -0.055em;
+}
+.gpu-back {
+  color: #b7a1cc !important;
+}
+.gpu-view-switch {
+  gap: 8px;
+  background: #1a122bc9;
+  border: 1px solid #9676bf40;
+  padding: 5px;
+  border-radius: 9px;
+  right: 34px;
+  top: 155px;
+}
+.gpu-view-switch button {
+  border: 0;
+  padding: 8px 11px;
+  border-radius: 5px;
+  color: #997eb9;
+  font-size: 8px;
+}
+.gpu-view-switch button span {
+  color: #bba8cf;
+}
+.gpu-view-switch button[aria-pressed="true"] {
+  background: #67479c55;
+  color: #77ffe1;
+}
+.gpu-view-switch button[aria-pressed="true"] span {
+  color: #f6eeff;
+}
+.gpu-assistant {
+  border-top-color: #b396dd45;
+}
+.gpu-assistant strong {
+  color: #f0e4ff;
+}
+.gpu-guide-mark {
+  color: #76ffe2;
+  border-color: #77ffe155;
+  background: #397e6726;
+  border-radius: 7px;
+}
+.gpu-assistant header > button {
+  color: #88ffe4;
+  font-size: 9px;
+}
+.gpu-assistant header small {
+  color: #b498cd;
+}
+.gpu-assistant > p {
+  color: #d4c5e4;
+}
+.gpu-guide-ask {
+  color: #83ffe5 !important;
+}
+.gpu-dialog-backdrop {
+  background: #080510db;
+  backdrop-filter: blur(18px);
+}
+.gpu-dialog {
+  background: linear-gradient(145deg, #20162e, #0f0c19 70%);
+  border-color: #a082c44f;
+  border-radius: 15px;
+  box-shadow: -25px 0 100px #0007;
+}
+.gpu-dialog > header {
+  border-color: #9871b533;
+}
+.gpu-dialog h2 {
+  font-weight: 600;
+}
+.gpu-close {
+  border-color: #8d68ab66 !important;
+  border-radius: 6px;
+  color: #d6bee9 !important;
+}
+.gpu-panel-intro {
+  color: #c3b1d5;
+}
+.gpu-maker-filter button {
+  border-radius: 6px;
+  border-color: #81629f55;
+  color: #bda6d2;
+}
+.gpu-maker-filter button[aria-pressed="true"] {
+  background: #6b46934a;
+  border-color: #b38adc;
+  color: #fff;
+}
+.gpu-input-row input,
+.gpu-input-row select {
+  border-radius: 6px;
+  background: #241932;
+  border-color: #77518b66;
+  color: #eee3f6;
+}
+.gpu-result-count {
+  color: #a88dbd;
+}
+.gpu-model-list article:hover,
+.gpu-model-list article.is-selected {
+  background: #64428326;
+}
+.gpu-model-pick strong {
+  font-weight: 600;
+}
+.gpu-model-pick small {
+  color: #a08bb9;
+}
+.gpu-model-memory small {
+  color: #b9a0ce;
+}
+.gpu-compare-add {
+  border-color: #77518c77 !important;
+  border-radius: 5px;
+}
+.gpu-compare-add[aria-pressed="true"] {
+  color: #83ffe5 !important;
+  border-color: #83ffe5 !important;
+}
+.gpu-fineprint {
+  color: #ac94c0;
+}
+.gpu-design-grid img,
+.gpu-design-no-photo {
+  background: #231832;
+  border-radius: 9px;
+}
+.gpu-design-grid > button {
+  border-color: #9971b533;
+}
+.gpu-design-grid h3 {
+  font-weight: 600;
+}
+.gpu-design-grid .gpu-mono {
+  color: #bc9ed2;
+}
+.gpu-design-grid-meta {
+  color: #cfb8e3;
+}
+.gpu-bottom {
+  background: #0e0a19d9 !important;
+  border-color: #c2a2e42b;
+}
+.gpu-design-rail > button {
+  border-right-color: #a37ac526;
+}
+.gpu-design-rail > button[aria-pressed="true"] {
+  background: linear-gradient(180deg, #b181ff14, transparent);
+}
+.gpu-design-rail > button[aria-pressed="true"]:before {
+  background: #76ffe1;
+}
+.gpu-design-rail small {
+  color: #ad91c2;
+}
+.gpu-design-rail button[aria-pressed="true"] small {
+  color: #83ffe5;
+}
+.gpu-card-caption {
+  color: #d2bce4;
+}
+.gpu-card-caption small {
+  color: #a68abc;
+}
+.gpu-camera-controls span {
+  color: #c4add9;
+}
+.gpu-camera-controls button {
+  color: #d5bdec;
+}
+.gpu-camera-controls button[aria-pressed="true"] {
+  color: #7effe3;
+}
+.gpu-photo-view {
+  background: radial-gradient(ellipse, #372443, #0f0b1b 70%);
+  border-color: #9a76be44;
+  border-radius: 10px;
+}
+.gpu-guide-summary {
+  background: #30203c;
+  border-color: #a583bc55;
+  border-radius: 9px;
+}
+.gpu-guide-summary > p {
+  color: #ecddf4;
+}
+.gpu-guide-suggestions button {
+  background: #2a1b37;
+  color: #d8bee8;
+  border-color: #9b71b555;
+  border-radius: 6px;
+}
+.gpu-guide-suggestions button:hover {
+  color: #83ffe5;
+  border-color: #83ffe5;
+}
+.gpu-guide-exchange p {
+  color: #dfcfe9;
+}
+.gpu-guide-exchange {
+  border-color: #9b71b544;
+}
+.gpu-guide-form input {
+  background: #291b37;
+  color: #f1e6f7;
+  border-color: #946bad66;
+  border-radius: 6px;
+}
+.gpu-guide-form button {
+  background: #77ffe1;
+  border-radius: 6px;
+  color: #14221f;
+}
+.gpu-guide-form label {
+  color: #c1a6d4;
+}
+.gpu-guide-sources button,
+.gpu-guide-sources a {
+  color: #8affe5;
+}
+.gpu-anatomy-selector button {
+  background: #22132ee8;
+  border-color: #9b6db65e;
+  border-radius: 6px;
+}
+.gpu-anatomy-selector button[aria-pressed="true"] {
+  border-color: #7effe3;
+  color: #7effe3;
+}
+.gpu-anatomy-copy p {
+  color: #c8b6da;
+}
+.gpu-anatomy-copy b {
+  color: #e2d3ed;
+}
+@media (min-width: 1600px) {
+  .gpu-museum-title {
+    top: 20%;
+    left: 5vw;
+  }
+  .gpu-museum-title.is-welcome h1 {
+    font-size: 86px;
+  }
+  .gpu-museum-title p {
+    font-size: 14px;
+  }
+}
+@media (max-height: 800px) and (min-width: 801px) {
+  .gpu-museum-title {
+    top: 155px;
+  }
+  .gpu-museum-title.is-welcome h1 {
+    font-size: 55px;
+    margin: 17px 0;
+  }
+  .gpu-museum-title p {
+    font-size: 11px;
+    line-height: 1.7;
+  }
+  .gpu-museum-title .gpu-primary {
+    margin-top: 19px;
+    padding: 12px 20px !important;
+  }
+}
+@media (max-width: 1100px) {
+  .gpu-header {
+    left: 20px;
+    right: 20px;
+    padding: 0 16px;
+  }
+  .gpu-header nav {
+    gap: 20px;
+  }
+  .gpu-header-actions {
+    gap: 18px;
+  }
+  .gpu-museum-title {
+    left: 33px;
+    max-width: 380px;
+  }
+  .gpu-museum-title.is-welcome h1 {
+    font-size: 58px;
+  }
+  .gpu-topline {
+    left: 33px;
+    right: 33px;
+  }
+  .gpu-walk-controls {
+    left: 33px;
+  }
+}
+@media (max-width: 800px) {
+  .gpu-header {
+    top: 12px;
+    left: 14px;
+    right: 14px;
+    height: 56px;
+    padding: 0 12px;
+    border-radius: 10px;
+  }
+  .gpu-brand {
+    font-size: 18px;
+    gap: 6px;
+  }
+  .gpu-brand-symbol {
+    width: 24px !important;
+    height: 27px !important;
+  }
+  .gpu-header-actions {
+    gap: 12px;
+  }
+  .gpu-header-compare {
+    font-size: 8px !important;
+  }
+  .gpu-index-button {
+    font-size: 9px !important;
+    gap: 6px;
+  }
+  .gpu-index-button > span {
+    font-size: 7px;
+    padding: 4px;
+  }
+  .gpu-topline {
+    top: 88px;
+    left: 24px;
+    right: 24px;
+    font-size: 6px;
+  }
+  .gpu-museum-title {
+    top: 132px;
+    left: 24px;
+    max-width: 310px;
+  }
+  .gpu-museum-title > .gpu-mono {
+    font-size: 6px;
+    letter-spacing: 0.12em;
+  }
+  .gpu-museum-title > .gpu-mono:before {
+    width: 13px;
+  }
+  .gpu-museum-title.is-welcome h1 {
+    font-size: 48px;
+    margin: 19px 0;
+  }
+  .gpu-museum-title p {
+    font-size: 11px;
+    line-height: 1.7;
+    max-width: 300px;
+  }
+  .gpu-museum-title .gpu-primary {
+    margin-top: 18px;
+    padding: 12px 18px !important;
+    gap: 24px;
+  }
+  .gpu-floor-map {
+    right: 17px;
+    bottom: 56px;
+    padding: 12px;
+    width: 167px;
+    border-radius: 9px;
+  }
+  .gpu-floor-map > header > .gpu-mono {
+    font-size: 7px;
+  }
+  .gpu-floor-plan > button {
+    min-height: 35px;
+    font-size: 9px !important;
+    padding: 6px !important;
+  }
+  .gpu-floor-plan small {
+    font-size: 5px;
+  }
+  .gpu-walk-controls {
+    left: 22px;
+    bottom: 59px;
+  }
+  .gpu-walk-heading > .gpu-mono {
+    font-size: 7px;
+  }
+  .gpu-walk-pad button,
+  .gpu-turn-pad button {
+    border-radius: 5px;
+  }
+  .gpu-exhibit-hint {
+    bottom: 330px;
+  }
+  .gpu-view-switch {
+    top: 113px;
+    right: 23px;
+    padding: 3px;
+    gap: 1px;
+    border-radius: 7px;
+  }
+  .gpu-view-switch button {
+    font-size: 6px;
+    padding: 6px 7px;
+  }
+  .gpu-assistant {
+    background: #1a1127f5;
+    border-color: #b28bd44f;
+    border-radius: 8px;
+  }
+  .gpu-dialog {
+    border-radius: 11px;
+  }
+  .gpu-mode-inspect .gpu-vignette {
+    background:
+      linear-gradient(90deg, #0b09149e, transparent 90%),
+      linear-gradient(0deg, #0b0914, transparent 45%);
+  }
+  .gpu-guide-summary {
+    padding: 16px;
+  }
+  .gpu-bottom {
+    border-radius: 8px 8px 0 0;
+  }
+  .gpu-photo-view {
+    border-radius: 8px;
+  }
+}
+@media (max-height: 650px) {
+  .gpu-museum-title {
+    top: 132px;
+  }
+  .gpu-museum-title.is-welcome h1 {
+    font-size: 32px;
+  }
+  .gpu-museum-title p,
+  .gpu-museum-title .gpu-primary {
+    display: none;
+  }
+  .gpu-walk-controls {
+    bottom: 40px;
+  }
+  .gpu-floor-map {
+    bottom: 40px;
+    padding: 10px;
+  }
+  .gpu-floor-plan > button {
+    min-height: 0;
+    font-size: 7px !important;
+    padding: 4px !important;
+  }
+  .gpu-floor-plan small {
+    font-size: 4px;
   }
 }
