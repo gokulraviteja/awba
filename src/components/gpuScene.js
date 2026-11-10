@@ -714,6 +714,7 @@ export function createGpuScene(
       part: "chip",
       spin: false,
       firstPerson: false,
+      lookSensitivity: 1,
       reducedMotion,
     },
     depth = 0,
@@ -828,10 +829,10 @@ export function createGpuScene(
   };
   const mouseLook = (e) => {
     if (!isLocked() || state.mode !== "vault" || state.paused) return;
-    walk.yaw += e.movementX * 0.0025;
+    walk.yaw += e.movementX * 0.0025 * state.lookSensitivity;
     walk.pitch = Math.max(
       -0.75,
-      Math.min(0.85, walk.pitch - e.movementY * 0.0025),
+      Math.min(0.85, walk.pitch - e.movementY * 0.0025 * state.lookSensitivity),
     );
   };
   const onDown = (e) => {
@@ -865,8 +866,11 @@ export function createGpuScene(
         dy = e.clientY - down.y;
       if (Math.abs(dx) + Math.abs(dy) > 4) drag = true;
       if (state.mode === "vault") {
-        walk.yaw = down.yaw + dx * 0.006;
-        walk.pitch = Math.max(-0.65, Math.min(0.8, down.pitch - dy * 0.004));
+        walk.yaw = down.yaw + dx * 0.006 * state.lookSensitivity;
+        walk.pitch = Math.max(
+          -0.65,
+          Math.min(0.8, down.pitch - dy * 0.004 * state.lookSensitivity),
+        );
       } else {
         targetRY = down.ry + dx * 0.008;
         targetRX = Math.max(-1.3, Math.min(1.3, down.rx + dy * 0.006));
@@ -902,6 +906,11 @@ export function createGpuScene(
     reportPosition();
   };
   const keyDown = (e) => {
+    if (e.code === "Escape" && isLocked()) {
+      document.exitPointerLock();
+      blur();
+      return;
+    }
     if (
       state.mode !== "vault" ||
       state.paused ||

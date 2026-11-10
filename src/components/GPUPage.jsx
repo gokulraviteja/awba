@@ -296,6 +296,24 @@ export default function GPUPage() {
       () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
     ),
     [spin, setSpin] = useState(false);
+  const [lookSensitivity, setLookSensitivity] = useState(() => {
+    try {
+      const stored = localStorage.getItem("awba.pc.lookSensitivity");
+      const value = Number(stored);
+      return stored !== null && Number.isFinite(value)
+        ? Math.min(2, Math.max(0.25, value))
+        : 1;
+    } catch {
+      return 1;
+    }
+  });
+  useEffect(() => {
+    try {
+      localStorage.setItem("awba.pc.lookSensitivity", String(lookSensitivity));
+    } catch {
+      /* Browsing still works when preference storage is unavailable. */
+    }
+  }, [lookSensitivity]);
   const host = useRef(null),
     scene = useRef(null),
     selectRef = useRef(null);
@@ -356,10 +374,11 @@ export default function GPUPage() {
       mode,
       spin,
       firstPerson,
+      lookSensitivity,
       reducedMotion: reduced,
       paused: !!panel,
     });
-  }, [design, mode, spin, reduced, panel, firstPerson]);
+  }, [design, mode, spin, reduced, panel, firstPerson, lookSensitivity]);
   useEffect(() => {
     const handler = (e) => {
       if (panel || ["INPUT", "SELECT", "TEXTAREA"].includes(e.target.tagName))
@@ -802,6 +821,36 @@ export default function GPUPage() {
                   Back to entrance ↗
                 </button>
               </details>
+              <div className="gpu-look-settings">
+                <div>
+                  <label htmlFor="gpu-look-sensitivity">Look sensitivity</label>
+                  <output htmlFor="gpu-look-sensitivity">
+                    {lookSensitivity.toFixed(2)}×
+                  </output>
+                </div>
+                <input
+                  id="gpu-look-sensitivity"
+                  type="range"
+                  min="0.25"
+                  max="2"
+                  step="0.05"
+                  value={lookSensitivity}
+                  aria-describedby="gpu-look-help"
+                  aria-valuetext={`${lookSensitivity.toFixed(2)} times normal speed`}
+                  onChange={(e) => setLookSensitivity(Number(e.target.value))}
+                />
+                <div className="gpu-look-caption">
+                  <small id="gpu-look-help">
+                    Slower ← → Faster · mouse and drag
+                  </small>
+                  <button
+                    aria-label="Reset look sensitivity"
+                    onClick={() => setLookSensitivity(1)}
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
               <div className="gpu-menu-settings">
                 <label>
                   <input

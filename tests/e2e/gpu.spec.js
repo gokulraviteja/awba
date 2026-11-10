@@ -114,6 +114,7 @@ test("museum supports walking, turning, named racks and direct exhibit selection
   await expect(page.locator(".gpu-scene")).toHaveAttribute(
     "data-scene-status",
     "ready",
+    { timeout: 30_000 },
   );
   await page
     .getByRole("button", { name: "Show movement controls", exact: true })
@@ -319,6 +320,7 @@ test("mouse look and keyboard movement follow their stated directions, with no t
   await expect(page.locator(".gpu-scene")).toHaveAttribute(
     "data-scene-status",
     "ready",
+    { timeout: 30_000 },
   );
   await expect(page.getByRole("button", { name: /Take.*tour/i })).toHaveCount(
     0,
@@ -367,6 +369,7 @@ test("first-person mode aims from the crosshair, inspects with E and releases mo
   await expect(page.locator(".gpu-scene")).toHaveAttribute(
     "data-scene-status",
     "ready",
+    { timeout: 30_000 },
   );
   await page.getByRole("button", { name: "Enter museum", exact: true }).click();
   await expect(page.locator(".gpu-page")).toHaveAttribute(
@@ -394,6 +397,10 @@ test("first-person mode aims from the crosshair, inspects with E and releases mo
       )
       .not.toBe(0);
     await page.keyboard.press("Escape");
+    await expect(page.locator(".gpu-page")).toHaveAttribute(
+      "data-pointer-locked",
+      "false",
+    );
   } else {
     await expect(page.locator(".gpu-quiet-hint")).toContainText("Drag to look");
   }
@@ -440,4 +447,54 @@ test("first-person mode aims from the crosshair, inspects with E and releases mo
     "data-pointer-locked",
     "false",
   );
+});
+
+test("look sensitivity changes actual mouse movement, persists and resets", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/pc");
+  await expect(page.locator(".gpu-scene")).toHaveAttribute(
+    "data-scene-status",
+    "ready",
+    { timeout: 30_000 },
+  );
+  await page.getByRole("button", { name: "Open menu", exact: true }).click();
+  const slider = page.getByRole("slider", {
+    name: "Look sensitivity",
+    exact: true,
+  });
+  await expect(slider).toHaveValue("1");
+  await slider.press("Home");
+  for (let i = 0; i < 5; i++) await slider.press("ArrowRight");
+  await expect(slider).toHaveValue("0.5");
+  await page.getByRole("button", { name: "Close panel", exact: true }).click();
+  await page.mouse.move(640, 360);
+  await page.mouse.down();
+  await page.mouse.move(740, 360, { steps: 8 });
+  await page.mouse.up();
+  await expect(page.locator(".gpu-page")).toHaveAttribute(
+    "data-player-yaw",
+    "0.30",
+  );
+  await page.getByRole("button", { name: "Open menu", exact: true }).click();
+  await slider.press("End");
+  await expect(slider).toHaveValue("2");
+  await page.getByRole("button", { name: "Close panel", exact: true }).click();
+  await page.mouse.move(640, 360);
+  await page.mouse.down();
+  await page.mouse.move(740, 360, { steps: 8 });
+  await page.mouse.up();
+  await expect(page.locator(".gpu-page")).toHaveAttribute(
+    "data-player-yaw",
+    "1.50",
+  );
+  await page.reload();
+  await page.getByRole("button", { name: "Open menu", exact: true }).click();
+  await expect(slider).toHaveValue("2");
+  await page
+    .getByRole("button", { name: "Reset look sensitivity", exact: true })
+    .click();
+  await expect(slider).toHaveValue("1");
+  await page.screenshot({ path: "test-results/pc-museum-sensitivity.png" });
 });

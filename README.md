@@ -95,6 +95,8 @@ The initial MCP surface exposes `search_models`, `get_model`, `compare_models`, 
 The GPU museum is available at `/pc` and `/pc/`. It includes a first-person
 scanner view (WASD, mouse look, click or E to inspect, Shift to walk slowly,
 Esc to release the mouse), direct drag/click controls and touch movement controls.
+Menu → Look sensitivity adjusts mouse and drag speed from 0.25× to 2× and saves
+the setting in this browser; Reset restores 1×.
 The guided tour and entrance host are deferred. Selecting a model still opens
 its explanation and specifications on a separate display stage. Inside and Real
 photos modes are currently removed; manufacturer links and the design archive

@@ -4740,3 +4740,45 @@
   outline: 1px solid #e16a6355;
   outline-offset: -2px;
 }
+
+/* Look settings stay in the menu, away from the museum view. */
+.gpu-look-settings {
+  margin-top: 22px;
+  padding: 20px 0;
+  border-top: 1px solid #a58a8028;
+}
+.gpu-look-settings > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.gpu-look-settings label {
+  font-size: 13px;
+  color: #ddd2cd;
+}
+.gpu-look-settings output {
+  font: 12px monospace;
+  color: #ed8b80;
+}
+.gpu-look-settings input[type="range"] {
+  display: block;
+  width: 100%;
+  height: 24px;
+  margin: 16px 0 8px;
+  padding: 0;
+  accent-color: #e16a63;
+  cursor: pointer;
+}
+.gpu-look-caption small {
+  font-size: 10px;
+  color: #a99b95;
+}
+.gpu-look-caption button {
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  color: #d68c83;
+  font-size: 11px;
+  cursor: pointer;
+}
