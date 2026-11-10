@@ -4782,3 +4782,35 @@
   font-size: 11px;
   cursor: pointer;
 }
+
+.museum-enter-button {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  top: 62%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  border: 1px solid #ee8175;
+  border-radius: 6px;
+  background: #d95f57;
+  color: #fff5ee;
+  padding: 15px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 35px #0005;
+  white-space: nowrap;
+}
+.museum-enter-button:hover {
+  background: #e66c62;
+}
+.museum-enter-button:focus-visible {
+  outline: 2px solid #fff0e5;
+  outline-offset: 4px;
+}
+.museum-enter-button svg {
+  width: 18px;
+  height: 18px;
+}

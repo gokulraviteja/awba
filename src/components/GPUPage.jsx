@@ -285,6 +285,7 @@ export default function GPUPage() {
     [panel, setPanel] = useState(null),
     [status, setStatus] = useState("loading"),
     [locked, setLocked] = useState(false),
+    [showEntry, setShowEntry] = useState(true),
     [captureFailed, setCaptureFailed] = useState(false),
     [compare, setCompare] = useState([]),
     [moveOpen, setMoveOpen] = useState(false),
@@ -340,8 +341,14 @@ export default function GPUPage() {
       onSelect: (d) => selectRef.current(d),
       onStatus: setStatus,
       onDepth: () => {},
-      onPointerLock: setLocked,
-      onCaptureError: () => setCaptureFailed(true),
+      onPointerLock: (active) => {
+        setLocked(active);
+        setShowEntry(!active);
+      },
+      onCaptureError: () => {
+        setCaptureFailed(true);
+        setShowEntry(false);
+      },
       onHover: setHovered,
       onPosition: setPlayer,
       reducedMotion: reduced,
@@ -567,6 +574,18 @@ export default function GPUPage() {
       )}
       {mode === "vault" && (
         <>
+          {showEntry && status === "ready" && (
+            <button
+              className="museum-enter-button"
+              onClick={() => {
+                setShowEntry(false);
+                setMoveOpen(false);
+                scene.current?.enterFirstPerson();
+              }}
+            >
+              Enter museum <Arrow />
+            </button>
+          )}
           {
             <div
               className={`museum-crosshair ${hovered ? "has-target" : ""}`}
@@ -594,6 +613,7 @@ export default function GPUPage() {
               aria-expanded={moveOpen}
               onClick={() => {
                 setMoveOpen(!moveOpen);
+                setShowEntry(false);
               }}
             >
               Move <span>↗</span>
@@ -655,9 +675,11 @@ export default function GPUPage() {
           {mode === "vault"
             ? locked
               ? "WASD move · Shift walk · aim + click inspect · Esc release mouse"
-              : captureFailed
-                ? "Drag to look · WASD move · aim + click or E to inspect"
-                : "WASD move · aim + click inspect · click empty space for mouse look"
+              : showEntry
+                ? "Enter museum to start · WASD move · Esc release mouse"
+                : captureFailed
+                  ? "Drag to look · WASD move · aim + click or E to inspect"
+                  : "WASD move · aim + click inspect · click empty space for mouse look"
             : "Drag the card to rotate"}
         </div>
       }

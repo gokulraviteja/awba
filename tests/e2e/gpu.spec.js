@@ -35,7 +35,10 @@ test("GPU vault loads a live scene and switches between distinct real designs", 
     "true",
   );
   await expect(
-    page.getByRole("button", { name: /Enter museum|Enter first-person/i }),
+    page.getByRole("button", { name: "Enter museum", exact: true }),
+  ).toBeVisible({ timeout: 30_000 });
+  await expect(
+    page.getByRole("button", { name: /Enter first-person/i }),
   ).toHaveCount(0);
   await expect(page.locator(".gpu-scene")).toHaveAttribute(
     "data-scene-status",
@@ -379,9 +382,10 @@ test("first-person mode aims from the crosshair, inspects with E and releases mo
     "ready",
     { timeout: 30_000 },
   );
-  await page
-    .locator(".gpu-scene canvas")
-    .click({ position: { x: 640, y: 360 } });
+  await page.getByRole("button", { name: "Enter museum", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Enter museum", exact: true }),
+  ).toHaveCount(0);
   await expect(page.locator(".gpu-page")).toHaveAttribute(
     "data-first-person",
     "true",
