@@ -713,7 +713,7 @@ export function createGpuScene(
       design: designs[0],
       part: "chip",
       spin: false,
-      firstPerson: false,
+      firstPerson: true,
       lookSensitivity: 1,
       reducedMotion,
     },
@@ -726,7 +726,6 @@ export function createGpuScene(
     frame = 0,
     last = performance.now(),
     snapCamera = true,
-    skipLockClick = false,
     lockUnavailable = false;
   const walk = { x: 0, z: 16, yaw: 0, pitch: 0.08 };
   const keys = new Set(),
@@ -837,16 +836,7 @@ export function createGpuScene(
   };
   const onDown = (e) => {
     if (state.paused || e.button !== 0) return;
-    skipLockClick =
-      !lockUnavailable &&
-      state.firstPerson &&
-      state.mode === "vault" &&
-      !isLocked() &&
-      !matchMedia("(pointer: coarse)").matches;
-    if (skipLockClick) {
-      lockMouse();
-      return;
-    }
+    drag = false;
     if (isLocked()) return;
     down = {
       x: e.clientX,
@@ -885,19 +875,18 @@ export function createGpuScene(
       }
     }
   };
-  const onUp = (e) => {
-    if (state.paused) {
-      down = null;
-      return;
-    }
-    if (!drag && state.mode === "vault") {
-      const p = pick(e, state.firstPerson);
-      if (!skipLockClick) inspectHit(p);
-    }
+  const onUp = () => {
     down = null;
+  };
+  const onClick = (e) => {
+    if (state.paused || state.mode !== "vault" || drag) return;
+    const hit = pick(e, state.firstPerson);
+    if (hit) inspectHit(hit);
+    else if (state.firstPerson && !isLocked() && !lockUnavailable) lockMouse();
   };
   const onCancel = () => {
     down = null;
+    drag = true;
   };
   const wheel = (e) => {
     if (state.mode !== "vault" || state.paused) return;
@@ -958,6 +947,7 @@ export function createGpuScene(
   renderer.domElement.addEventListener("pointerdown", onDown);
   renderer.domElement.addEventListener("pointermove", onMove);
   renderer.domElement.addEventListener("pointerup", onUp);
+  renderer.domElement.addEventListener("click", onClick);
   renderer.domElement.addEventListener("pointercancel", onCancel);
   renderer.domElement.addEventListener("wheel", wheel, { passive: false });
   const resize = () => {
@@ -996,7 +986,9 @@ export function createGpuScene(
       last = now;
       return;
     }
-    const dt = Math.min((now - last) / 1000, 0.05);
+    const elapsed = Math.max(0, (now - last) / 1000);
+    const dt = Math.min(elapsed, 0.05);
+    const inputDt = Math.min(elapsed, 0.25);
     last = now;
     const mobile = camera.aspect < 0.85,
       vault = state.mode === "vault",
@@ -1014,11 +1006,11 @@ export function createGpuScene(
         walk.yaw +=
           ((keys.has("ArrowRight") || held.has("turnRight") ? 1 : 0) -
             (keys.has("ArrowLeft") || held.has("turnLeft") ? 1 : 0)) *
-          dt *
+          inputDt *
           1.25;
         const diagonal = forward && right ? Math.SQRT1_2 : 1;
         const speed = keys.has("ShiftLeft") || keys.has("ShiftRight") ? 2 : 4.2;
-        move(forward * diagonal, right * diagonal, dt * speed);
+        move(forward * diagonal, right * diagonal, inputDt * speed);
       }
       cameraTarget.set(walk.x, 2.5, walk.z);
       lookTarget.set(
@@ -1204,6 +1196,7 @@ export function createGpuScene(
       renderer.domElement.removeEventListener("pointerdown", onDown);
       renderer.domElement.removeEventListener("pointermove", onMove);
       renderer.domElement.removeEventListener("pointerup", onUp);
+      renderer.domElement.removeEventListener("click", onClick);
       renderer.domElement.removeEventListener("pointercancel", onCancel);
       renderer.domElement.removeEventListener("wheel", wheel);
       disposeObject(scene);

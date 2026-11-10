@@ -1,4 +1,9 @@
-import { expect, test } from "@playwright/test";
+import { expect as baseExpect, test } from "@playwright/test";
+// Software-rendered CI browsers need more time to draw the museum between inputs.
+const expect = baseExpect.configure({
+  timeout: process.env.CI ? 15_000 : 5_000,
+});
+test.setTimeout(process.env.CI ? 180_000 : 30_000);
 
 async function openMenuItem(page, name) {
   await page.getByRole("button", { name: "Open menu", exact: true }).click();
@@ -24,11 +29,14 @@ test("GPU vault loads a live scene and switches between distinct real designs", 
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/pc");
   await expect(page).toHaveTitle(/PC Museum/, { timeout: 15_000 });
+  await expect(page.locator(".museum-crosshair")).toBeVisible();
+  await expect(page.locator(".gpu-page")).toHaveAttribute(
+    "data-first-person",
+    "true",
+  );
   await expect(
-    page.getByRole("heading", {
-      name: /Aim\. Explore\./,
-    }),
-  ).toBeVisible();
+    page.getByRole("button", { name: /Enter museum|Enter first-person/i }),
+  ).toHaveCount(0);
   await expect(page.locator(".gpu-scene")).toHaveAttribute(
     "data-scene-status",
     /ready|fallback/,
@@ -371,7 +379,9 @@ test("first-person mode aims from the crosshair, inspects with E and releases mo
     "ready",
     { timeout: 30_000 },
   );
-  await page.getByRole("button", { name: "Enter museum", exact: true }).click();
+  await page
+    .locator(".gpu-scene canvas")
+    .click({ position: { x: 640, y: 360 } });
   await expect(page.locator(".gpu-page")).toHaveAttribute(
     "data-first-person",
     "true",
@@ -433,13 +443,6 @@ test("first-person mode aims from the crosshair, inspects with E and releases mo
   );
   const canvas = page.locator(".gpu-scene canvas");
   await canvas.click({ position: { x: 640, y: 360 } });
-  if (captured) {
-    await expect(page.locator(".gpu-page")).toHaveAttribute(
-      "data-pointer-locked",
-      "true",
-    );
-    await page.mouse.click(640, 360);
-  }
   await expect(page.locator(".gpu-inspector h1")).toHaveText(
     "RTX 5060 Ti 16GB",
   );

@@ -284,12 +284,10 @@ export default function GPUPage() {
     [mode, setMode] = useState("vault"),
     [panel, setPanel] = useState(null),
     [status, setStatus] = useState("loading"),
-    [firstPerson, setFirstPerson] = useState(false),
     [locked, setLocked] = useState(false),
     [captureFailed, setCaptureFailed] = useState(false),
     [compare, setCompare] = useState([]),
     [moveOpen, setMoveOpen] = useState(false),
-    [welcome, setWelcome] = useState(true),
     [player, setPlayer] = useState({ x: 0, z: 16, yaw: 0 }),
     [hovered, setHovered] = useState(null);
   const [reduced, setReduced] = useState(
@@ -324,8 +322,6 @@ export default function GPUPage() {
     setMoveOpen(false);
     setMode("inspect");
     setPanel(null);
-
-    setWelcome(false);
   };
   selectRef.current = (exhibit) => {
     if (exhibit.gpu) {
@@ -334,8 +330,6 @@ export default function GPUPage() {
       setMoveOpen(false);
       setMode("inspect");
       setPanel(null);
-
-      setWelcome(false);
     } else chooseDesign(exhibit);
   };
   useEffect(() => {
@@ -349,16 +343,7 @@ export default function GPUPage() {
       onPointerLock: setLocked,
       onCaptureError: () => setCaptureFailed(true),
       onHover: setHovered,
-      onPosition: (p) => {
-        setPlayer(p);
-        if (
-          Math.abs(p.x) > 0.4 ||
-          Math.abs(p.z - 16) > 0.4 ||
-          Math.abs(p.yaw) > 0.3 ||
-          Math.abs(p.pitch - 0.08) > 0.08
-        )
-          setWelcome(false);
-      },
+      onPosition: setPlayer,
       reducedMotion: reduced,
     });
     scene.current = s;
@@ -373,12 +358,12 @@ export default function GPUPage() {
       design,
       mode,
       spin,
-      firstPerson,
+      firstPerson: true,
       lookSensitivity,
       reducedMotion: reduced,
       paused: !!panel,
     });
-  }, [design, mode, spin, reduced, panel, firstPerson, lookSensitivity]);
+  }, [design, mode, spin, reduced, panel, lookSensitivity]);
   useEffect(() => {
     const handler = (e) => {
       if (panel || ["INPUT", "SELECT", "TEXTAREA"].includes(e.target.tagName))
@@ -388,7 +373,6 @@ export default function GPUPage() {
 
         setMode("vault");
         setMoveOpen(false);
-        setWelcome(false);
       }
     };
     window.addEventListener("keydown", handler);
@@ -400,8 +384,6 @@ export default function GPUPage() {
     setMoveOpen(false);
     setMode("inspect");
     setPanel(null);
-
-    setWelcome(false);
   };
   const toggleCompare = (id) =>
     setCompare((a) =>
@@ -425,13 +407,8 @@ export default function GPUPage() {
     setMoveOpen(false);
     setMode("vault");
     setPanel(null);
-    setWelcome(false);
+
     scene.current?.navigate(id);
-  };
-  const explore = () => {
-    setWelcome(false);
-    setFirstPerson(true);
-    scene.current?.enterFirstPerson();
   };
   const walkButton = (direction, label, glyph) => (
     <button
@@ -439,7 +416,7 @@ export default function GPUPage() {
       onPointerDown={(e) => {
         e.preventDefault();
         e.currentTarget.setPointerCapture(e.pointerId);
-        setWelcome(false);
+
         scene.current?.move(direction, true);
       }}
       onPointerUp={() => scene.current?.move(direction, false)}
@@ -447,7 +424,6 @@ export default function GPUPage() {
       onLostPointerCapture={() => scene.current?.move(direction, false)}
       onClick={(e) => {
         if (e.detail === 0) {
-          setWelcome(false);
           scene.current?.step(direction);
         }
       }}
@@ -459,7 +435,7 @@ export default function GPUPage() {
     <main
       className={`gpu-page gpu-mode-${mode}`}
       style={{ "--gpu-accent": accent }}
-      data-first-person={firstPerson}
+      data-first-person="true"
       data-pointer-locked={locked}
       data-capture-unavailable={captureFailed}
       data-player-x={player.x.toFixed(2)}
@@ -591,24 +567,7 @@ export default function GPUPage() {
       )}
       {mode === "vault" && (
         <>
-          {welcome && (
-            <section className="museum-entry" aria-label="Enter the PC museum">
-              <span className="gpu-mono">THE GRAPHICS COLLECTION</span>
-              <h1>
-                Aim. Explore.
-                <br />
-                Understand.
-              </h1>
-              <p>
-                WASD to move. Look around, aim at a card, then click to inspect
-                it.
-              </p>
-              <button className="gpu-primary" onClick={explore}>
-                Enter museum <Arrow />
-              </button>
-            </section>
-          )}
-          {!welcome && (
+          {
             <div
               className={`museum-crosshair ${hovered ? "has-target" : ""}`}
               aria-hidden="true"
@@ -619,14 +578,8 @@ export default function GPUPage() {
               <i />
               <b />
             </div>
-          )}
-          {!welcome && !firstPerson && (
-            <button className="museum-fps-enter" onClick={explore}>
-              Enter first-person ↗
-            </button>
-          )}
-
-          {hovered && !welcome && (
+          }
+          {hovered && (
             <div className="gpu-exhibit-hint" aria-live="polite">
               <strong>{hovered}</strong>
               <span>Click / E to inspect</span>
@@ -641,7 +594,6 @@ export default function GPUPage() {
               aria-expanded={moveOpen}
               onClick={() => {
                 setMoveOpen(!moveOpen);
-                setWelcome(false);
               }}
             >
               Move <span>↗</span>
@@ -676,7 +628,6 @@ export default function GPUPage() {
                 className="gpu-entrance"
                 onClick={() => {
                   scene.current?.entrance();
-                  setWelcome(true);
                 }}
               >
                 ↺ Back to entrance
@@ -704,11 +655,9 @@ export default function GPUPage() {
           {mode === "vault"
             ? locked
               ? "WASD move · Shift walk · aim + click inspect · Esc release mouse"
-              : firstPerson
-                ? captureFailed
-                  ? "Drag to look · WASD move · aim + click or E to inspect"
-                  : "Click scene to capture mouse · WASD move · Esc release"
-                : "WASD move · drag to look · aim + E or click a card"
+              : captureFailed
+                ? "Drag to look · WASD move · aim + click or E to inspect"
+                : "WASD move · aim + click inspect · click empty space for mouse look"
             : "Drag the card to rotate"}
         </div>
       }
@@ -803,7 +752,6 @@ export default function GPUPage() {
                     setPanel(null);
                     setMode("vault");
                     setMoveOpen(true);
-                    setWelcome(false);
                   }}
                 >
                   Show movement controls ↗
@@ -813,9 +761,7 @@ export default function GPUPage() {
                     setPanel(null);
                     setMode("vault");
 
-                    setFirstPerson(false);
                     scene.current?.entrance();
-                    setWelcome(true);
                   }}
                 >
                   Back to entrance ↗

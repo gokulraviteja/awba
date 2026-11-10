@@ -92,7 +92,9 @@ The initial MCP surface exposes `search_models`, `get_model`, `compare_models`, 
 
 ## Verification
 
-The GPU museum is available at `/pc` and `/pc/`. It includes a first-person
+The GPU museum opens directly in first-person view at `/pc` and `/pc/`, with no
+entry screen. Click an aimed-at card to inspect it; click empty space to request
+mouse capture. It includes a first-person
 scanner view (WASD, mouse look, click or E to inspect, Shift to walk slowly,
 Esc to release the mouse), direct drag/click controls and touch movement controls.
 Menu → Look sensitivity adjusts mouse and drag speed from 0.25× to 2× and saves
