@@ -1,12 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  defaultDesign,
-  designs,
-  gpus,
-  makers,
-  museumRacks,
-} from "./gpuData.js";
+import { defaultDesign, designs, gpus, makers } from "./gpuData.js";
 import { createGpuScene } from "./gpuScene.js";
+import MuseumMap from "./MuseumMap.jsx";
 import "./gpu.css";
 import { GPUAssistant, GPUGuideChat } from "./GPUAssistant.jsx";
 
@@ -28,6 +23,17 @@ function Dialog({ title, kicker, onClose, children, wide = false }) {
     const previous = document.activeElement;
     ref.current?.focus();
     const trap = (e) => {
+      if (
+        e.code === "KeyM" &&
+        mode === "vault" &&
+        !e.metaKey &&
+        !e.ctrlKey &&
+        !e.altKey
+      ) {
+        e.preventDefault();
+        setMoveOpen(false);
+        setPanel("map");
+      }
       if (e.key === "Escape") {
         e.stopPropagation();
         onClose();
@@ -388,6 +394,17 @@ export default function GPUPage() {
     const handler = (e) => {
       if (panel || ["INPUT", "SELECT", "TEXTAREA"].includes(e.target.tagName))
         return;
+      if (
+        e.code === "KeyM" &&
+        mode === "vault" &&
+        !e.metaKey &&
+        !e.ctrlKey &&
+        !e.altKey
+      ) {
+        e.preventDefault();
+        setMoveOpen(false);
+        setPanel("map");
+      }
       if (e.key === "Escape") {
         if (locked) return;
 
@@ -591,7 +608,7 @@ export default function GPUPage() {
         <>
           {showEntry && status === "ready" && (
             <button
-              className="museum-enter-button"
+              className={`museum-enter-button ${hasEntered ? "is-resume" : ""}`}
               onClick={() => {
                 setHasEntered(true);
                 setShowEntry(false);
@@ -688,17 +705,24 @@ export default function GPUPage() {
       )}
       {
         <div className="gpu-quiet-hint">
-          {mode === "vault"
-            ? locked
-              ? "WASD move · Shift walk · aim + click inspect · Esc release mouse"
-              : showEntry
-                ? hasEntered
-                  ? "Resume exploring · WASD move · Esc release mouse"
-                  : "Enter museum to start · WASD move · Esc release mouse"
-                : captureFailed
-                  ? "Drag to look · WASD move · aim + click or E to inspect"
-                  : "WASD move · aim + click inspect · click empty space for mouse look"
-            : "Drag the card to rotate"}
+          <span className="museum-desktop-hint">
+            {mode === "vault"
+              ? locked
+                ? "WASD move · click to inspect · M map · Esc release mouse"
+                : showEntry
+                  ? hasEntered
+                    ? "Resume exploring · WASD move · M map"
+                    : "Enter museum to start · M gallery map"
+                  : captureFailed
+                    ? "Drag to look · WASD move · click to inspect · M map"
+                    : "WASD move · click a card to inspect · M map"
+              : "Drag the card to rotate"}
+          </span>
+          <span className="museum-touch-hint">
+            {mode === "vault"
+              ? "Drag to look · tap Move to walk · aim + tap a card"
+              : "Drag the card to rotate"}
+          </span>
         </div>
       }
       {panel && (
@@ -707,35 +731,45 @@ export default function GPUPage() {
           title={
             panel === "menu"
               ? "Explore at your pace."
-              : panel === "guide"
-                ? `Meet ${selected.name}.`
-                : panel === "catalog"
-                  ? "Find your silicon."
-                  : panel === "designs"
-                    ? "Same chip. Different character."
-                    : panel === "basics"
-                      ? "Start with the small chip."
-                      : "Put them side by side."
+              : panel === "map"
+                ? "Choose a gallery."
+                : panel === "guide"
+                  ? `Meet ${selected.name}.`
+                  : panel === "catalog"
+                    ? "Find your silicon."
+                    : panel === "designs"
+                      ? "Same chip. Different character."
+                      : panel === "basics"
+                        ? "Start with the small chip."
+                        : "Put them side by side."
           }
           kicker={
             panel === "menu"
               ? "THE PC MUSEUM"
-              : panel === "guide"
-                ? "YOUR GPU ASSISTANT"
-                : panel === "catalog"
-                  ? "THE MODEL INDEX"
-                  : panel === "designs"
-                    ? "THE DESIGN ARCHIVE"
-                    : panel === "basics"
-                      ? "GRAPHICS CARD / FIELD NOTES"
-                      : "COMPARE / UP TO THREE"
+              : panel === "map"
+                ? "THE GRAPHICS COLLECTION"
+                : panel === "guide"
+                  ? "YOUR GPU ASSISTANT"
+                  : panel === "catalog"
+                    ? "THE MODEL INDEX"
+                    : panel === "designs"
+                      ? "THE DESIGN ARCHIVE"
+                      : panel === "basics"
+                        ? "GRAPHICS CARD / FIELD NOTES"
+                        : "COMPARE / UP TO THREE"
           }
           onClose={closePanel}
-          wide={panel === "designs" || panel === "compare"}
+          wide={panel === "designs" || panel === "compare" || panel === "map"}
         >
           {panel === "menu" && (
             <div className="gpu-menu-content">
               <nav className="gpu-menu-links" aria-label="Museum menu">
+                <button
+                  aria-label="Gallery map"
+                  onClick={() => setPanel("map")}
+                >
+                  Gallery map <span>M</span>
+                </button>
                 <button onClick={() => setPanel("catalog")}>
                   Model index <span>{gpus.length}</span>
                 </button>
@@ -763,21 +797,6 @@ export default function GPUPage() {
                   </button>
                 )}
               </nav>
-              <details className="gpu-menu-destinations">
-                <summary>Jump to a display bay</summary>
-                <div>
-                  {museumRacks.map((r) => (
-                    <button
-                      key={r.id}
-                      aria-label={`Visit ${r.maker} ${r.generation} rack`}
-                      onClick={() => visitRack(r.id)}
-                    >
-                      <span>{r.maker}</span>
-                      {r.generation}
-                    </button>
-                  ))}
-                </div>
-              </details>
               <details className="gpu-menu-help">
                 <summary>Movement & help</summary>
                 <p>
@@ -871,6 +890,19 @@ export default function GPUPage() {
                 PC foundations & assembly ↗
               </a>
             </div>
+          )}
+          {panel === "map" && (
+            <MuseumMap
+              player={player}
+              onVisit={visitRack}
+              onEntrance={() => {
+                setHasEntered(true);
+                setMoveOpen(false);
+                setMode("vault");
+                setPanel(null);
+                scene.current?.entrance();
+              }}
+            />
           )}
           {panel === "guide" && (
             <GPUGuideChat

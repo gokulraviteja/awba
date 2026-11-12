@@ -4814,3 +4814,266 @@
   width: 18px;
   height: 18px;
 }
+
+/* Museum architecture is the main view; the interface supplies only wayfinding. */
+.gpu-mode-vault .gpu-vignette {
+  background: linear-gradient(
+    0deg,
+    #14201c40,
+    transparent 22%,
+    transparent 82%,
+    #14201c35
+  );
+}
+.gpu-page .gpu-brand {
+  padding: 8px 12px;
+  border: 1px solid #c9c8b729;
+  border-radius: 6px;
+  background: #17201ee0;
+}
+.gpu-page .gpu-quiet-hint {
+  color: #e4e1d6;
+  background: #1d2722e0;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 9px;
+  line-height: 1.5;
+}
+.gpu-page .gpu-menu-trigger,
+.gpu-page .gpu-move-trigger {
+  background: #1b2521ec;
+  border-color: #c4bc9b55;
+}
+.museum-touch-hint {
+  display: none;
+}
+.museum-map {
+  max-width: 660px;
+  margin: 0 auto;
+}
+.museum-map-plan {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 70px minmax(0, 1fr);
+  grid-template-rows: repeat(4, minmax(104px, auto));
+  gap: 10px 0;
+  position: relative;
+  margin: 28px 0 0;
+}
+.museum-map-aisle {
+  grid-column: 2;
+  grid-row: 1/5;
+  position: relative;
+  background: #c4c1ab0b;
+  border-left: 1px dashed #b0ac9255;
+  border-right: 1px dashed #b0ac9255;
+  margin: 0 15px;
+}
+.museum-map-aisle > span {
+  position: absolute;
+  inset: 20px 0 auto;
+  writing-mode: vertical-rl;
+  font-size: 10px;
+  color: #8f9b8e;
+  margin: auto;
+  width: 12px;
+}
+.museum-map-aisle > i {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 9px;
+  height: 9px;
+  border: 2px solid #eb8a75;
+  background: #af5146;
+  border-radius: 50%;
+  box-shadow: 0 0 0 5px #b6534729;
+}
+.gpu-page .museum-map-room {
+  text-align: left;
+  background: #303e3547;
+  border: 1px solid #a9ad8e33;
+  border-radius: 5px;
+  padding: 15px 18px;
+  cursor: pointer;
+  position: relative;
+  color: #e1e3d5;
+  transition: background 0.15s;
+}
+.gpu-page .museum-map-room:hover,
+.gpu-page .museum-map-room[aria-current="location"] {
+  background: #53614d55;
+  border-color: #c68d6c;
+}
+.museum-map-room-number {
+  position: absolute;
+  right: 14px;
+  top: 15px;
+  font-size: 10px;
+  color: #c18c70;
+}
+.museum-map-maker {
+  display: block;
+  color: #a0ae98;
+  font-size: 10px;
+  margin-bottom: 4px;
+}
+.museum-map-room strong {
+  display: block;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.15;
+}
+.museum-map-room small {
+  display: block;
+  font-size: 10px;
+  color: #9aa995;
+  margin-top: 5px;
+}
+.museum-map-count {
+  display: flex;
+  justify-content: space-between;
+  color: #b4beaa;
+  font-size: 10px;
+  margin-top: 12px;
+}
+.museum-map-count b {
+  font-weight: 400;
+  color: #d58b6b;
+}
+.museum-map-foyer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  border: 1px solid #a9ad8e33;
+  padding: 16px 18px;
+  margin-top: 12px;
+  border-radius: 5px;
+  background: #b5ac8730;
+}
+.museum-map-foyer strong {
+  display: block;
+  font-size: 17px;
+  font-weight: 500;
+}
+.museum-map-foyer span {
+  display: block;
+  margin-top: 4px;
+  font-size: 10px;
+  color: #b3bba7;
+}
+.gpu-page .museum-map-foyer button {
+  font-size: 11px;
+  padding: 8px 0 8px 12px;
+  color: #dfa389;
+  cursor: pointer;
+}
+.museum-map-help {
+  font-size: 10px;
+  color: #aab69f;
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.museum-map-help > i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #df8a74;
+}
+.museum-map-help > span {
+  margin-left: auto;
+  color: #7e8d78;
+}
+@media (max-width: 800px) {
+  .museum-desktop-hint {
+    display: none;
+  }
+  .museum-touch-hint {
+    display: inline;
+  }
+  .gpu-page .gpu-brand {
+    padding: 7px 9px;
+  }
+  .gpu-page .gpu-quiet-hint {
+    max-width: 210px;
+    font-size: 8px;
+  }
+  .museum-map-plan {
+    grid-template-columns: minmax(0, 1fr) 32px minmax(0, 1fr);
+    grid-template-rows: repeat(4, minmax(100px, auto));
+    margin-top: 20px;
+  }
+  .museum-map-aisle {
+    margin: 0 8px;
+  }
+  .museum-map-aisle > span {
+    display: none;
+  }
+  .gpu-page .museum-map-room {
+    padding: 14px 11px;
+  }
+  .museum-map-room strong {
+    font-size: 20px;
+  }
+  .museum-map-room-number {
+    right: 8px;
+    top: 14px;
+    font-size: 8px;
+  }
+  .museum-map-maker,
+  .museum-map-room small,
+  .museum-map-count {
+    font-size: 9px;
+  }
+  .museum-map-foyer {
+    padding: 13px 11px;
+  }
+  .museum-map-foyer span {
+    max-width: 130px;
+    line-height: 1.5;
+  }
+  .museum-map-help > span {
+    margin: 4px 0 0;
+    flex-basis: 100%;
+  }
+}
+.gpu-page .gpu-dialog:focus {
+  outline: none;
+}
+.gpu-page .museum-enter-button.is-resume {
+  top: auto;
+  bottom: 72px;
+  transform: translateX(-50%);
+  padding: 10px 18px;
+  font-size: 12px;
+  gap: 18px;
+}
+@media (max-width: 800px) {
+  .gpu-page .museum-enter-button.is-resume {
+    bottom: 84px;
+  }
+}
+.gpu-page .gpu-exhibit-hint {
+  top: auto;
+  bottom: 88px;
+  left: 32px;
+  transform: none;
+  width: max-content;
+  text-align: left;
+  max-width: 240px;
+}
+@media (max-width: 800px) {
+  .gpu-page .gpu-exhibit-hint {
+    left: 23px;
+    bottom: 145px;
+    max-width: 220px;
+  }
+}
+@media (max-width: 800px) {
+  .museum-map-help > span {
+    display: none;
+  }
+}

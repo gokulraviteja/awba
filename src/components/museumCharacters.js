@@ -76,8 +76,19 @@ export function createScanner() {
   box(root, [0.18, 0.17, 0.37], [0.12, -0.26, 0.32], shell);
   const support = box(root, [0.16, 0.15, 0.38], [-0.23, -0.22, 0.13], glove);
   support.rotation.y = -0.65;
-  root.scale.setScalar(0.65);
-  root.position.set(0.38, -0.29, -0.8);
+  const screen = new T.MeshBasicMaterial({ color: "#122c29" });
+  const readout = new T.MeshBasicMaterial({ color: "#b3c5aa" });
+  box(root, [0.15, 0.09, 0.012], [0, 0.005, 0.192], screen, 0.006);
+  for (let i = 0; i < 3; i++)
+    box(
+      root,
+      [0.09 - i * 0.015, 0.008, 0.014],
+      [-i * 0.007, 0.027 - i * 0.021, 0.202],
+      readout,
+      0.002,
+    );
+  root.scale.setScalar(0.52);
+  root.position.set(0.36, -0.35, -0.82);
   root.rotation.set(0.02, -0.3, -0.04);
   return root;
 }

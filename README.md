@@ -92,6 +92,16 @@ The initial MCP surface exposes `search_models`, `get_model`, `compare_models`, 
 
 ## Verification
 
+The graphics collection has eight architectural gallery bays, 47 interactive GPU
+models, a foyer with featured cards, physical direction signs and collision-aware
+movement around display plinths and seating. Memory-capacity variants share a
+vitrine while retaining separate labels and selection targets. The enlarged 3D
+models are original visual studies, not manufacturer CAD.
+
+Open Menu → Gallery map, or press M while exploring, to choose a gallery and
+return to the foyer. Gallery jumps keep the camera in the aisle so the full
+display is visible. The map is optional and never pinned over the museum view.
+
 The GPU museum opens in first-person view at `/pc` and `/pc/`. The Enter museum
 button enables mouse control. After entering, Esc releases the mouse and the
 button changes to Resume exploring. Click an aimed-at card to inspect it; click empty

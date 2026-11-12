@@ -1,15 +1,10 @@
 import * as T from "three";
 import { createScanner } from "./museumCharacters.js";
+import { createMuseumArchitecture } from "./museumArchitecture.js";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import {
-  designs,
-  gpus,
-  makers,
-  defaultDesign,
-  museumRacks,
-} from "./gpuData.js";
+import { designs, museumRacks } from "./gpuData.js";
 
 const metal = (color, roughness = 0.38, metalness = 0.8) =>
   new T.MeshStandardMaterial({ color, roughness, metalness });
@@ -87,33 +82,55 @@ function makeCard(design, lite = false) {
   if (lite) {
     const w = design.style === "astral" ? 8.5 : 7.7,
       h = 3.05;
-    const body = metal(
-      new T.Color(design.color).multiplyScalar(0.17),
-      0.7,
-      0.15,
-    );
-    block(root, w, h, 0.65, body);
-    const details = [];
-    const count = design.fans;
-    for (let i = 0; i < count; i++) {
-      const g = new T.RingGeometry(0.26, 1.12, 14);
-      g.translate(-w / 2 + (w * (i + 0.5)) / count, 0, 0.34);
-      details.push(g);
+    const body = metal(design.color, 0.48, 0.35),
+      silver = metal("#a2aba8", 0.45, 0.55);
+    block(root, w, h, 0.65, body, 0, 0, 0, 0.12);
+    block(root, w - 0.2, 0.13, 0.72, silver, 0, -h / 2 + 0.05, 0, 0.02);
+    const blades = [],
+      rings = [],
+      discs = [];
+    for (let i = 0; i < design.fans; i++) {
+      const x = -w / 2 + (w * (i + 0.5)) / design.fans;
+      const disc = new T.CircleGeometry(1.18, 32);
+      disc.translate(x, 0, 0.34);
+      discs.push(disc);
+      const ring = new T.TorusGeometry(1.16, 0.055, 5, 36);
+      ring.translate(x, 0, 0.39);
+      rings.push(ring);
+      const hub = new T.CircleGeometry(0.24, 16);
+      hub.translate(x, 0, 0.46);
+      rings.push(hub);
+      for (let j = 0; j < 11; j++) {
+        const shape = new T.Shape();
+        shape.moveTo(0.2, -0.05);
+        shape.quadraticCurveTo(0.65, -0.2, 1.06, 0.1);
+        shape.lineTo(0.97, 0.34);
+        shape.quadraticCurveTo(0.55, 0.12, 0.2, 0.09);
+        shape.closePath();
+        const blade = new T.ShapeGeometry(shape, 4);
+        blade.rotateZ((j * Math.PI * 2) / 11);
+        blade.translate(x, 0, 0.4);
+        blades.push(blade);
+      }
     }
-    const merged = mergeGeometries(details);
-    details.forEach((g) => g.dispose());
-    root.add(new T.Mesh(merged, metal("#101b23", 0.6, 0.3)));
+    const append = (geos, mat) => {
+      root.add(new T.Mesh(mergeGeometries(geos), mat));
+      geos.forEach((g) => g.dispose());
+    };
+    append(discs, metal("#161e21", 0.8, 0.1));
+    append(rings, silver);
+    append(blades, metal("#303b3e", 0.6, 0.25));
     block(
       root,
-      w - 0.5,
-      0.045,
-      0.04,
+      w - 0.25,
+      0.055,
+      0.06,
       new T.MeshBasicMaterial({ color: design.trim }),
       0,
-      1.55,
-      0.32,
+      h / 2 + 0.02,
+      0.36,
     );
-    block(root, 3.3, 0.21, 0.08, metal("#a69155"), -0.6, -1.6, 0);
+    block(root, 3.3, 0.21, 0.08, metal("#bea45d", 0.45, 0.6), -0.6, -1.6, 0);
     return root;
   }
 
@@ -431,12 +448,12 @@ export function createGpuScene(
     };
   }
   const scene = new T.Scene();
-  scene.background = new T.Color("#121010");
-  scene.fog = new T.FogExp2("#201d1d", 0.014);
+  scene.background = new T.Color("#777d76");
+  scene.fog = new T.FogExp2("#b5b5a8", 0.008);
   renderer.setPixelRatio(Math.min(devicePixelRatio, 1.6));
   renderer.outputColorSpace = T.SRGBColorSpace;
   renderer.toneMapping = T.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.25;
+  renderer.toneMappingExposure = 1;
   renderer.domElement.tabIndex = 0;
   renderer.domElement.setAttribute(
     "aria-label",
@@ -448,224 +465,36 @@ export function createGpuScene(
     environment = new RoomEnvironment();
   const env = pmrem.fromScene(environment, 0.04);
   scene.environment = env.texture;
-  scene.environmentIntensity = 0.48;
+  scene.environmentIntensity = 0.55;
   environment.dispose();
   pmrem.dispose();
-  scene.add(new T.HemisphereLight("#ded6d1", "#1b1919", 1.1));
-  const key = new T.DirectionalLight("#fff2ec", 3);
+  scene.add(new T.HemisphereLight("#edf0e8", "#6c685a", 0.85));
+  const key = new T.DirectionalLight("#fff2ec", 1.7);
   key.position.set(-3, 9, 8);
   scene.add(key);
-  const rim = new T.DirectionalLight("#cb8989", 1.3);
+  const rim = new T.DirectionalLight("#cb8989", 0.55);
   rim.position.set(9, 6, -6);
   scene.add(rim);
-  const warm = new T.DirectionalLight("#e9dfd8", 1.5);
+  const warm = new T.DirectionalLight("#e9dfd8", 0.7);
   warm.position.set(-8, 3, 1);
   scene.add(warm);
-  const museum = new T.Group();
+  const sideFill = new T.DirectionalLight("#e9eee7", 1.1);
+  sideFill.position.set(9, 6, 2);
+  scene.add(sideFill);
+  const {
+    world: museum,
+    clickable,
+    blockers,
+    collisions,
+  } = createMuseumArchitecture(makeCard);
   scene.add(museum);
-  const steel = metal("#aea6a6", 0.32, 0.6),
-    deck = metal("#2f2b2a", 0.43, 0.52),
-    lightmat = new T.MeshBasicMaterial({ color: "#e26665" }),
-    orange = new T.MeshBasicMaterial({ color: "#e26665" });
-  const floor = new T.Mesh(
-    new T.PlaneGeometry(170, 190),
-    metal("#1e1b1b", 0.44, 0.45),
+  host.dataset.exhibitCount = String(
+    new Set(clickable.map((hit) => hit.userData.exhibit.gpu.id)).size,
   );
-  floor.rotation.x = -Math.PI / 2;
-  floor.position.set(0, -0.15, -45);
-  museum.add(floor);
-  const violet = new T.MeshBasicMaterial({ color: "#b84240" });
-  const cyan = new T.MeshBasicMaterial({ color: "#a59b97" });
-  const shell = metal("#615958", 0.4, 0.55);
-  const carbon = metal("#211e1e", 0.64, 0.25);
-  // The room is an oversized PC chassis: broad panels and circuit-board paths.
-  block(museum, 0.35, 9.5, 65, carbon, -9.2, 4.5, -14, 0.12);
-  block(museum, 0.35, 9.5, 65, carbon, 9.2, 4.5, -14, 0.12);
-  for (let bay = 0; bay < 4; bay++) {
-    const z = 3 - bay * 13;
-    block(
-      museum,
-      10,
-      0.06,
-      8.8,
-      metal(bay % 2 ? "#2c2929" : "#232020", 0.5, 0.4),
-      0,
-      -0.12,
-      z,
-      0.12,
-    );
-    // Paired, angular PCB traces replace the warehouse floor grid.
-    for (const side of [-1, 1]) {
-      const m = side < 0 ? cyan : violet;
-      block(museum, 0.055, 0.015, 7, m, side * 4, -0.07, z);
-      block(museum, 1.2, 0.015, 0.055, m, side * 3.4, -0.07, z - 3.5);
-      block(museum, 0.055, 0.015, 4, m, side * 2.8, -0.07, z - 5.5);
-      const pad = new T.Mesh(new T.RingGeometry(0.13, 0.19, 24), m);
-      pad.rotation.x = -Math.PI / 2;
-      pad.position.set(side * 2.8, -0.055, z - 7.5);
-      museum.add(pad);
-    }
-  }
-  const clickable = [],
-    racks = new T.Group();
-  museum.add(racks);
-  for (const rack of museumRacks) {
-    const { side, bay, generation, maker } = rack;
-    const group = new T.Group();
-    group.position.set(side * 7.4, 0, 3 - bay * 13);
-    group.rotation.y = side === -1 ? Math.PI / 2 : -Math.PI / 2;
-    racks.add(group);
-    // Bevelled case sides, a vented rear panel and ARGB edge channels.
-    block(group, 8.7, 8.05, 0.22, carbon, 0, 3.8, -1.22, 0.14);
-    for (const x of [-4.25, 4.25]) {
-      block(group, 0.32, 8.25, 2.7, shell, x, 3.95, 0, 0.1);
-      block(
-        group,
-        0.055,
-        7.6,
-        0.07,
-        side < 0 ? cyan : violet,
-        x,
-        3.95,
-        1.4,
-        0.02,
-      );
-    }
-    block(group, 8.7, 0.4, 2.7, shell, 0, 7.95, 0, 0.12);
-    block(group, 8.7, 0.35, 2.7, shell, 0, 0.05, 0, 0.1);
-    // The tiny rear vents read as a PC enclosure rather than open server shelving.
-    for (let vent = 0; vent < 9; vent++)
-      block(
-        group,
-        6.8,
-        0.032,
-        0.025,
-        metal("#433d3d", 0.6, 0.3),
-        0,
-        0.9 + vent * 0.75,
-        -1.08,
-      );
-    const models = gpus.filter((g) => g.generation === generation);
-    const accent = makers[maker].color;
-    for (let level = 0; level < 4; level++) {
-      const y = 0.5 + level * 1.8;
-      block(group, 8.5, 0.12, 2.5, deck, 0, y, 0);
-      block(
-        group,
-        8.1,
-        0.028,
-        0.045,
-        level % 2 ? violet : cyan,
-        0,
-        y - 0.1,
-        1.4,
-      );
-      block(group, 8.1, 0.025, 0.06, lightmat, 0, y + 1.6, -0.65);
-      for (let slot = 0; slot < 3; slot++) {
-        const gpu = models[level * 3 + slot];
-        if (!gpu) continue;
-        const design = defaultDesign(gpu);
-        const x = -2.8 + slot * 2.8;
-        const card = makeCard(design, true);
-        card.scale.setScalar(0.28);
-        card.position.set(x, y + 0.7, 0.15);
-        group.add(card);
-        const hit = new T.Mesh(
-          new T.BoxGeometry(2.6, 1.55, 0.9),
-          new T.MeshBasicMaterial({ visible: false }),
-        );
-        hit.position.copy(card.position);
-        hit.userData.exhibit = { gpu, design };
-        group.add(hit);
-        clickable.push(hit);
-        block(
-          group,
-          2.56,
-          0.37,
-          0.055,
-          new T.MeshBasicMaterial({ color: "#191717" }),
-          x,
-          y,
-          1.29,
-        );
-        const name = label(gpu.name, "#f1f1f1", 500);
-        name.scale.setScalar(0.88);
-        name.position.set(x, y, 1.326);
-        group.add(name);
-      }
-    }
-    block(group, 8.5, 0.7, 0.1, deck, 0, 7.5, 1.15);
-    const title = label(maker.toUpperCase() + " / " + generation, accent, 700);
-    title.position.set(0, 7.5, 1.23);
-    title.scale.setScalar(1.6);
-    group.add(title);
-  }
-
-  // Four chamfered gateways suggest a premium gaming case skeleton.
-  for (let bay = 0; bay < 5; bay++) {
-    const z = 12 - bay * 13;
-    for (const side of [-1, 1]) {
-      block(museum, 0.28, 6.6, 0.38, shell, side * 7.5, 3.15, z, 0.06);
-      const shoulder = block(
-        museum,
-        0.28,
-        2.8,
-        0.38,
-        shell,
-        side * 6.55,
-        7.45,
-        z,
-        0.06,
-      );
-      shoulder.rotation.z = side * 0.76;
-      block(
-        museum,
-        0.055,
-        6.3,
-        0.08,
-        side < 0 ? cyan : violet,
-        side * 7.29,
-        3.2,
-        z + 0.22,
-      );
-      const light = block(
-        museum,
-        0.055,
-        2.8,
-        0.08,
-        side < 0 ? cyan : violet,
-        side * 6.34,
-        7.4,
-        z + 0.22,
-      );
-      light.rotation.z = side * 0.76;
-    }
-    block(museum, 11.1, 0.28, 0.38, shell, 0, 8.45, z, 0.06);
-    block(
-      museum,
-      10.8,
-      0.045,
-      0.08,
-      bay % 2 ? cyan : violet,
-      0,
-      8.23,
-      z + 0.22,
-    );
-  }
-  const endPanel = new T.Group();
-  endPanel.position.set(0, 4.2, -48);
-  block(endPanel, 18, 8.5, 0.35, carbon, 0, 0, 0, 0.3);
-  const signature = label("GRAPHICS / AWBA", "#e26665", 900);
-  signature.position.set(0, 0, 0.25);
-  signature.scale.setScalar(2);
-  endPanel.add(signature);
-  museum.add(endPanel);
-  for (let i = 0; i < 4; i++) {
-    const t = label("0" + (i + 1) + " / GPU BAY", "#b1aaa9", 500);
-    t.rotation.x = -Math.PI / 2;
-    t.position.set(0, -0.055, 8 - i * 13);
-    museum.add(t);
-  }
+  host.dataset.galleryCount = String(museumRacks.length);
+  const deck = metal("#343b39", 0.55, 0.4),
+    brass = metal("#9b917b", 0.5, 0.6);
+  const orange = new T.MeshBasicMaterial({ color: "#d16a56" });
   // A separate, quiet exhibition stage keeps the selected card readable.
   const stage = new T.Group();
   scene.add(stage);
@@ -700,7 +529,7 @@ export function createGpuScene(
   );
   block(pedestal, 6.9, 0.025, 0.025, orange, 0, 1.79, 1.24);
   for (const x of [-2.3, 2.3])
-    block(pedestal, 0.18, 0.35, 0.45, deck, x, 1.93, 0, 0.04);
+    block(pedestal, 0.18, 0.35, 0.45, brass, x, 1.93, 0, 0.04);
   pedestal.position.set(2.15, 0, 0);
   stage.add(pedestal);
   const scanner = createScanner();
@@ -732,6 +561,7 @@ export function createGpuScene(
     held = new Set();
   let positionTick = 0,
     hovered = null,
+    focusedExhibit = null,
     lastReported = "";
   const cameraTarget = new T.Vector3(),
     look = new T.Vector3(),
@@ -752,7 +582,7 @@ export function createGpuScene(
         2.5 + Math.sin(walk.pitch) * 15,
         walk.z - Math.cos(walk.yaw) * 15,
       );
-      camera.fov = 62;
+      camera.fov = 70;
       camera.updateProjectionMatrix();
       camera.lookAt(look);
       camera.updateMatrixWorld();
@@ -765,7 +595,10 @@ export function createGpuScene(
     );
     if (centered) pointer.set(0, 0);
     ray.setFromCamera(pointer, camera);
-    return ray.intersectObjects(clickable, false)[0];
+    const hit = ray.intersectObjects(clickable, false)[0];
+    if (!hit || hit.distance > 17) return null;
+    const obstruction = ray.intersectObjects(blockers, false)[0];
+    return obstruction && obstruction.distance < hit.distance ? null : hit;
   }
   function reportPosition() {
     const stamp = [walk.x, walk.z, walk.yaw, walk.pitch]
@@ -778,7 +611,7 @@ export function createGpuScene(
     onPosition({ ...walk });
   }
   function move(forward, right, amount) {
-    walk.x = Math.max(
+    let nextX = Math.max(
       -5.3,
       Math.min(
         5.3,
@@ -786,14 +619,31 @@ export function createGpuScene(
           (Math.sin(walk.yaw) * forward + Math.cos(walk.yaw) * right) * amount,
       ),
     );
-    walk.z = Math.max(
+    let nextZ = Math.max(
       -44,
       Math.min(
-        18,
+        20,
         walk.z +
           (-Math.cos(walk.yaw) * forward + Math.sin(walk.yaw) * right) * amount,
       ),
     );
+    // Sweep each axis to the first solid edge, even when a frame spans a long step.
+    for (const c of collisions)
+      if (Math.abs(walk.z - c.z) < c.halfZ) {
+        const left = c.x - c.halfX,
+          right = c.x + c.halfX;
+        if (walk.x <= left && nextX > left) nextX = Math.min(nextX, left);
+        if (walk.x >= right && nextX < right) nextX = Math.max(nextX, right);
+      }
+    for (const c of collisions)
+      if (Math.abs(nextX - c.x) < c.halfX) {
+        const front = c.z + c.halfZ,
+          back = c.z - c.halfZ;
+        if (walk.z >= front && nextZ < front) nextZ = Math.max(nextZ, front);
+        if (walk.z <= back && nextZ > back) nextZ = Math.min(nextZ, back);
+      }
+    walk.x = nextX;
+    walk.z = nextZ;
   }
   const lockError = () => {
     lockUnavailable = true;
@@ -868,6 +718,13 @@ export function createGpuScene(
     } else if (state.mode === "vault") {
       const p = pick(e);
       renderer.domElement.style.cursor = p ? "pointer" : "grab";
+      if (focusedExhibit !== p?.object) {
+        if (focusedExhibit?.userData.focus)
+          focusedExhibit.userData.focus.visible = false;
+        focusedExhibit = p?.object || null;
+        if (focusedExhibit?.userData.focus)
+          focusedExhibit.userData.focus.visible = true;
+      }
       const name = p?.object.userData.exhibit?.gpu.name || null;
       if (name !== hovered) {
         hovered = name;
@@ -1026,7 +883,7 @@ export function createGpuScene(
       cameraTarget.set(mobile ? 2.15 : 0, mobile ? 3.9 : 4.1, mobile ? 19 : 15);
       lookTarget.set(mobile ? 2.15 : 0.1, mobile ? -1.2 : 2.9, -1);
     }
-    const nextFov = vault ? 62 : 44;
+    const nextFov = vault ? 70 : 44;
     if (camera.fov !== nextFov) {
       camera.fov = nextFov;
       camera.updateProjectionMatrix();
@@ -1042,15 +899,24 @@ export function createGpuScene(
     camera.lookAt(look);
     hero.visible = !vault;
     museum.visible = vault;
+    scene.background.set(vault ? "#777d76" : "#121214");
+    scene.fog.color.set(vault ? "#b5b5a8" : "#202024");
     stage.visible = !vault;
-    scanner.visible = vault && state.firstPerson;
+    scanner.visible = vault && state.firstPerson && !mobile;
     scanner.position.y =
-      -0.29 +
+      -0.35 +
       (!state.reducedMotion && (keys.size || held.size)
         ? Math.sin(now * 0.009) * 0.012
         : 0);
     if (vault) {
       const p = pick({ clientX: 0, clientY: 0 }, true);
+      if (focusedExhibit !== p?.object) {
+        if (focusedExhibit?.userData.focus)
+          focusedExhibit.userData.focus.visible = false;
+        focusedExhibit = p?.object || null;
+        if (focusedExhibit?.userData.focus)
+          focusedExhibit.userData.focus.visible = true;
+      }
       const name = p?.object.userData.exhibit?.gpu.name || null;
       if (name !== hovered) {
         hovered = name;
@@ -1076,28 +942,29 @@ export function createGpuScene(
       pcb: inside ? -0.35 : 0,
       backplate: inside ? -0.9 : 0,
     };
-    for (const [id, g] of Object.entries(hero.userData.layers)) {
-      g.position.z += (positions[id] - g.position.z) * ease;
-      const y = inside
-        ? {
-            fans: 1.7,
-            heatsink: 0.55,
-            chip: -0.8,
-            memory: -0.8,
-            pcb: -0.8,
-            backplate: -1.8,
-          }[id]
-        : 0;
-      g.position.y += (y - g.position.y) * ease;
-      g.traverse((o) => {
-        if (o.isMesh && o.material?.emissive) {
-          const active = inside && state.part === id;
-          o.material.emissive.set(active ? "#29576b" : "#000000");
-          o.material.emissiveIntensity = active ? 0.35 : 0;
-        }
-      });
-    }
-    if (!state.reducedMotion)
+    if (!vault)
+      for (const [id, g] of Object.entries(hero.userData.layers)) {
+        g.position.z += (positions[id] - g.position.z) * ease;
+        const y = inside
+          ? {
+              fans: 1.7,
+              heatsink: 0.55,
+              chip: -0.8,
+              memory: -0.8,
+              pcb: -0.8,
+              backplate: -1.8,
+            }[id]
+          : 0;
+        g.position.y += (y - g.position.y) * ease;
+        g.traverse((o) => {
+          if (o.isMesh && o.material?.emissive) {
+            const active = inside && state.part === id;
+            o.material.emissive.set(active ? "#29576b" : "#000000");
+            o.material.emissiveIntensity = active ? 0.35 : 0;
+          }
+        });
+      }
+    if (!vault && !state.reducedMotion)
       for (const f of hero.userData.fans)
         f.userData.blades.rotation.z += dt * 1.7;
 
@@ -1125,6 +992,10 @@ export function createGpuScene(
       if (next.mode && next.mode !== state.mode) {
         snapCamera = true;
         onHover(null);
+        hovered = null;
+        if (focusedExhibit?.userData.focus)
+          focusedExhibit.userData.focus.visible = false;
+        focusedExhibit = null;
         keys.clear();
         held.clear();
       }
@@ -1157,7 +1028,7 @@ export function createGpuScene(
       const r = museumRacks.find((r) => r.id === id);
       if (!r) return;
       snapCamera = true;
-      walk.x = r.side * 2.6;
+      walk.x = 0;
       walk.z = 3 - r.bay * 13;
       walk.yaw = (r.side * Math.PI) / 2;
       walk.pitch = 0.1;

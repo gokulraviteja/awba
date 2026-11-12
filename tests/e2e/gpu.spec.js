@@ -12,9 +12,9 @@ async function openMenuItem(page, name) {
     .getByRole("button", { name, exact: true })
     .click();
 }
-async function visitRack(page, name) {
+async function visitGallery(page, name) {
   await page.getByRole("button", { name: "Open menu", exact: true }).click();
-  await page.getByText("Jump to a display bay", { exact: true }).click();
+  await page.getByRole("button", { name: "Gallery map", exact: true }).click();
   await page.getByRole("button", { name, exact: true }).click();
 }
 async function selectDesign(page, name) {
@@ -117,7 +117,7 @@ test("model index filters generations and memory variants, then compares actual 
   await expect(page.locator(".gpu-specs")).toContainText("150");
 });
 
-test("museum supports walking, turning, named racks and direct exhibit selection", async ({
+test("museum supports walking, turning, named galleries and direct exhibit selection", async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -163,10 +163,10 @@ test("museum supports walking, turning, named racks and direct exhibit selection
     })
     .toBeGreaterThan(0.2);
   await page.keyboard.up("ArrowRight");
-  await visitRack(page, "Visit NVIDIA RTX 50 rack");
+  await visitGallery(page, "Visit NVIDIA RTX 50 gallery");
   await expect(page.locator(".gpu-page")).toHaveAttribute(
     "data-player-x",
-    "-2.60",
+    "0.00",
   );
   await expect(page.locator(".gpu-page")).toHaveAttribute(
     "data-player-z",
@@ -174,16 +174,14 @@ test("museum supports walking, turning, named racks and direct exhibit selection
   );
   await expect(page.locator(".museum-entry")).toHaveCount(0);
   await page.screenshot({ path: "test-results/pc-museum-nameplates.png" });
-  // The card at the centre of this human-height rack view is the labelled 5060 Ti.
+  // Gallery navigation frames the centre display, which holds the flagship card.
   await expect
     .poll(() => page.locator(".gpu-page").getAttribute("data-player-yaw"))
     .toBe("-1.57");
   await page
     .locator(".gpu-scene canvas")
     .click({ position: { x: 640, y: 355 } });
-  await expect(page.locator(".gpu-inspector h1")).toHaveText(
-    "RTX 5060 Ti 16GB",
-  );
+  await expect(page.locator(".gpu-inspector h1")).toHaveText("RTX 5090");
   await page
     .getByRole("button", { name: "Back to museum", exact: true })
     .click();
@@ -210,10 +208,10 @@ test("mobile supports still mode, browsing and the design archive without overfl
   await expect(page.getByLabel("Still mode", { exact: true })).toBeChecked();
   await page.getByRole("button", { name: "Close panel", exact: true }).click();
   await page.screenshot({ path: "test-results/pc-museum-mobile.png" });
-  await visitRack(page, "Visit AMD RX 9000 rack");
+  await visitGallery(page, "Visit AMD RX 9000 gallery");
   await expect(page.locator(".gpu-page")).toHaveAttribute(
     "data-player-x",
-    "2.60",
+    "0.00",
   );
   await openMenuItem(page, "Model index 47");
   await page
@@ -424,19 +422,15 @@ test("first-person mode aims from the crosshair, inspects with E and releases mo
   } else {
     await expect(page.locator(".gpu-quiet-hint")).toContainText("Drag to look");
   }
-  await visitRack(page, "Visit NVIDIA RTX 50 rack");
+  await visitGallery(page, "Visit NVIDIA RTX 50 gallery");
   await expect(page.locator(".gpu-page")).toHaveAttribute(
     "data-player-yaw",
     "-1.57",
   );
-  await expect(page.locator(".gpu-exhibit-hint strong")).toHaveText(
-    "RTX 5060 Ti 16GB",
-  );
+  await expect(page.locator(".gpu-exhibit-hint strong")).toHaveText("RTX 5090");
   await page.locator(".gpu-scene canvas").focus();
   await page.keyboard.press("e");
-  await expect(page.locator(".gpu-inspector h1")).toHaveText(
-    "RTX 5060 Ti 16GB",
-  );
+  await expect(page.locator(".gpu-inspector h1")).toHaveText("RTX 5090");
   await expect(page.locator(".gpu-page")).toHaveAttribute(
     "data-pointer-locked",
     "false",
@@ -448,14 +442,10 @@ test("first-person mode aims from the crosshair, inspects with E and releases mo
   await page
     .getByRole("button", { name: "Back to museum", exact: true })
     .click();
-  await expect(page.locator(".gpu-exhibit-hint strong")).toHaveText(
-    "RTX 5060 Ti 16GB",
-  );
+  await expect(page.locator(".gpu-exhibit-hint strong")).toHaveText("RTX 5090");
   const canvas = page.locator(".gpu-scene canvas");
   await canvas.click({ position: { x: 640, y: 360 } });
-  await expect(page.locator(".gpu-inspector h1")).toHaveText(
-    "RTX 5060 Ti 16GB",
-  );
+  await expect(page.locator(".gpu-inspector h1")).toHaveText("RTX 5090");
   await expect(page.locator(".gpu-page")).toHaveAttribute(
     "data-pointer-locked",
     "false",
@@ -539,4 +529,118 @@ test("returning from an exhibit resumes the museum instead of asking to enter ag
     "16.00",
   );
   await page.screenshot({ path: "test-results/pc-museum-resume.png" });
+});
+
+test("gallery map covers every rendered model and supports keyboard navigation and the foyer", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await page.goto("/pc");
+  await expect(page.locator(".gpu-scene")).toHaveAttribute(
+    "data-scene-status",
+    "ready",
+    { timeout: 30_000 },
+  );
+  await expect(page.locator(".gpu-scene")).toHaveAttribute(
+    "data-exhibit-count",
+    "47",
+  );
+  await expect(page.locator(".gpu-scene")).toHaveAttribute(
+    "data-gallery-count",
+    "8",
+  );
+  await page.keyboard.press("m");
+  const map = page.getByRole("dialog");
+  await expect(
+    map.getByRole("heading", { name: "Choose a gallery." }),
+  ).toBeVisible();
+  await expect(map.locator(".museum-map-room")).toHaveCount(8);
+  await page.screenshot({ path: "test-results/pc-museum-gallery-map.png" });
+  await map
+    .getByRole("button", { name: "Visit Intel Arc B gallery", exact: true })
+    .click();
+  await expect(page.locator(".gpu-page")).toHaveAttribute(
+    "data-player-z",
+    "-36.00",
+  );
+  await expect(page.locator(".gpu-exhibit-hint strong")).toHaveText("Arc B580");
+  await page.locator(".gpu-scene canvas").focus();
+  await page.keyboard.press("e");
+  await expect(page.locator(".gpu-inspector h1")).toHaveText("Arc B580");
+  await page.keyboard.press("Escape");
+  await page.keyboard.press("m");
+  await expect(
+    map.getByRole("button", { name: "Visit Intel Arc B gallery", exact: true }),
+  ).toHaveAttribute("aria-current", "location");
+  await map
+    .getByRole("button", { name: "Back to foyer ↗", exact: true })
+    .click();
+  await expect(page.locator(".gpu-page")).toHaveAttribute(
+    "data-player-z",
+    "16.00",
+  );
+  await expect(map).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+test("the gallery map fits on mobile and keeps destination controls usable", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/pc");
+  await openMenuItem(page, "Gallery map");
+  await expect(page.locator(".museum-map-room")).toHaveCount(8);
+  await page.screenshot({ path: "test-results/pc-museum-mobile-map.png" });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  const room = await page.locator(".museum-map-room").first().boundingBox();
+  expect(room.x).toBeGreaterThan(0);
+  expect(room.x + room.width).toBeLessThan(391);
+  await page
+    .getByRole("button", { name: "Visit AMD RX 9000 gallery", exact: true })
+    .click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page.locator(".gpu-page")).toHaveAttribute(
+    "data-player-yaw",
+    "1.57",
+  );
+});
+
+test("display plinths stop the visitor walking through exhibits", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/pc");
+  const scene = page.locator(".gpu-scene"),
+    museum = page.locator(".gpu-page");
+  await expect(scene).toHaveAttribute("data-scene-status", "ready", {
+    timeout: 30_000,
+  });
+  await page
+    .getByRole("button", { name: "Show movement controls", exact: true })
+    .click();
+  const right = page.getByRole("button", { name: "Walk right", exact: true });
+  for (let i = 0; i < 3; i++) await right.press("Enter");
+  await expect(museum).toHaveAttribute("data-player-x", "2.70");
+  await page
+    .getByRole("button", { name: "Close movement controls", exact: true })
+    .click();
+  await page.locator(".gpu-scene canvas").focus();
+  await page.keyboard.down("w");
+  await expect
+    .poll(async () => Number(await museum.getAttribute("data-player-z")), {
+      timeout: 15_000,
+    })
+    .toBeLessThan(10.1);
+  // Continue attempting to move through the plinth after reaching its edge.
+  await page.waitForTimeout(1500);
+  await page.keyboard.up("w");
+  expect(
+    Number(await museum.getAttribute("data-player-z")),
+  ).toBeGreaterThanOrEqual(9.7);
 });
